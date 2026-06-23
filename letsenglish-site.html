@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Let's English — Școala ta de engleză</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0D1B3E;
+    --navy-light: #1A2D5A;
+    --gold: #E8A714;
+    --gold-light: #FFC740;
+    --gold-pale: #FFF8E7;
+    --white: #FFFFFF;
+    --off-white: #F7F8FC;
+    --text-dark: #0D1B3E;
+    --text-mid: #3D4B6E;
+    --text-muted: #7B89A8;
+    --border: #E2E7F0;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    background: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(13,27,62,0.97);
+    backdrop-filter: blur(12px);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--navy) !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600 !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(232,167,20,0.08) 0%, transparent 70%);
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(var(--gold) 1px, transparent 1px),
+      linear-gradient(90deg, var(--gold) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .hero-content {
+    max-width: 680px; position: relative; z-index: 2;
+    margin-left: auto; margin-right: auto;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(232,167,20,0.15);
+    border: 1px solid rgba(232,167,20,0.3);
+    color: var(--gold);
+    font-size: 0.8rem; font-weight: 600;
+    padding: 0.35rem 1rem; border-radius: 2rem;
+    margin-bottom: 2rem; letter-spacing: 0.5px;
+  }
+
+  .hero-badge::before { content: '✦'; font-size: 0.6rem; }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold);
+    position: relative;
+  }
+
+  .hero-typing {
+    min-height: 1.3em;
+    display: inline-block;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 3px;
+    background: var(--gold);
+    animation: blink 0.8s infinite;
+    margin-left: 2px;
+    vertical-align: baseline;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hero-sub {
+    color: rgba(255,255,255,0.65);
+    font-size: 1.1rem;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600; font-size: 1rem;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500; font-size: 1rem;
+    text-decoration: none; border: 1.5px solid rgba(255,255,255,0.25); cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+
+  .btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
+
+  .hero-stats {
+    display: flex; gap: 3rem; justify-content: center;
+    margin-top: 4rem; padding-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .hero-stat { text-align: center; }
+  .hero-stat strong { display: block; font-size: 2rem; font-weight: 700; color: var(--gold); font-family: 'Playfair Display', serif; }
+  .hero-stat span { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+
+  /* SECTION COMMONS */
+  section { padding: 5rem 2rem; }
+
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 700; color: var(--navy);
+    line-height: 1.2; margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    color: var(--text-mid);
+    font-size: 1.05rem; max-width: 520px;
+    margin-bottom: 3rem;
+  }
+
+  .container { max-width: 1060px; margin: 0 auto; }
+
+  /* COURSES */
+  #cursuri { background: var(--off-white); }
+
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; margin-top: 2rem;
+  }
+
+  .course-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .course-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(13,27,62,0.1); }
+
+  .course-card.featured {
+    border-color: var(--gold);
+    background: var(--gold-pale);
+  }
+
+  .course-badge {
+    position: absolute; top: 1rem; right: 1rem;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.7rem; font-weight: 700;
+    padding: 0.25rem 0.65rem; border-radius: 2rem;
+  }
+
+  .course-icon {
+    width: 48px; height: 48px;
+    background: var(--navy);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
+    font-size: 1.4rem;
+  }
+
+  .course-card.featured .course-icon { background: var(--gold); }
+
+  .course-card h3 {
+    font-size: 1.15rem; font-weight: 600;
+    color: var(--navy); margin-bottom: 0.5rem;
+  }
+
+  .course-card p {
+    color: var(--text-mid); font-size: 0.9rem;
+    margin-bottom: 1.25rem; line-height: 1.6;
+  }
+
+  .course-details {
+    list-style: none; margin-bottom: 1.5rem;
+  }
+
+  .course-details li {
+    font-size: 0.85rem; color: var(--text-mid);
+    padding: 0.3rem 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+
+  .course-details li::before {
+    content: '✓';
+    color: var(--gold);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .course-cta {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    color: var(--navy); font-weight: 600; font-size: 0.9rem;
+    text-decoration: none; border: 1.5px solid var(--navy);
+    padding: 0.6rem 1.2rem; border-radius: var(--radius-sm);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .course-cta:hover { background: var(--navy); color: var(--white); }
+  .course-card.featured .course-cta { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .course-card.featured .course-cta:hover { background: var(--navy-light); }
+
+  /* QUICK TEST */
+  #test { background: var(--white); }
+
+  .test-container {
+    max-width: 680px; margin: 0 auto;
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 3rem;
+    color: var(--white);
+  }
+
+  .test-header { text-align: center; margin-bottom: 2.5rem; }
+  .test-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;
+  }
+  .test-header p { color: rgba(255,255,255,0.65); }
+
+  .progress-bar {
+    height: 4px; background: rgba(255,255,255,0.15);
+    border-radius: 2px; margin-bottom: 2rem; overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%; background: var(--gold);
+    border-radius: 2px; transition: width 0.4s ease;
+  }
+
+  .question-num {
+    font-size: 0.8rem; color: rgba(255,255,255,0.5);
+    margin-bottom: 0.5rem;
+  }
+
+  .question-text {
+    font-size: 1.15rem; font-weight: 500;
+    margin-bottom: 1.5rem; line-height: 1.5;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .option-btn {
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    color: var(--white);
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    cursor: pointer; text-align: left;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .option-btn:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); }
+  .option-btn.correct { background: rgba(34,197,94,0.2); border-color: #22C55E; }
+  .option-btn.wrong { background: rgba(239,68,68,0.2); border-color: #EF4444; }
+  .option-btn.disabled { cursor: default; pointer-events: none; }
+
+  .test-result {
+    display: none;
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  .result-level {
+    font-size: 3.5rem; font-weight: 900;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .result-label {
+    font-size: 1.1rem; font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-desc {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.9rem; margin-bottom: 2rem;
+    max-width: 420px; margin-left: auto; margin-right: auto;
+  }
+
+  .btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700; font-size: 1rem;
+    border: none; cursor: pointer;
+    transition: background 0.2s; width: 100%;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .btn-gold:hover { background: var(--gold-light); }
+
+  /* CALENDAR */
+  #calendar { background: var(--off-white); }
+
+  .calendar-wrap {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem; align-items: start;
+  }
+
+  .cal-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .cal-header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .cal-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700;
+  }
+
+  .cal-nav {
+    display: flex; gap: 0.5rem;
+  }
+
+  .cal-nav button {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    width: 34px; height: 34px;
+    border-radius: 8px; cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+
+  .cal-nav button:hover { background: rgba(255,255,255,0.22); }
+
+  .cal-weekdays {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    padding: 0.75rem 1rem 0.25rem;
+    gap: 4px;
+  }
+
+  .cal-weekday {
+    text-align: center; font-size: 0.72rem;
+    font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 0.25rem 0;
+  }
+
+  .cal-days {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    padding: 0.5rem 1rem 1rem;
+    gap: 4px;
+  }
+
+  .cal-day {
+    aspect-ratio: 1; display: flex; align-items: center;
+    justify-content: center; border-radius: 8px;
+    font-size: 0.88rem; cursor: pointer;
+    position: relative; transition: all 0.15s;
+    font-weight: 500;
+  }
+
+  .cal-day.empty { pointer-events: none; }
+  .cal-day.other-month { color: var(--border); pointer-events: none; }
+
+  .cal-day.available {
+    color: var(--navy);
+  }
+
+  .cal-day.available::after {
+    content: '';
+    position: absolute; bottom: 4px;
+    width: 5px; height: 5px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+
+  .cal-day.available:hover {
+    background: var(--gold-pale);
+  }
+
+  .cal-day.selected {
+    background: var(--navy) !important;
+    color: var(--white) !important;
+  }
+
+  .cal-day.selected::after { background: var(--gold-light); }
+
+  .cal-day.today {
+    background: var(--gold-pale);
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  .cal-day.busy { color: var(--border); pointer-events: none; }
+
+  .cal-legend {
+    display: flex; gap: 1.25rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  /* SCHEDULE PANEL */
+  .schedule-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .schedule-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .schedule-header h4 {
+    font-weight: 600; color: var(--navy); font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .schedule-header p {
+    font-size: 0.82rem; color: var(--text-muted);
+  }
+
+  .schedule-slots { padding: 1rem 1.5rem; }
+
+  .slot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+    transition: background 0.15s;
+  }
+
+  .slot:hover { background: var(--off-white); }
+
+  .slot-time {
+    font-weight: 600; font-size: 0.9rem; color: var(--navy);
+  }
+
+  .slot-type {
+    font-size: 0.78rem; color: var(--text-muted);
+  }
+
+  .slot-btn {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .slot-btn:hover { background: var(--navy-light); }
+
+  .slot-btn.taken {
+    background: var(--off-white);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    cursor: default;
+  }
+
+  .no-date-msg {
+    text-align: center; padding: 2rem;
+    color: var(--text-muted); font-size: 0.9rem;
+  }
+
+  /* TESTIMONIALS */
+  #testimoniale { background: var(--navy); }
+  #testimoniale .section-title { color: var(--white); }
+  #testimoniale .section-label { color: var(--gold); }
+  #testimoniale .section-subtitle { color: rgba(255,255,255,0.55); }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .testi-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+  }
+
+  .testi-stars {
+    color: var(--gold); font-size: 0.9rem;
+    margin-bottom: 1rem; letter-spacing: 2px;
+  }
+
+  .testi-text {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.92rem; line-height: 1.7;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+  }
+
+  .testi-author {
+    font-size: 0.82rem; color: rgba(255,255,255,0.5);
+  }
+
+  .testi-author strong { color: var(--gold); display: block; margin-bottom: 0.1rem; }
+
+  /* CONTACT */
+  #contact { background: var(--off-white); }
+
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: start;
+  }
+
+  .contact-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 700; color: var(--navy);
+    margin-bottom: 1rem;
+  }
+
+  .contact-info p { color: var(--text-mid); margin-bottom: 1.5rem; font-size: 0.95rem; }
+
+  .contact-items { list-style: none; }
+  .contact-items li {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem; color: var(--text-mid);
+  }
+
+  .contact-items li:last-child { border-bottom: none; }
+
+  .contact-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: var(--navy);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+
+  .contact-form {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+
+  .contact-form h4 {
+    font-weight: 600; color: var(--navy);
+    font-size: 1.1rem; margin-bottom: 1.5rem;
+  }
+
+  .form-group { margin-bottom: 1rem; }
+
+  .form-group label {
+    display: block; font-size: 0.82rem; font-weight: 600;
+    color: var(--text-mid); margin-bottom: 0.4rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 0.75rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem; font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    transition: border-color 0.2s;
+    outline: none;
+    background: var(--white);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--navy);
+  }
+
+  .form-group textarea { resize: vertical; min-height: 90px; }
+
+  .form-submit {
+    background: var(--gold);
+    color: var(--navy);
+    border: none; padding: 0.85rem 2rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700; font-size: 1rem;
+    cursor: pointer; width: 100%;
+    transition: background 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .form-submit:hover { background: var(--gold-light); }
+
+  .form-success {
+    display: none; text-align: center;
+    padding: 2rem;
+    color: var(--text-mid);
+  }
+
+  .form-success .big { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .form-success h4 { color: var(--navy); margin-bottom: 0.5rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.85rem;
+  }
+
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .hero { padding: 6rem 1.25rem 3rem; }
+    .hero-stats { gap: 1.5rem; }
+    .calendar-wrap { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    section { padding: 3.5rem 1.25rem; }
+    .test-container { padding: 2rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Let's <span>English</span></div>
+  <ul class="nav-links">
+    <li><a href="#cursuri">Cursuri</a></li>
+    <li><a href="#test">Test rapid</a></li>
+    <li><a href="#calendar">Disponibilitate</a></li>
+    <li><a href="#testimoniale">Recenzii</a></li>
+    <li><a href="#contact" class="nav-cta">Rezervă lecție</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Școală de engleză online · Chișinău</div>
+    <h1>Engleza pe care<br>o <em><span class="hero-typing" id="heroTyping"></span><span class="cursor"></span></em></h1>
+    <p class="hero-sub">Profesori certificați TEFL, cu experiență din 2017. Lecții adaptate nivelului tău — online sau offline, pentru copii, adulți și B2B.</p>
+    <div class="hero-actions">
+      <a href="#test" class="btn-primary">Testează-ți nivelul gratuit →</a>
+      <a href="#calendar" class="btn-outline">Rezervă o lecție</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>7+</strong>
+        <span>Ani de experiență</span>
+      </div>
+      <div class="hero-stat">
+        <strong>A1–C1</strong>
+        <span>Toate nivelele</span>
+      </div>
+      <div class="hero-stat">
+        <strong>100%</strong>
+        <span>Satisfacție cursanți</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURSURI -->
+<section id="cursuri">
+  <div class="container">
+    <div class="section-label">Ce oferim</div>
+    <h2 class="section-title">Cursuri pentru fiecare nevoie</h2>
+    <p class="section-subtitle">Indiferent de vârstă sau nivel, ai un program construit special pentru tine.</p>
+    <div class="courses-grid">
+
+      <div class="course-card">
+        <div class="course-icon">👦</div>
+        <h3>Copii & Adolescenți</h3>
+        <p>32 de lecții în 3 luni. Materiale adaptate curriculumului școlar, grupuri mici, conversații de la prima lecție.</p>
+        <ul class="course-details">
+          <li>3 lecții pe săptămână</li>
+          <li>Grupuri mici (max. 6 elevi)</li>
+          <li>Testare gratuită inclusă</li>
+          <li>Materiale didactice moderne</li>
+        </ul>
+        <a href="#contact" class="course-cta">Rezervă →</a>
+      </div>
+
+      <div class="course-card featured">
+        <div class="course-badge">Recomandat</div>
+        <div class="course-icon">🎯</div>
+        <h3>Adulți — Curs General</h3>
+        <p>24 de lecții în 8 săptămâni. Platformă online disponibilă, materiale moderne, focus pe comunicare reală.</p>
+        <ul class="course-details">
+          <li>3 lecții pe săptămână</li>
+          <li>Grupuri mici interactive</li>
+          <li>Acces platformă online</li>
+          <li>Testare gratuită inclusă</li>
+        </ul>
+        <a href="#contact" class="course-cta">Rezervă →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">👤</div>
+        <h3>Lecții Individuale</h3>
+        <p>Program complet flexibil, personalizat 100% pe obiectivele tale. Discuții în engleză toată lecția.</p>
+        <ul class="course-details">
+          <li>Orar ales de tine</li>
+          <li>100% personalizat</li>
+          <li>Posibil la domiciliu (extra)</li>
+          <li>Progres rapid garantat</li>
+        </ul>
+        <a href="#contact" class="course-cta">Rezervă →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">🏢</div>
+        <h3>Engleză B2B</h3>
+        <p>Cursuri corporate pentru echipe. Engleză de business, prezentări, negocieri și comunicare profesională.</p>
+        <ul class="course-details">
+          <li>Programe pentru echipe</li>
+          <li>Focus pe business English</li>
+          <li>Lun–Vin 8:00–20:30</li>
+          <li>Sâmbătă 9:00–16:00</li>
+        </ul>
+        <a href="#contact" class="course-cta">Contactează-ne →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TEST RAPID -->
+<section id="test">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <div class="section-label">Află-ți nivelul</div>
+      <h2 class="section-title">Test rapid de engleză</h2>
+      <p class="section-subtitle" style="margin:0 auto;">10 întrebări, 3 minute. Primești imediat nivelul tău CEFR (A1–C1).</p>
+    </div>
+
+    <div class="test-container">
+      <div class="test-header">
+        <h2>Verifică-ți engleza</h2>
+        <p>Răspunde sincer — nu există greșeli, doar informații utile pentru tine.</p>
+      </div>
+
+      <div id="testBody">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width:10%"></div>
+        </div>
+        <div class="question-num" id="questionNum">Întrebarea 1 din 10</div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+      </div>
+
+      <div class="test-result" id="testResult">
+        <p style="color:rgba(255,255,255,0.5); font-size:0.85rem;">Nivelul tău este</p>
+        <div class="result-level" id="resultLevel">B1</div>
+        <div class="result-label" id="resultLabel">Intermediar</div>
+        <p class="result-desc" id="resultDesc"></p>
+        <button class="btn-gold" onclick="openContact()">Vreau să încep lecțiile!</button>
+        <button onclick="restartTest()" style="background:transparent;border:none;color:rgba(255,255,255,0.4);font-size:0.8rem;cursor:pointer;margin-top:1rem;display:block;width:100%;">Refă testul</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section id="calendar">
+  <div class="container">
+    <div class="section-label">Disponibilitate</div>
+    <h2 class="section-title">Calendar de rezervări</h2>
+    <p class="section-subtitle">Alege ziua și ora potrivită pentru tine. Zilele marcate au locuri disponibile.</p>
+
+    <div class="calendar-wrap">
+      <!-- Calendar -->
+      <div class="cal-panel">
+        <div class="cal-header">
+          <h3 id="calMonthYear">Iulie 2025</h3>
+          <div class="cal-nav">
+            <button onclick="changeMonth(-1)">‹</button>
+            <button onclick="changeMonth(1)">›</button>
+          </div>
+        </div>
+        <div class="cal-weekdays">
+          <div class="cal-weekday">Lu</div>
+          <div class="cal-weekday">Ma</div>
+          <div class="cal-weekday">Mi</div>
+          <div class="cal-weekday">Jo</div>
+          <div class="cal-weekday">Vi</div>
+          <div class="cal-weekday">Sâ</div>
+          <div class="cal-weekday">Du</div>
+        </div>
+        <div class="cal-days" id="calDays"></div>
+        <div class="cal-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--gold)"></div>
+            Disponibil
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--border)"></div>
+            Ocupat
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--navy)"></div>
+            Selectat
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule panel -->
+      <div class="schedule-panel">
+        <div class="schedule-header">
+          <h4 id="scheduleTitle">Selectează o dată</h4>
+          <p id="scheduleSubtitle">Alege o zi din calendar pentru a vedea orele disponibile</p>
+        </div>
+        <div class="schedule-slots" id="scheduleSlots">
+          <div class="no-date-msg">
+            📅 Apasă pe o zi marcată cu punctul auriu pentru a vedea orele disponibile
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALE -->
+<section id="testimoniale">
+  <div class="container">
+    <div class="section-label">Ce spun cursanții</div>
+    <h2 class="section-title">Experiențe reale</h2>
+    <p class="section-subtitle">Recenzii autentice de la cursanții care au ales Let's English.</p>
+
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"După fiecare lecție am simțit că prind mai multă încredere în a vorbi engleză. Atmosfera a fost mereu relaxată, dar eficientă. Recomand cu încredere tuturor!"</p>
+        <div class="testi-author"><strong>Ana M.</strong> Cursantă adulți</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Tatiana este o profesoară excelentă — răbdătoare, atentă, profesionistă. Fiecare lecție a fost clar structurată și adaptată exact nivelului meu."</p>
+        <div class="testi-author"><strong>Mihai C.</strong> Lecții individuale</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Lecțiile au fost interactive și dinamice! Energia pozitivă creată la ore mă face să mă simt confortabil și încrezător. Progresez vizibil săptămână de săptămână."</p>
+        <div class="testi-author"><strong>Elena P.</strong> Curs general adulți</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-label">Contactează-ne</div>
+        <h3>Hai să vorbim despre obiectivele tale</h3>
+        <p>Trimite-ne un mesaj și te contactăm în maxim 24 de ore pentru a stabili prima lecție de probă gratuită.</p>
+        <ul class="contact-items">
+          <li>
+            <div class="contact-icon">📍</div>
+            <div>
+              <strong style="color:var(--navy);display:block;margin-bottom:0.2rem">Adresă (offline)</strong>
+              Str. Meșterul Manole 14/1, Sectorul Ciocana, Chișinău
+            </div>
+          </li>
+          <li>
+            <div class="contact-icon">🕐</div>
+            <div>
+              <strong style="color:var(--navy);display:block;margin-bottom:0.2rem">Program</strong>
+              Luni – Vineri: 08:00 – 20:30<br>Sâmbătă: 09:00 – 16:00
+            </div>
+          </li>
+          <li>
+            <div class="contact-icon">💻</div>
+            <div>
+              <strong style="color:var(--navy);display:block;margin-bottom:0.2rem">Formate disponibile</strong>
+              Online · Offline · B2B corporate
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact-form" id="contactForm">
+        <h4>Rezervă o lecție gratuită</h4>
+        <div class="form-group">
+          <label>Numele tău</label>
+          <input type="text" placeholder="ex. Maria Ionescu" id="inputName">
+        </div>
+        <div class="form-group">
+          <label>Telefon / WhatsApp</label>
+          <input type="tel" placeholder="+373 __ ___ ___" id="inputPhone">
+        </div>
+        <div class="form-group">
+          <label>Format preferat</label>
+          <select id="inputFormat">
+            <option value="">Alege formatul...</option>
+            <option>Online</option>
+            <option>Offline (Chișinău)</option>
+            <option>Corporate / B2B</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nivel actual (aproximativ)</label>
+          <select id="inputLevel">
+            <option value="">Nu știu sigur — vreau să testez</option>
+            <option>A1 – Începător</option>
+            <option>A2 – Elementar</option>
+            <option>B1 – Intermediar</option>
+            <option>B2 – Intermediar avansat</option>
+            <option>C1 – Avansat</option>
+          </select>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Trimite cererea →</button>
+        <div class="form-success" id="formSuccess">
+          <div class="big">🎉</div>
+          <h4>Cerere trimisă!</h4>
+          <p style="font-size:0.9rem;color:var(--text-muted)">Tatiana te va contacta în cel mai scurt timp pentru a stabili prima lecție gratuită.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Let's English · Chișinău, Moldova · <a href="mailto:contact@letsenglish.md">contact@letsenglish.md</a></p>
+  <p style="margin-top:0.5rem;font-size:0.78rem;">Certificare TEFL · Online & Offline · A1–C1</p>
+</footer>
+
+<script>
+/* ---- HERO TYPING ---- */
+const phrases = ["înveți acum", "vorbești cu încredere", "folosești zilnic", "stăpânești complet"];
+let pi = 0, ci = 0, deleting = false;
+const el = document.getElementById('heroTyping');
+
+function type() {
+  const word = phrases[pi];
+  if (!deleting) {
+    el.textContent = word.slice(0, ++ci);
+    if (ci === word.length) { deleting = true; setTimeout(type, 1800); return; }
+  } else {
+    el.textContent = word.slice(0, --ci);
+    if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+  }
+  setTimeout(type, deleting ? 60 : 90);
+}
+type();
+
+/* ---- QUIZ ---- */
+const questions = [
+  { q: "Complete: 'She ___ to school every day.'", opts: ["go","goes","going","gone"], correct: 1, level: "A1" },
+  { q: "What is the past tense of 'buy'?", opts: ["buyed","boughted","bought","buys"], correct: 2, level: "A1" },
+  { q: "Choose the correct sentence:", opts: ["I am agree with you.","I agree with you.","I am agree you.","I agreeing with you."], correct: 1, level: "A2" },
+  { q: "Fill in: 'By the time she arrived, we ___ already left.'", opts: ["have","had","has","were"], correct: 1, level: "B1" },
+  { q: "Which sentence uses the correct conditional?", opts: ["If I would know, I'll tell you.","If I knew, I would tell you.","If I know, I would told you.","If I had know, I'll told you."], correct: 1, level: "B1" },
+  { q: "Choose the correct phrasal verb: 'She needs to ___ her diet — too much sugar.'", opts: ["cut out","cut off","cut down on","cut up"], correct: 2, level: "B2" },
+  { q: "What does 'ubiquitous' mean?", opts: ["Unique","Present everywhere","Old-fashioned","Mysterious"], correct: 1, level: "B2" },
+  { q: "Identify the subjunctive: which is correct?", opts: ["I suggest that he goes home.","I suggest that he go home.","I suggest that he going home.","I suggest that he will go home."], correct: 1, level: "C1" },
+  { q: "'The legislation was ___ due to widespread opposition.'", opts: ["shelved","shelled","shielded","shuffled"], correct: 0, level: "C1" },
+  { q: "Complete the idiom: 'It's a blessing in ___'", opts: ["hiding","disguise","shadow","retreat"], correct: 1, level: "B1" }
+];
+
+let currentQ = 0, score = 0, answered = false;
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('questionNum').textContent = `Întrebarea ${currentQ + 1} din ${questions.length}`;
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('progressFill').style.width = `${((currentQ) / questions.length) * 100}%`;
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i, btn);
+    container.appendChild(btn);
+  });
+  answered = false;
+}
+
+function selectAnswer(idx, btn) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.classList.add('disabled'));
+  if (idx === q.correct) { score++; btn.classList.add('correct'); }
+  else {
+    btn.classList.add('wrong');
+    allBtns[q.correct].classList.add('correct');
+  }
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) renderQuestion();
+    else showResult();
+  }, 1000);
+}
+
+const levels = [
+  { min: 0, max: 2, level: "A1", label: "Începător", desc: "Abia la început? Perfect — totul se construiește de la zero. Cursul nostru A1 te va ajuta să pui bazele solide." },
+  { min: 3, max: 4, level: "A2", label: "Elementar", desc: "Cunoști bazele! Cursul A2 te va ajuta să îți extinzi vocabularul și să comunici în situații de zi cu zi." },
+  { min: 5, max: 6, level: "B1", label: "Intermediar", desc: "Bravo! Poți comunica în engleza de zi cu zi. Cursul B1 te pregătește pentru conversații mai complexe." },
+  { min: 7, max: 8, level: "B2", label: "Intermediar avansat", desc: "Nivel excelent! Cursul B2 îți va rafina fluența și te pregătește pentru contexte profesionale." },
+  { min: 9, max: 10, level: "C1", label: "Avansat", desc: "Impresionant! La nivel C1 lucrăm pe nuanțe, stil și exprimare sofisticată. Continuă să crești!" }
+];
+
+function showResult() {
+  const lvl = levels.find(l => score >= l.min && score <= l.max) || levels[0];
+  document.getElementById('testBody').style.display = 'none';
+  document.getElementById('testResult').style.display = 'block';
+  document.getElementById('resultLevel').textContent = lvl.level;
+  document.getElementById('resultLabel').textContent = lvl.label;
+  document.getElementById('resultDesc').textContent = `Scor: ${score}/10 — ${lvl.desc}`;
+  document.getElementById('progressFill').style.width = '100%';
+}
+
+function restartTest() {
+  currentQ = 0; score = 0; answered = false;
+  document.getElementById('testBody').style.display = 'block';
+  document.getElementById('testResult').style.display = 'none';
+  renderQuestion();
+}
+
+function openContact() {
+  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+}
+
+renderQuestion();
+
+/* ---- CALENDAR ---- */
+let calDate = new Date();
+calDate.setDate(1);
+
+const weekdays = ["Lu","Ma","Mi","Jo","Vi","Sâ","Du"];
+const months = ["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"];
+
+const availableSlots = {
+  1: ["10:00","12:00","15:00","18:00"],
+  3: ["09:00","11:00","17:00"],
+  5: ["10:00","14:00","19:00"],
+  8: ["09:00","11:00","14:00","18:00"],
+  10: ["10:00","16:00"],
+  12: ["09:00","13:00","17:00","19:00"],
+  14: ["11:00","15:00"],
+  15: ["10:00","12:00","18:00"],
+  17: ["09:00","14:00","17:00"],
+  19: ["10:00","15:00","18:00"],
+  21: ["09:00","11:00","14:00"],
+  22: ["10:00","16:00","19:00"],
+  24: ["09:00","13:00","17:00"],
+  26: ["10:00","14:00","18:00"],
+  28: ["09:00","11:00","15:00","19:00"],
+  29: ["10:00","16:00"]
+};
+
+const takenSlots = {
+  1: ["10:00"],
+  8: ["09:00","18:00"],
+  12: ["09:00"],
+  15: ["10:00"],
+  22: ["10:00"]
+};
+
+let selectedDay = null;
+
+function renderCalendar() {
+  const year = calDate.getFullYear();
+  const month = calDate.getMonth();
+  document.getElementById('calMonthYear').textContent = `${months[month]} ${year}`;
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  let startDow = firstDay.getDay();
+  startDow = startDow === 0 ? 6 : startDow - 1;
+
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+
+  const container = document.getElementById('calDays');
+  container.innerHTML = '';
+
+  for (let i = 0; i < startDow; i++) {
+    const d = document.createElement('div');
+    d.className = 'cal-day empty';
+    container.appendChild(d);
+  }
+
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const d = document.createElement('div');
+    d.className = 'cal-day';
+    d.textContent = day;
+    const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
+    const hasSlots = availableSlots[day];
+    if (isToday) d.classList.add('today');
+    if (hasSlots) d.classList.add('available');
+    else d.classList.add('busy');
+    if (selectedDay === day) d.classList.add('selected');
+    if (hasSlots) d.onclick = () => selectDay(day);
+    container.appendChild(d);
+  }
+}
+
+function selectDay(day) {
+  selectedDay = day;
+  renderCalendar();
+  const slots = availableSlots[day] || [];
+  const taken = takenSlots[day] || [];
+  const m = calDate.getMonth();
+  const y = calDate.getFullYear();
+  document.getElementById('scheduleTitle').textContent = `${day} ${months[m]} ${y}`;
+  document.getElementById('scheduleSubtitle').textContent = `${slots.length - taken.filter(t => slots.includes(t)).length} locuri disponibile`;
+  const container = document.getElementById('scheduleSlots');
+  container.innerHTML = '';
+  slots.forEach(time => {
+    const isTaken = taken.includes(time);
+    const slot = document.createElement('div');
+    slot.className = 'slot';
+    slot.innerHTML = `
+      <div>
+        <div class="slot-time">${time}</div>
+        <div class="slot-type">${isTaken ? 'Loc ocupat' : 'Lecție individuală / grup'}</div>
+      </div>
+      <button class="slot-btn ${isTaken ? 'taken' : ''}" ${isTaken ? 'disabled' : `onclick="bookSlot('${day} ${months[m]}', '${time}')"`}>
+        ${isTaken ? 'Ocupat' : 'Rezervă'}
+      </button>
+    `;
+    container.appendChild(slot);
+  });
+}
+
+function bookSlot(date, time) {
+  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => {
+    const nameField = document.getElementById('inputName');
+    if (nameField) nameField.focus();
+  }, 800);
+  alert(`Ai ales: ${date} la ora ${time}.\nComplectează formularul de mai jos pentru confirmare.`);
+}
+
+function changeMonth(dir) {
+  calDate.setMonth(calDate.getMonth() + dir);
+  selectedDay = null;
+  renderCalendar();
+  document.getElementById('scheduleTitle').textContent = 'Selectează o dată';
+  document.getElementById('scheduleSubtitle').textContent = 'Alege o zi din calendar pentru a vedea orele disponibile';
+  document.getElementById('scheduleSlots').innerHTML = '<div class="no-date-msg">📅 Apasă pe o zi marcată cu punctul auriu pentru a vedea orele disponibile</div>';
+}
+
+// Init calendar to current month
+calDate = new Date();
+calDate.setDate(1);
+renderCalendar();
+
+/* ---- FORM ---- */
+function submitForm() {
+  const name = document.getElementById('inputName').value.trim();
+  const phone = document.getElementById('inputPhone').value.trim();
+  if (!name || !phone) { alert('Te rugăm să completezi numele și telefonul.'); return; }
+  document.querySelector('.contact-form h4').style.display = 'none';
+  document.querySelectorAll('.form-group').forEach(g => g.style.display = 'none');
+  document.querySelector('.form-submit').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+</script>
+</body>
+</html>
