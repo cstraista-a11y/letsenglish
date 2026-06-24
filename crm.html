@@ -398,7 +398,7 @@ tr:hover td{background:var(--bg)}
       <label>Parolă</label>
       <input type="password" id="loginPass" placeholder="••••••••" value="admin123">
     </div>
-    <button class="login-btn" id="loginBtn">Intră în cont →</button>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Intră în cont →</button>
     <p class="login-hint">Demo: tatiana@letsenglish.eu / admin123</p>
   </div>
 </div>
@@ -906,15 +906,13 @@ function openStudent(id){
   const pct = Math.round((s.lectiiFinalizate/s.packageTotal)*100);
   const initials = s.first[0]+s.last[0];
 
-  const lectiiHTML = s.lectii.map(l=>`
-    <li class="lectie-item">
-      <div class="lectie-nr ${l.done?'done'}">${l.nr}</div>
-      <div class="lectie-info">
-        <div class="lectie-date">${l.date || (l.done?'—':'Planificată')}</div>
-        <div class="lectie-desc">${l.desc || (l.done?'Lecție finalizată':'—')}</div>
-      </div>
-      ${l.done?'<span class="badge badge-green">✓</span>':'<span class="badge badge-gray">—</span>'}
-    </li>`).join('');
+  const lectiiHTML = s.lectii.map(l=>{
+    const doneClass = l.done ? 'done' : '';
+    const dateText = l.date || (l.done ? '&mdash;' : 'Planificata');
+    const descText = l.desc || (l.done ? 'Lectie finalizata' : '&mdash;');
+    const badge = l.done ? '<span class="badge badge-green">&#10003;</span>' : '<span class="badge badge-gray">&mdash;</span>';
+    return '<li class="lectie-item"><div class="lectie-nr ' + doneClass + '">' + l.nr + '</div><div class="lectie-info"><div class="lectie-date">' + dateText + '</div><div class="lectie-desc">' + descText + '</div></div>' + badge + '</li>';
+  }).join('');
 
   const notesHTML = s.notes.length ? s.notes.map(n=>`
     <div class="note-item">
