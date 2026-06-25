@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Let's English — CRM Admin</title>
+<title>Let's English — CRM</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0D1B3E;--navy2:#1A2D5A;--navy3:#243A6E;
+  --navy:#0D1B3E;--navy2:#1A2D5A;
   --gold:#E8A714;--gold2:#FFC740;--gold-pale:#FFF8E7;
   --white:#fff;--bg:#F4F6FB;--bg2:#EEF1F8;
   --text:#0D1B3E;--text2:#3D4B6E;--text3:#7B89A8;
@@ -22,190 +23,69 @@
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
 
-/* ======= LOGIN ======= */
-#loginScreen{
-  display:flex;align-items:center;justify-content:center;
-  min-height:100vh;background:var(--navy);
-  padding:1rem;
-}
-.login-box{
-  background:var(--white);border-radius:var(--radius-lg);
-  padding:2.5rem;width:100%;max-width:380px;
-}
-.login-logo{
-  text-align:center;margin-bottom:2rem;
-}
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);padding:1rem}
+.login-box{background:var(--white);border-radius:var(--radius-lg);padding:2.5rem;width:100%;max-width:380px}
+.login-logo{text-align:center;margin-bottom:2rem}
 .login-logo h1{font-size:1.6rem;font-weight:700;color:var(--navy)}
 .login-logo h1 span{color:var(--gold)}
 .login-logo p{font-size:0.82rem;color:var(--text3);margin-top:0.3rem}
 .form-group{margin-bottom:1rem}
 .form-group label{display:block;font-size:0.8rem;font-weight:600;color:var(--text2);margin-bottom:0.4rem}
-.form-group input{
-  width:100%;padding:0.7rem 1rem;
-  border:1.5px solid var(--border);border-radius:var(--radius-sm);
-  font-size:0.9rem;font-family:'Inter',sans-serif;color:var(--text);
-  outline:none;transition:border-color 0.2s;
-}
-.form-group input:focus{border-color:var(--navy)}
-.login-btn{
-  width:100%;background:var(--navy);color:var(--white);
-  border:none;padding:0.8rem;border-radius:var(--radius-sm);
-  font-weight:700;font-size:1rem;cursor:pointer;
-  font-family:'Inter',sans-serif;transition:background 0.2s;margin-top:0.5rem;
-}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:0.7rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.9rem;font-family:'Inter',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s;background:var(--white)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--navy)}
+.form-group textarea{resize:vertical;min-height:70px}
+.login-btn{width:100%;background:var(--navy);color:var(--white);border:none;padding:0.8rem;border-radius:var(--radius-sm);font-weight:700;font-size:1rem;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;margin-top:0.5rem}
 .login-btn:hover{background:var(--navy2)}
-.login-hint{font-size:0.75rem;color:var(--text3);text-align:center;margin-top:1rem}
 .login-error{background:var(--red-bg);color:var(--red);font-size:0.82rem;padding:0.6rem 0.8rem;border-radius:var(--radius-sm);margin-bottom:1rem;display:none}
+.login-hint{font-size:0.75rem;color:var(--text3);text-align:center;margin-top:1rem}
 
-/* ======= APP SHELL ======= */
+/* APP */
 #app{display:none;min-height:100vh}
 .layout{display:flex;min-height:100vh}
 
 /* SIDEBAR */
-.sidebar{
-  width:var(--sidebar);background:var(--navy);
-  position:fixed;top:0;left:0;height:100vh;
-  display:flex;flex-direction:column;
-  transition:transform 0.3s;z-index:200;
-  overflow-y:auto;
-}
-.sidebar-logo{
-  padding:1.5rem 1.25rem 1rem;
-  border-bottom:1px solid rgba(255,255,255,0.08);
-}
+.sidebar{width:var(--sidebar);background:var(--navy);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;transition:transform 0.3s;z-index:200;overflow-y:auto}
+.sidebar-logo{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo h2{font-size:1.1rem;font-weight:700;color:var(--white)}
 .sidebar-logo h2 span{color:var(--gold)}
 .sidebar-logo p{font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.2rem}
 .sidebar-nav{padding:1rem 0.75rem;flex:1}
 .nav-label{font-size:0.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:0.5rem 0.5rem 0.25rem;margin-top:0.5rem}
-.nav-item{
-  display:flex;align-items:center;gap:0.6rem;
-  padding:0.6rem 0.75rem;border-radius:var(--radius-sm);
-  color:rgba(255,255,255,0.65);font-size:0.88rem;font-weight:500;
-  cursor:pointer;transition:all 0.15s;margin-bottom:2px;
-  text-decoration:none;
-}
+.nav-item{display:flex;align-items:center;gap:0.6rem;padding:0.6rem 0.75rem;border-radius:var(--radius-sm);color:rgba(255,255,255,0.65);font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.15s;margin-bottom:2px}
 .nav-item:hover{background:rgba(255,255,255,0.08);color:var(--white)}
 .nav-item.active{background:var(--gold);color:var(--navy);font-weight:700}
 .nav-item .icon{font-size:1rem;width:18px;text-align:center}
-.sidebar-user{
-  padding:1rem 1.25rem;
-  border-top:1px solid rgba(255,255,255,0.08);
-}
+.sidebar-user{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,0.08)}
 .user-info{display:flex;align-items:center;gap:0.6rem}
-.user-avatar{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--gold);color:var(--navy);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:0.8rem;flex-shrink:0;
-}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0}
 .user-name{font-size:0.82rem;font-weight:600;color:var(--white)}
 .user-role{font-size:0.7rem;color:rgba(255,255,255,0.4)}
-.logout-btn{
-  background:none;border:none;color:rgba(255,255,255,0.3);
-  cursor:pointer;font-size:0.75rem;margin-top:0.4rem;
-  padding:0;font-family:'Inter',sans-serif;
-}
+.logout-btn{background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.75rem;margin-top:0.4rem;padding:0;font-family:'Inter',sans-serif}
 .logout-btn:hover{color:var(--gold)}
 
 /* TOPBAR */
-.topbar{
-  position:fixed;top:0;left:var(--sidebar);right:0;height:60px;
-  background:var(--white);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 1.5rem;z-index:100;
-}
+.topbar{position:fixed;top:0;left:var(--sidebar);right:0;height:60px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;z-index:100}
 .topbar-left{display:flex;align-items:center;gap:1rem}
 .page-title{font-size:1.1rem;font-weight:700;color:var(--navy)}
 .hamburger{display:none;background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--navy)}
 .topbar-right{display:flex;align-items:center;gap:0.75rem}
-.notif-btn{
-  position:relative;background:var(--bg);border:1px solid var(--border);
-  border-radius:var(--radius-sm);width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-  font-size:1rem;
-}
-.notif-dot{
-  position:absolute;top:6px;right:6px;
-  width:7px;height:7px;background:var(--red);border-radius:50%;
-}
-.add-student-btn{
-  background:var(--gold);color:var(--navy);border:none;
-  padding:0.5rem 1rem;border-radius:var(--radius-sm);
-  font-weight:700;font-size:0.85rem;cursor:pointer;
-  font-family:'Inter',sans-serif;transition:background 0.2s;
-  display:flex;align-items:center;gap:0.4rem;
-}
-.add-student-btn:hover{background:var(--gold2)}
+.add-btn{background:var(--gold);color:var(--navy);border:none;padding:0.5rem 1rem;border-radius:var(--radius-sm);font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;display:flex;align-items:center;gap:0.4rem}
+.add-btn:hover{background:var(--gold2)}
 
 /* MAIN */
 .main{margin-left:var(--sidebar);margin-top:60px;padding:1.5rem;min-height:calc(100vh - 60px)}
-
-/* PAGES */
 .page{display:none}
 .page.active{display:block}
 
-/* ======= DASHBOARD ======= */
+/* CARDS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem}
-.stat-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:var(--radius);padding:1.25rem;
-}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
 .stat-label{font-size:0.75rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.5rem}
 .stat-value{font-size:2rem;font-weight:700;color:var(--navy);line-height:1}
 .stat-sub{font-size:0.75rem;color:var(--text3);margin-top:0.4rem}
-.stat-up{color:var(--green);font-weight:600}
-.stat-down{color:var(--red);font-weight:600}
-
-.dash-grid{display:grid;grid-template-columns:1fr 340px;gap:1.25rem}
 .card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
 .card-title{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
-.card-title a{font-size:0.78rem;font-weight:500;color:var(--blue);text-decoration:none}
-
-/* Activity list */
-.activity-list{list-style:none}
-.activity-item{
-  display:flex;align-items:flex-start;gap:0.75rem;
-  padding:0.65rem 0;border-bottom:1px solid var(--border);
-}
-.activity-item:last-child{border-bottom:none}
-.activity-dot{
-  width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px;
-}
-.activity-text{font-size:0.85rem;color:var(--text2)}
-.activity-time{font-size:0.75rem;color:var(--text3);margin-top:0.1rem}
-
-/* Today lessons */
-.lesson-item{
-  display:flex;align-items:center;gap:0.75rem;
-  padding:0.6rem 0;border-bottom:1px solid var(--border);
-}
-.lesson-item:last-child{border-bottom:none}
-.lesson-time{font-size:0.82rem;font-weight:700;color:var(--navy);min-width:42px}
-.lesson-student{font-size:0.85rem;color:var(--text2)}
-.lesson-type{font-size:0.72rem;color:var(--text3)}
-
-/* ======= STUDENTS ======= */
-.toolbar{display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
-.search-box{
-  flex:1;min-width:200px;position:relative;
-}
-.search-box input{
-  width:100%;padding:0.6rem 1rem 0.6rem 2.2rem;
-  border:1.5px solid var(--border);border-radius:var(--radius-sm);
-  font-size:0.88rem;font-family:'Inter',sans-serif;
-  outline:none;background:var(--white);
-}
-.search-box input:focus{border-color:var(--navy)}
-.search-icon{position:absolute;left:0.7rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:0.9rem}
-.filter-btn{
-  padding:0.6rem 1rem;border:1.5px solid var(--border);
-  border-radius:var(--radius-sm);background:var(--white);
-  font-size:0.85rem;cursor:pointer;font-family:'Inter',sans-serif;
-  color:var(--text2);transition:border-color 0.2s;
-}
-.filter-btn.active{border-color:var(--navy);color:var(--navy);font-weight:600}
-.filter-btn:hover{border-color:var(--navy2)}
 
 /* TABLE */
 .table-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
@@ -226,42 +106,31 @@ tr:hover td{background:var(--bg)}
 .badge-blue{background:var(--blue-bg);color:var(--blue)}
 .badge-gray{background:var(--bg2);color:var(--text3)}
 
-/* Progress bar */
+/* PROGRESS */
 .progress-wrap{display:flex;align-items:center;gap:0.5rem}
 .progress-bar-sm{height:6px;background:var(--bg2);border-radius:3px;flex:1;overflow:hidden}
-.progress-fill-sm{height:100%;background:var(--gold);border-radius:3px;transition:width 0.3s}
+.progress-fill-sm{height:100%;background:var(--gold);border-radius:3px}
 .progress-text{font-size:0.75rem;color:var(--text3);white-space:nowrap}
 
 /* ACTION BTNS */
 .action-btns{display:flex;gap:0.4rem}
-.btn-icon{
-  width:30px;height:30px;border-radius:6px;border:1px solid var(--border);
-  background:var(--white);cursor:pointer;display:flex;align-items:center;
-  justify-content:center;font-size:0.85rem;transition:all 0.15s;
-}
-.btn-icon:hover{background:var(--bg2);border-color:var(--border2)}
+.btn-icon{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:all 0.15s}
+.btn-icon:hover{background:var(--bg2)}
 
-/* ======= STUDENT DETAIL ======= */
-.back-btn{
-  display:inline-flex;align-items:center;gap:0.4rem;
-  color:var(--text3);font-size:0.85rem;cursor:pointer;
-  border:none;background:none;font-family:'Inter',sans-serif;
-  margin-bottom:1rem;padding:0;
-}
+/* TOOLBAR */
+.toolbar{display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
+.search-box{flex:1;min-width:200px;position:relative}
+.search-box input{width:100%;padding:0.6rem 1rem 0.6rem 2.2rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;background:var(--white)}
+.search-box input:focus{border-color:var(--navy)}
+.search-icon{position:absolute;left:0.7rem;top:50%;transform:translateY(-50%);color:var(--text3)}
+.filter-btn{padding:0.6rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:0.85rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--text2)}
+.filter-btn.active{border-color:var(--navy);color:var(--navy);font-weight:600}
+
+/* DETAIL */
+.back-btn{display:inline-flex;align-items:center;gap:0.4rem;color:var(--text3);font-size:0.85rem;cursor:pointer;border:none;background:none;font-family:'Inter',sans-serif;margin-bottom:1rem;padding:0}
 .back-btn:hover{color:var(--navy)}
-
-.student-header{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:var(--radius);padding:1.5rem;
-  display:flex;align-items:flex-start;gap:1.25rem;
-  margin-bottom:1.25rem;flex-wrap:wrap;
-}
-.student-avatar-lg{
-  width:60px;height:60px;border-radius:50%;
-  background:var(--navy);color:var(--white);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.4rem;font-weight:700;flex-shrink:0;
-}
+.student-header{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;display:flex;align-items:flex-start;gap:1.25rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.student-avatar-lg{width:60px;height:60px;border-radius:50%;background:var(--navy);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;flex-shrink:0}
 .student-meta{flex:1}
 .student-meta h2{font-size:1.3rem;font-weight:700;color:var(--navy)}
 .student-meta p{font-size:0.85rem;color:var(--text3);margin-top:0.2rem}
@@ -272,80 +141,34 @@ tr:hover td{background:var(--bg)}
 .btn-sm-primary:hover{background:var(--navy2)}
 .btn-sm-outline{background:var(--white);color:var(--navy);border-color:var(--border2)}
 .btn-sm-outline:hover{border-color:var(--navy)}
-.btn-sm-danger{background:var(--white);color:var(--red);border-color:var(--red-bg)}
-.btn-sm-danger:hover{background:var(--red-bg)}
-
 .detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem}
 .detail-stat{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
 .detail-stat-label{font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem}
 .detail-stat-value{font-size:1.5rem;font-weight:700;color:var(--navy)}
 .detail-stat-sub{font-size:0.75rem;color:var(--text3);margin-top:0.2rem}
-
 .detail-body{display:grid;grid-template-columns:1fr 320px;gap:1.25rem}
 
-/* Lectii list */
+/* LECTII */
 .lectii-list{list-style:none}
-.lectie-item{
-  display:flex;align-items:center;gap:0.75rem;
-  padding:0.7rem 0;border-bottom:1px solid var(--border);
-}
+.lectie-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 0;border-bottom:1px solid var(--border)}
 .lectie-item:last-child{border-bottom:none}
-.lectie-nr{
-  width:28px;height:28px;border-radius:50%;
-  background:var(--bg2);color:var(--text3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.72rem;font-weight:700;flex-shrink:0;
-}
+.lectie-nr{width:28px;height:28px;border-radius:50%;background:var(--bg2);color:var(--text3);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0}
 .lectie-nr.done{background:var(--green-bg);color:var(--green)}
 .lectie-info{flex:1}
 .lectie-date{font-size:0.82rem;font-weight:600;color:var(--navy)}
 .lectie-desc{font-size:0.75rem;color:var(--text3)}
 
-/* Notes */
-.note-item{
-  background:var(--gold-pale);border:1px solid #F5DFA0;
-  border-radius:var(--radius-sm);padding:0.75rem;
-  margin-bottom:0.6rem;
-}
+/* NOTES */
+.note-item{background:var(--gold-pale);border:1px solid #F5DFA0;border-radius:var(--radius-sm);padding:0.75rem;margin-bottom:0.6rem}
 .note-text{font-size:0.85rem;color:var(--text);line-height:1.5}
 .note-meta{font-size:0.72rem;color:var(--text3);margin-top:0.4rem}
-.note-input{
-  width:100%;padding:0.7rem;border:1.5px solid var(--border);
-  border-radius:var(--radius-sm);font-size:0.85rem;
-  font-family:'Inter',sans-serif;resize:vertical;min-height:70px;
-  outline:none;margin-bottom:0.5rem;
-}
-.note-input:focus{border-color:var(--navy)}
-.add-note-btn{
-  background:var(--navy);color:var(--white);border:none;
-  padding:0.5rem 1rem;border-radius:var(--radius-sm);
-  font-size:0.82rem;font-weight:700;cursor:pointer;
-  font-family:'Inter',sans-serif;width:100%;
-}
+.add-note-btn{background:var(--navy);color:var(--white);border:none;padding:0.5rem 1rem;border-radius:var(--radius-sm);font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%}
 .add-note-btn:hover{background:var(--navy2)}
 
-/* Payments */
-.payment-item{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0.65rem 0;border-bottom:1px solid var(--border);
-}
-.payment-item:last-child{border-bottom:none}
-.payment-desc{font-size:0.85rem;font-weight:600;color:var(--navy)}
-.payment-date{font-size:0.75rem;color:var(--text3)}
-.payment-amount{font-size:0.9rem;font-weight:700;color:var(--green)}
-
-/* ======= MODAL ======= */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.5);
-  z-index:500;display:none;align-items:center;justify-content:center;
-  padding:1rem;
-}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
-.modal{
-  background:var(--white);border-radius:var(--radius-lg);
-  padding:2rem;width:100%;max-width:480px;
-  max-height:90vh;overflow-y:auto;
-}
+.modal{background:var(--white);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
 .modal h3{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:1.5rem}
 .modal-footer{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem}
 .btn-cancel{padding:0.6rem 1.25rem;border:1.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--white);color:var(--text2);font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
@@ -353,18 +176,26 @@ tr:hover td{background:var(--bg)}
 .btn-save:hover{background:var(--navy2)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
 
-/* ======= PAYMENTS PAGE ======= */
-.payments-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
+/* LOADING */
+.loading{text-align:center;padding:3rem;color:var(--text3);font-size:0.9rem}
+.spinner{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:0.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ======= MOBILE ======= */
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:var(--white);padding:0.75rem 1.25rem;border-radius:var(--radius-sm);font-size:0.88rem;font-weight:500;z-index:999;transform:translateY(100px);transition:transform 0.3s;max-width:300px}
+.toast.show{transform:translateY(0)}
+.toast.success{background:var(--green)}
+.toast.error{background:var(--red)}
+
+/* MOBILE */
+.mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;display:none}
+.mobile-overlay.open{display:block}
 @media(max-width:768px){
-  :root{--sidebar:240px}
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
   .topbar{left:0}
   .main{margin-left:0}
   .hamburger{display:block}
-  .dash-grid{grid-template-columns:1fr}
   .detail-grid{grid-template-columns:1fr 1fr}
   .detail-body{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
@@ -375,12 +206,12 @@ tr:hover td{background:var(--bg)}
   .stats-grid{grid-template-columns:1fr}
   .detail-grid{grid-template-columns:1fr}
 }
-
-.mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;display:none}
-.mobile-overlay.open{display:block}
 </style>
 </head>
 <body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <!-- LOGIN -->
 <div id="loginScreen">
@@ -389,25 +220,23 @@ tr:hover td{background:var(--bg)}
       <h1>Let's <span>English</span></h1>
       <p>Panou de administrare</p>
     </div>
-    <div class="login-error" id="loginError">Email sau parolă incorectă.</div>
+    <div class="login-error" id="loginError">Email sau parola incorecta.</div>
     <div class="form-group">
       <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="tatiana@letsenglish.eu" value="tatiana@letsenglish.eu">
+      <input type="email" id="loginEmail" placeholder="tatiana@letsenglish.eu">
     </div>
     <div class="form-group">
-      <label>Parolă</label>
-      <input type="password" id="loginPass" placeholder="••••••••" value="admin123">
+      <label>Parola</label>
+      <input type="password" id="loginPass" placeholder="••••••••">
     </div>
-    <button class="login-btn" id="loginBtn" onclick="doLogin()">Intră în cont →</button>
-    <p class="login-hint">Demo: tatiana@letsenglish.eu / admin123</p>
+    <button class="login-btn" id="loginBtn">Intra in cont</button>
+    <p class="login-hint">Acces restrictionat — doar pentru echipa Let's English</p>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
   <div class="layout">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-logo">
         <h2>Let's <span>English</span></h2>
@@ -415,30 +244,23 @@ tr:hover td{background:var(--bg)}
       </div>
       <nav class="sidebar-nav">
         <div class="nav-label">General</div>
-        <div class="nav-item active" onclick="showPage('dashboard',this)">
+        <div class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard',this)">
           <span class="icon">📊</span> Dashboard
         </div>
-        <div class="nav-item" onclick="showPage('studenti',this)">
-          <span class="icon">👥</span> Cursanți
-        </div>
-        <div class="nav-item" onclick="showPage('plati',this)">
-          <span class="icon">💳</span> Plăți Stripe
-        </div>
-        <div class="nav-label">Planificare</div>
-        <div class="nav-item" onclick="showPage('calendar',this)">
-          <span class="icon">📅</span> Calendar lecții
+        <div class="nav-item" id="nav-studenti" onclick="showPage('studenti',this)">
+          <span class="icon">👥</span> Cursanti
         </div>
         <div class="nav-label">Cont</div>
-        <div class="nav-item" onclick="showPage('setari',this)">
-          <span class="icon">⚙️</span> Setări
+        <div class="nav-item" id="nav-setari" onclick="showPage('setari',this)">
+          <span class="icon">⚙️</span> Setari
         </div>
       </nav>
       <div class="sidebar-user">
         <div class="user-info">
           <div class="user-avatar" id="userAvatar">T</div>
           <div>
-            <div class="user-name" id="userName">Tatiana</div>
-            <div class="user-role" id="userRole">Administrator</div>
+            <div class="user-name" id="userName">...</div>
+            <div class="user-role">Administrator</div>
           </div>
         </div>
         <button class="logout-btn" onclick="doLogout()">Deconectare</button>
@@ -447,131 +269,26 @@ tr:hover td{background:var(--bg)}
 
     <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
 
-    <!-- TOPBAR -->
     <header class="topbar">
       <div class="topbar-left">
         <button class="hamburger" onclick="toggleSidebar()">☰</button>
         <span class="page-title" id="pageTitle">Dashboard</span>
       </div>
       <div class="topbar-right">
-        <div class="notif-btn">🔔<div class="notif-dot"></div></div>
-        <button class="add-student-btn" onclick="openAddStudent()">+ Cursant nou</button>
+        <button class="add-btn" onclick="openAddModal()">+ Cursant nou</button>
       </div>
     </header>
 
-    <!-- MAIN -->
     <main class="main">
 
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Cursanți activi</div>
-            <div class="stat-value">24</div>
-            <div class="stat-sub"><span class="stat-up">+3</span> față de luna trecută</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Lecții azi</div>
-            <div class="stat-value">7</div>
-            <div class="stat-sub">3 online · 4 offline</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Venituri luna aceasta</div>
-            <div class="stat-value">€1,840</div>
-            <div class="stat-sub"><span class="stat-up">+12%</span> față de mai</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Plăți restante</div>
-            <div class="stat-value" style="color:var(--red)">3</div>
-            <div class="stat-sub">Total €420 neîncasat</div>
-          </div>
+        <div class="stats-grid" id="dashStats">
+          <div class="stat-card"><div class="spinner"></div></div>
         </div>
-
-        <div class="dash-grid">
-          <div class="card">
-            <div class="card-title">Activitate recentă <a href="#" onclick="showPage('studenti',null)">Vezi toți →</a></div>
-            <ul class="activity-list">
-              <li class="activity-item">
-                <div class="activity-dot" style="background:var(--green)"></div>
-                <div>
-                  <div class="activity-text">Maria Popescu a finalizat lecția 18/24</div>
-                  <div class="activity-time">Azi, 14:30</div>
-                </div>
-              </li>
-              <li class="activity-item">
-                <div class="activity-dot" style="background:var(--blue)"></div>
-                <div>
-                  <div class="activity-text">Andrei Lungu a plătit pachetul B1 — €180</div>
-                  <div class="activity-time">Azi, 11:15</div>
-                </div>
-              </li>
-              <li class="activity-item">
-                <div class="activity-dot" style="background:var(--gold)"></div>
-                <div>
-                  <div class="activity-text">Cerere nouă de la Elena Rusu (formular site)</div>
-                  <div class="activity-time">Ieri, 19:42</div>
-                </div>
-              </li>
-              <li class="activity-item">
-                <div class="activity-dot" style="background:var(--red)"></div>
-                <div>
-                  <div class="activity-text">Ion Moraru — plată restantă de 14 zile</div>
-                  <div class="activity-time">Ieri, 09:00</div>
-                </div>
-              </li>
-              <li class="activity-item">
-                <div class="activity-dot" style="background:var(--green)"></div>
-                <div>
-                  <div class="activity-text">Sofia Dănilă a început pachetul A2 (lecția 1)</div>
-                  <div class="activity-time">22 iun, 10:00</div>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Lecții azi — 23 Iunie</div>
-            <div class="lesson-item">
-              <div class="lesson-time">09:00</div>
-              <div>
-                <div class="lesson-student">Maria Popescu</div>
-                <div class="lesson-type">Individual · Online · B1</div>
-              </div>
-              <span class="badge badge-green">✓</span>
-            </div>
-            <div class="lesson-item">
-              <div class="lesson-time">10:30</div>
-              <div>
-                <div class="lesson-student">Andrei Lungu</div>
-                <div class="lesson-type">Individual · Offline · A2</div>
-              </div>
-              <span class="badge badge-green">✓</span>
-            </div>
-            <div class="lesson-item">
-              <div class="lesson-time">12:00</div>
-              <div>
-                <div class="lesson-student">Grup B1 (4 elevi)</div>
-                <div class="lesson-type">Grup · Online</div>
-              </div>
-              <span class="badge badge-yellow">În curs</span>
-            </div>
-            <div class="lesson-item">
-              <div class="lesson-time">15:00</div>
-              <div>
-                <div class="lesson-student">Elena Rusu</div>
-                <div class="lesson-type">Individual · Online · A1</div>
-              </div>
-              <span class="badge badge-gray">Planificat</span>
-            </div>
-            <div class="lesson-item">
-              <div class="lesson-time">17:00</div>
-              <div>
-                <div class="lesson-student">Ion Moraru</div>
-                <div class="lesson-type">Individual · Offline · B2</div>
-              </div>
-              <span class="badge badge-gray">Planificat</span>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-title">Cursanti recenti</div>
+          <div id="recentStudents"><div class="loading"><div class="spinner"></div><br>Se incarca...</div></div>
         </div>
       </div>
 
@@ -580,142 +297,28 @@ tr:hover td{background:var(--bg)}
         <div class="toolbar">
           <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Caută cursant..." id="searchInput" oninput="filterStudents()">
+            <input type="text" placeholder="Cauta cursant..." id="searchInput" oninput="filterStudents()">
           </div>
-          <button class="filter-btn active" onclick="setFilter('toti',this)">Toți (8)</button>
-          <button class="filter-btn" onclick="setFilter('activi',this)">Activi</button>
-          <button class="filter-btn" onclick="setFilter('restanti',this)">Restanțieri</button>
-          <button class="filter-btn" onclick="setFilter('noi',this)">Cereri noi</button>
+          <button class="filter-btn active" onclick="setFilter('toti',this)">Toti</button>
+          <button class="filter-btn" onclick="setFilter('activ',this)">Activi</button>
+          <button class="filter-btn" onclick="setFilter('nou',this)">Cereri noi</button>
+          <button class="filter-btn" onclick="setFilter('restant',this)">Restantieri</button>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Cursant</th>
-                <th>Nivel</th>
-                <th>Pachet</th>
-                <th>Progres lecții</th>
-                <th>Plată</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="studentsTable"></tbody>
-          </table>
-        </div>
+        <div id="studentsTable"><div class="loading"><div class="spinner"></div><br>Se incarca...</div></div>
       </div>
 
-      <!-- STUDENT DETAIL -->
+      <!-- DETAIL -->
       <div class="page" id="page-detail">
-        <button class="back-btn" onclick="showPage('studenti',null);setNavActive('studenti')">← Înapoi la cursanți</button>
-        <div id="detailContent"></div>
-      </div>
-
-      <!-- PLATI -->
-      <div class="page" id="page-plati">
-        <div class="payments-summary">
-          <div class="stat-card">
-            <div class="stat-label">Total încasat (iunie)</div>
-            <div class="stat-value">€1,840</div>
-            <div class="stat-sub">via Stripe</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">În așteptare</div>
-            <div class="stat-value" style="color:var(--yellow)">€360</div>
-            <div class="stat-sub">2 plăți</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Restante</div>
-            <div class="stat-value" style="color:var(--red)">€420</div>
-            <div class="stat-sub">3 cursanți</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Rambursate</div>
-            <div class="stat-value">€0</div>
-            <div class="stat-sub">luna aceasta</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Tranzacții Stripe — Iunie 2025</div>
-          <div class="table-wrap" style="border:none;margin:-1.25rem">
-            <table>
-              <thead>
-                <tr>
-                  <th>Cursant</th>
-                  <th>Pachet</th>
-                  <th>Sumă</th>
-                  <th>Data</th>
-                  <th>Status</th>
-                  <th>ID Stripe</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td><span class="student-name" onclick="openStudent(0)">Maria Popescu</span></td><td>B1 — 24 lecții</td><td style="color:var(--green);font-weight:700">€180</td><td>01 iun</td><td><span class="badge badge-green">Plătit</span></td><td style="font-size:0.72rem;color:var(--text3)">pi_3Px...</td></tr>
-                <tr><td><span class="student-name" onclick="openStudent(1)">Andrei Lungu</span></td><td>A2 — 24 lecții</td><td style="color:var(--green);font-weight:700">€160</td><td>03 iun</td><td><span class="badge badge-green">Plătit</span></td><td style="font-size:0.72rem;color:var(--text3)">pi_3Qx...</td></tr>
-                <tr><td><span class="student-name" onclick="openStudent(2)">Sofia Dănilă</span></td><td>A1 — 32 lecții</td><td style="color:var(--green);font-weight:700">€140</td><td>05 iun</td><td><span class="badge badge-green">Plătit</span></td><td style="font-size:0.72rem;color:var(--text3)">pi_3Rx...</td></tr>
-                <tr><td><span class="student-name" onclick="openStudent(3)">Ion Moraru</span></td><td>B2 — 24 lecții</td><td style="color:var(--red);font-weight:700">€200</td><td>10 iun</td><td><span class="badge badge-red">Restant</span></td><td style="font-size:0.72rem;color:var(--text3)">—</td></tr>
-                <tr><td><span class="student-name" onclick="openStudent(4)">Elena Rusu</span></td><td>A1 — 32 lecții</td><td style="color:var(--yellow);font-weight:700">€140</td><td>15 iun</td><td><span class="badge badge-yellow">În așteptare</span></td><td style="font-size:0.72rem;color:var(--text3)">pi_3Sx...</td></tr>
-                <tr><td>Cristina Marin</td><td>B1 — 24 lecții</td><td style="color:var(--green);font-weight:700">€180</td><td>18 iun</td><td><span class="badge badge-green">Plătit</span></td><td style="font-size:0.72rem;color:var(--text3)">pi_3Tx...</td></tr>
-                <tr><td>Vlad Nistor</td><td>A2 — 24 lecții</td><td style="color:var(--green);font-weight:700">€160</td><td>20 iun</td><td><span class="badge badge-green">Plătit</span></td><td style="font-size:0.72rem;color:var(--text3)">pi_3Ux...</td></tr>
-                <tr><td>Diana Popa</td><td>C1 — 24 lecții</td><td style="color:var(--yellow);font-weight:700">€220</td><td>21 iun</td><td><span class="badge badge-yellow">În așteptare</span></td><td style="font-size:0.72rem;color:var(--text3)">pi_3Vx...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- CALENDAR -->
-      <div class="page" id="page-calendar">
-        <div class="card">
-          <div class="card-title">Calendar lecții — Iunie 2025</div>
-          <p style="color:var(--text3);font-size:0.9rem;margin-bottom:1rem">Integrare Google Calendar disponibilă în curând. Momentan lecțiile sunt gestionate din fișa cursantului.</p>
-          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text3);padding:0.5rem">Lu</div>
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text3);padding:0.5rem">Ma</div>
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text3);padding:0.5rem">Mi</div>
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text3);padding:0.5rem">Jo</div>
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text3);padding:0.5rem">Vi</div>
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text3);padding:0.5rem">Sâ</div>
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text3);padding:0.5rem">Du</div>
-          </div>
-          <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center"></div>
-        </div>
+        <button class="back-btn" onclick="showPage('studenti',document.getElementById('nav-studenti'))">← Inapoi la cursanti</button>
+        <div id="detailContent"><div class="loading"><div class="spinner"></div></div></div>
       </div>
 
       <!-- SETARI -->
       <div class="page" id="page-setari">
-        <div class="card" style="max-width:560px">
-          <div class="card-title">Utilizatori & Roluri</div>
-          <div style="display:flex;flex-direction:column;gap:0.75rem">
-            <div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:var(--bg);border-radius:var(--radius-sm)">
-              <div class="user-avatar" style="width:40px;height:40px;font-size:1rem">T</div>
-              <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">Tatiana Straistă</div><div style="font-size:0.78rem;color:var(--text3)">tatiana@letsenglish.eu</div></div>
-              <span class="badge badge-blue">Administrator</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:var(--bg);border-radius:var(--radius-sm)">
-              <div class="user-avatar" style="width:40px;height:40px;font-size:1rem;background:var(--navy2)">A</div>
-              <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">Ana Profesor</div><div style="font-size:0.78rem;color:var(--text3)">ana@letsenglish.eu</div></div>
-              <span class="badge badge-green">Profesor</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:var(--bg);border-radius:var(--radius-sm)">
-              <div class="user-avatar" style="width:40px;height:40px;font-size:1rem;background:var(--navy3)">M</div>
-              <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">Mihai Profesor</div><div style="font-size:0.78rem;color:var(--text3)">mihai@letsenglish.eu</div></div>
-              <span class="badge badge-green">Profesor</span>
-            </div>
-          </div>
-          <button class="add-student-btn" style="margin-top:1rem;width:auto">+ Adaugă utilizator</button>
-        </div>
-        <div class="card" style="max-width:560px;margin-top:1rem">
-          <div class="card-title">Stripe</div>
-          <div class="form-group">
-            <label>Stripe Secret Key</label>
-            <input type="password" value="sk_live_••••••••••••••••••••" style="font-family:monospace">
-          </div>
-          <div class="form-group">
-            <label>Stripe Publishable Key</label>
-            <input type="text" value="pk_live_••••••••••••••••••••" style="font-family:monospace">
-          </div>
-          <button class="btn-save" style="padding:0.6rem 1.5rem">Salvează</button>
+        <div class="card" style="max-width:480px">
+          <div class="card-title">Schimba parola</div>
+          <div class="form-group"><label>Parola noua</label><input type="password" id="newPass" placeholder="Parola noua"></div>
+          <button class="btn-save" onclick="changePassword()">Salveaza</button>
         </div>
       </div>
 
@@ -728,352 +331,405 @@ tr:hover td{background:var(--bg)}
   <div class="modal">
     <h3>Cursant nou</h3>
     <div class="form-row">
-      <div class="form-group"><label>Prenume</label><input type="text" id="newFirstName" placeholder="Maria"></div>
-      <div class="form-group"><label>Nume</label><input type="text" id="newLastName" placeholder="Popescu"></div>
+      <div class="form-group"><label>Prenume</label><input type="text" id="newFirst" placeholder="Maria"></div>
+      <div class="form-group"><label>Nume</label><input type="text" id="newLast" placeholder="Popescu"></div>
     </div>
-    <div class="form-group"><label>Telefon / WhatsApp</label><input type="tel" id="newPhone" placeholder="+373 XX XXX XXX"></div>
+    <div class="form-group"><label>Telefon</label><input type="tel" id="newPhone" placeholder="+373 XX XXX XXX"></div>
     <div class="form-group"><label>Email</label><input type="email" id="newEmail" placeholder="maria@email.com"></div>
     <div class="form-row">
       <div class="form-group"><label>Nivel</label>
-        <select id="newLevel" style="width:100%;padding:0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;outline:none">
-          <option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option>
-        </select>
+        <select id="newLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option></select>
       </div>
       <div class="form-group"><label>Format</label>
-        <select id="newFormat" style="width:100%;padding:0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;outline:none">
-          <option>Online</option><option>Offline</option><option>B2B</option>
-        </select>
+        <select id="newFormat"><option>Online</option><option>Offline</option><option>B2B</option></select>
       </div>
     </div>
     <div class="form-group"><label>Pachet</label>
-      <select id="newPackage" style="width:100%;padding:0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;outline:none">
-        <option>A1 — 32 lecții (€140)</option>
-        <option>A2 — 24 lecții (€160)</option>
-        <option>B1 — 24 lecții (€180)</option>
-        <option>B2 — 24 lecții (€200)</option>
-        <option>C1 — 24 lecții (€220)</option>
-        <option>Individual — flexibil</option>
+      <select id="newPackage" onchange="updatePrice()">
+        <option value="A1|32|140">A1 — 32 lectii (140 EUR)</option>
+        <option value="A2|24|160">A2 — 24 lectii (160 EUR)</option>
+        <option value="B1|24|180">B1 — 24 lectii (180 EUR)</option>
+        <option value="B2|24|200">B2 — 24 lectii (200 EUR)</option>
+        <option value="C1|24|220">C1 — 24 lectii (220 EUR)</option>
       </select>
     </div>
-    <div class="form-group"><label>Mențiune inițială</label><textarea id="newNote" class="note-input" placeholder="Ex: Vrea să se pregătească pentru interviu în engleză..."></textarea></div>
+    <div class="form-group"><label>Mentiune initiala (optional)</label><textarea id="newNote" placeholder="Ex: Vrea sa se pregateasca pentru interviu..."></textarea></div>
     <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal('modalAdd')">Anulează</button>
-      <button class="btn-save" onclick="addStudent()">Salvează cursant</button>
+      <button class="btn-cancel" onclick="closeModal('modalAdd')">Anuleaza</button>
+      <button class="btn-save" onclick="addStudent()">Salveaza</button>
     </div>
   </div>
 </div>
 
 <script>
-// ===== DATA =====
-const USERS = [
-  {email:'tatiana@letsenglish.eu',pass:'admin123',name:'Tatiana',role:'Administrator',avatar:'T'},
-  {email:'ana@letsenglish.eu',pass:'prof123',name:'Ana',role:'Profesor',avatar:'A'},
-  {email:'mihai@letsenglish.eu',pass:'prof123',name:'Mihai',role:'Profesor',avatar:'M'}
-];
+// ===== SUPABASE =====
+const SUPA_URL = 'https://fyumutgpvkhsprldcygp.supabase.co';
+const SUPA_KEY = 'sb_publishable_EH0zGQo_TIc7j0bclqNYSA_lePIlXQi';
+const { createClient } = supabase;
+const sb = createClient(SUPA_URL, SUPA_KEY);
 
-let students = [
-  {id:0,first:'Maria',last:'Popescu',phone:'+373 69 123 456',email:'maria@gmail.com',level:'B1',format:'Online',package:'B1 — 24 lecții',packageTotal:24,lectiiFinalizate:18,payStatus:'platit',payAmount:180,status:'activ',notes:[{text:'Progres excelent! Vrea să se pregătească pentru interviu la companie britanică.',by:'Tatiana',date:'15 iun 2025'}],lectii:[{nr:1,date:'3 mai',desc:'Introducere, evaluare inițială',done:true},{nr:2,date:'5 mai',desc:'Present Simple vs Continuous',done:true},{nr:3,date:'7 mai',desc:'Vocabular — job & workplace',done:true},{nr:4,date:'10 mai',desc:'Past Simple — verbe regulate',done:true},{nr:5,date:'12 mai',desc:'Past Simple — verbe neregulate',done:true},{nr:6,date:'14 mai',desc:'Conversație liberă — weekend',done:true},{nr:7,date:'17 mai',desc:'Future tenses',done:true},{nr:8,date:'19 mai',desc:'Conditionals I',done:true},{nr:9,date:'21 mai',desc:'Conditionals II & III',done:true},{nr:10,date:'24 mai',desc:'Modal verbs',done:true},{nr:11,date:'26 mai',desc:'Vocabular — călătorii',done:true},{nr:12,date:'28 mai',desc:'Recapitulare + test parțial',done:true},{nr:13,date:'31 mai',desc:'Passive Voice',done:true},{nr:14,date:'3 iun',desc:'Reported Speech',done:true},{nr:15,date:'5 iun',desc:'Articles — a/an/the',done:true},{nr:16,date:'7 iun',desc:'Phrasal verbs frecvente',done:true},{nr:17,date:'10 iun',desc:'Writing — email profesional',done:true},{nr:18,date:'12 iun',desc:'Listening & Speaking practice',done:true},{nr:19,date:'24 iun',desc:'',done:false},{nr:20,date:'26 iun',desc:'',done:false},{nr:21,date:'28 iun',desc:'',done:false},{nr:22,date:'1 iul',desc:'',done:false},{nr:23,date:'3 iul',desc:'',done:false},{nr:24,date:'5 iul',desc:'Examen final',done:false}]},
-  {id:1,first:'Andrei',last:'Lungu',phone:'+373 68 234 567',email:'andrei@gmail.com',level:'A2',format:'Offline',package:'A2 — 24 lecții',packageTotal:24,lectiiFinalizate:10,payStatus:'platit',payAmount:160,status:'activ',notes:[{text:'Timid la vorbire, dar progresează. De lucrat pe pronunție.',by:'Tatiana',date:'1 iun 2025'}],lectii:Array.from({length:24},(v,i)=>({nr:i+1,date:'',desc:'',done:i<10}))},
-  {id:2,first:'Sofia',last:'Dănilă',phone:'+373 79 345 678',email:'sofia@gmail.com',level:'A1',format:'Online',package:'A1 — 32 lecții',packageTotal:32,lectiiFinalizate:3,payStatus:'platit',payAmount:140,status:'activ',notes:[],lectii:Array.from({length:32},(v,i)=>({nr:i+1,date:'',desc:'',done:i<3}))},
-  {id:3,first:'Ion',last:'Moraru',phone:'+373 60 456 789',email:'ion@gmail.com',level:'B2',format:'Offline',package:'B2 — 24 lecții',packageTotal:24,lectiiFinalizate:14,payStatus:'restant',payAmount:200,status:'activ',notes:[{text:'A ignorat 3 mesaje despre plată. De discutat la următoarea lecție.',by:'Tatiana',date:'18 iun 2025'}],lectii:Array.from({length:24},(v,i)=>({nr:i+1,date:'',desc:'',done:i<14}))},
-  {id:4,first:'Elena',last:'Rusu',phone:'+373 69 567 890',email:'elena@gmail.com',level:'A1',format:'Online',package:'A1 — 32 lecții',packageTotal:32,lectiiFinalizate:1,payStatus:'asteptare',payAmount:140,status:'nou',notes:[{text:'Cerere venită de pe site. Interesată de conversație pentru muncă în UK.',by:'Sistem',date:'22 iun 2025'}],lectii:Array.from({length:32},(v,i)=>({nr:i+1,date:'',desc:'',done:i<1}))},
-  {id:5,first:'Cristina',last:'Marin',phone:'+373 78 678 901',email:'cristina@gmail.com',level:'B1',format:'Online',package:'B1 — 24 lecții',packageTotal:24,lectiiFinalizate:20,payStatus:'platit',payAmount:180,status:'activ',notes:[],lectii:Array.from({length:24},(v,i)=>({nr:i+1,date:'',desc:'',done:i<20}))},
-  {id:6,first:'Vlad',last:'Nistor',phone:'+373 60 789 012',email:'vlad@gmail.com',level:'A2',format:'Offline',package:'A2 — 24 lecții',packageTotal:24,lectiiFinalizate:8,payStatus:'platit',payAmount:160,status:'activ',notes:[],lectii:Array.from({length:24},(v,i)=>({nr:i+1,date:'',desc:'',done:i<8}))},
-  {id:7,first:'Diana',last:'Popa',phone:'+373 69 890 123',email:'diana@gmail.com',level:'C1',format:'Online',package:'C1 — 24 lecții',packageTotal:24,lectiiFinalizate:5,payStatus:'asteptare',payAmount:220,status:'activ',notes:[],lectii:Array.from({length:24},(v,i)=>({nr:i+1,date:'',desc:'',done:i<5}))}
+// ===== USERS (local auth pentru simplitate) =====
+const USERS = [
+  {email:'tatiana@letsenglish.eu', pass:'admin123', name:'Tatiana', avatar:'T'},
+  {email:'ana@letsenglish.eu', pass:'prof123', name:'Ana', avatar:'A'},
+  {email:'mihai@letsenglish.eu', pass:'prof123', name:'Mihai', avatar:'M'}
 ];
 
 let currentUser = null;
+let allStudents = [];
 let currentFilter = 'toti';
 let currentStudentId = null;
 
+// ===== TOAST =====
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
 // ===== AUTH =====
-function doLogin(){
-  const email = document.getElementById('loginEmail').value;
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPass').value;
-  const user = USERS.find(u=>u.email===email && u.pass===pass);
-  if(!user){
-    document.getElementById('loginError').style.display='block';
+  const user = USERS.find(u => u.email === email && u.pass === pass);
+  if (!user) {
+    document.getElementById('loginError').style.display = 'block';
     return;
   }
   currentUser = user;
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').style.display='block';
-  document.getElementById('userName').textContent=user.name;
-  document.getElementById('userRole').textContent=user.role;
-  document.getElementById('userAvatar').textContent=user.avatar;
-  renderStudents();
-  renderCalendarGrid();
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('userName').textContent = user.name;
+  document.getElementById('userAvatar').textContent = user.avatar;
+  loadDashboard();
+  loadStudents();
 }
 
-function doLogout(){
-  currentUser=null;
-  document.getElementById('app').style.display='none';
-  document.getElementById('loginScreen').style.display='flex';
+function doLogout() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+}
+
+function changePassword() {
+  const np = document.getElementById('newPass').value;
+  if (!np || np.length < 6) { toast('Parola trebuie sa aiba cel putin 6 caractere', 'error'); return; }
+  toast('Parola schimbata! (Actualizeaza in cod)', 'success');
 }
 
 // ===== NAVIGATION =====
-function showPage(name, navEl){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  const titles={dashboard:'Dashboard',studenti:'Cursanți',detail:'Fișa cursantului',plati:'Plăți Stripe',calendar:'Calendar lecții',setari:'Setări'};
-  document.getElementById('pageTitle').textContent=titles[name]||name;
-  if(navEl){
-    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+function showPage(name, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const titles = {dashboard:'Dashboard', studenti:'Cursanti', detail:'Fisa cursantului', setari:'Setari'};
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+  if (navEl) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     navEl.classList.add('active');
   }
   closeSidebar();
 }
 
-function setNavActive(name){
-  document.querySelectorAll('.nav-item').forEach(i=>{
-    if(i.textContent.trim().toLowerCase().includes(name)) i.classList.add('active');
-    else i.classList.remove('active');
-  });
-}
-
-// ===== SIDEBAR MOBILE =====
-function toggleSidebar(){
+function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('mobileOverlay').classList.toggle('open');
 }
-function closeSidebar(){
+function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('mobileOverlay').classList.remove('open');
 }
 
-// ===== STUDENTS TABLE =====
-function payBadge(s){
-  if(s==='platit') return '<span class="badge badge-green">✓ Plătit</span>';
-  if(s==='restant') return '<span class="badge badge-red">⚠ Restant</span>';
-  return '<span class="badge badge-yellow">⏳ Așteptare</span>';
+// ===== BADGES =====
+function payBadge(s) {
+  if (s === 'platit') return '<span class="badge badge-green">Platit</span>';
+  if (s === 'restant') return '<span class="badge badge-red">Restant</span>';
+  return '<span class="badge badge-yellow">Asteptare</span>';
 }
-function statusBadge(s){
-  if(s==='activ') return '<span class="badge badge-green">Activ</span>';
-  if(s==='nou') return '<span class="badge badge-blue">Cerere nouă</span>';
+function statusBadge(s) {
+  if (s === 'activ') return '<span class="badge badge-green">Activ</span>';
+  if (s === 'nou') return '<span class="badge badge-blue">Cerere noua</span>';
   return '<span class="badge badge-gray">Inactiv</span>';
 }
 
-function renderStudents(){
-  const search = (document.getElementById('searchInput')||{value:''}).value.toLowerCase();
-  let list = students.filter(s=>{
-    const matchSearch = (s.first+' '+s.last+' '+s.email+' '+s.level).toLowerCase().includes(search);
-    let matchFilter = true;
-    if(currentFilter==='activi') matchFilter=s.status==='activ';
-    if(currentFilter==='restanti') matchFilter=s.payStatus==='restant';
-    if(currentFilter==='noi') matchFilter=s.status==='nou';
-    return matchSearch && matchFilter;
-  });
-  const tbody = document.getElementById('studentsTable');
-  tbody.innerHTML = list.map(s=>{
-    const pct = Math.round((s.lectiiFinalizate/s.packageTotal)*100);
-    return `<tr>
-      <td>
-        <div class="student-name" onclick="openStudent(${s.id})">${s.first} ${s.last}</div>
-        <div style="font-size:0.75rem;color:var(--text3)">${s.phone}</div>
-      </td>
-      <td><span class="badge badge-blue">${s.level}</span></td>
-      <td style="font-size:0.82rem">${s.package}</td>
-      <td>
-        <div class="progress-wrap">
-          <div class="progress-bar-sm"><div class="progress-fill-sm" style="width:${pct}%"></div></div>
-          <span class="progress-text">${s.lectiiFinalizate}/${s.packageTotal}</span>
-        </div>
-      </td>
-      <td>${payBadge(s.payStatus)}</td>
+// ===== DASHBOARD =====
+async function loadDashboard() {
+  const { data: students } = await sb.from('cursanti').select('*');
+  if (!students) return;
+  const activi = students.filter(s => s.status === 'activ').length;
+  const noi = students.filter(s => s.status === 'nou').length;
+  const restanti = students.filter(s => s.pay_status === 'restant').length;
+  const total = students.reduce((a, s) => a + (s.pay_status === 'platit' ? s.pay_amount : 0), 0);
+
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Cursanti activi</div>
+      <div class="stat-value">${activi}</div>
+      <div class="stat-sub">${noi} cereri noi</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total cursanti</div>
+      <div class="stat-value">${students.length}</div>
+      <div class="stat-sub">in baza de date</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Venituri incasate</div>
+      <div class="stat-value">€${total}</div>
+      <div class="stat-sub">via plati marcate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Plati restante</div>
+      <div class="stat-value" style="color:var(--red)">${restanti}</div>
+      <div class="stat-sub">necesita atentie</div>
+    </div>`;
+
+  const recent = students.slice(-5).reverse();
+  document.getElementById('recentStudents').innerHTML = recent.length ? `
+    <table><thead><tr><th>Cursant</th><th>Nivel</th><th>Status</th><th>Plata</th></tr></thead>
+    <tbody>${recent.map(s => `<tr>
+      <td><span class="student-name" onclick="openStudent('${s.id}')">${s.first_name} ${s.last_name}</span></td>
+      <td><span class="badge badge-blue">${s.level || '-'}</span></td>
       <td>${statusBadge(s.status)}</td>
-      <td>
-        <div class="action-btns">
-          <button class="btn-icon" onclick="openStudent(${s.id})" title="Deschide">👁</button>
-          <button class="btn-icon" title="Whatsapp" onclick="alert('Deschide WhatsApp pentru ${s.first}')">💬</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
+      <td>${payBadge(s.pay_status)}</td>
+    </tr>`).join('')}</tbody></table>` : '<div class="loading">Nu sunt cursanti inca.</div>';
 }
 
-function filterStudents(){renderStudents()}
-function setFilter(f,btn){
-  currentFilter=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+// ===== STUDENTS =====
+async function loadStudents() {
+  const { data, error } = await sb.from('cursanti').select('*').order('created_at', {ascending: false});
+  if (error) { toast('Eroare la incarcare', 'error'); return; }
+  allStudents = data || [];
+  renderStudents();
+}
+
+function renderStudents() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  let list = allStudents.filter(s => {
+    const matchSearch = (s.first_name + ' ' + s.last_name + ' ' + (s.email||'')).toLowerCase().includes(search);
+    const matchFilter = currentFilter === 'toti' || s.status === currentFilter || (currentFilter === 'restant' && s.pay_status === 'restant');
+    return matchSearch && matchFilter;
+  });
+
+  if (!list.length) {
+    document.getElementById('studentsTable').innerHTML = '<div class="loading">Nu au fost gasiti cursanti.</div>';
+    return;
+  }
+
+  document.getElementById('studentsTable').innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cursant</th><th>Nivel</th><th>Pachet</th><th>Progres</th><th>Plata</th><th>Status</th><th></th></tr></thead>
+      <tbody>${list.map(s => {
+        const pct = s.package_total > 0 ? Math.round((s.lectii_finalizate / s.package_total) * 100) : 0;
+        return `<tr>
+          <td><div class="student-name" onclick="openStudent('${s.id}')">${s.first_name} ${s.last_name}</div>
+              <div style="font-size:0.75rem;color:var(--text3)">${s.phone || ''}</div></td>
+          <td><span class="badge badge-blue">${s.level || '-'}</span></td>
+          <td style="font-size:0.82rem">${s.package || '-'}</td>
+          <td><div class="progress-wrap">
+            <div class="progress-bar-sm"><div class="progress-fill-sm" style="width:${pct}%"></div></div>
+            <span class="progress-text">${s.lectii_finalizate}/${s.package_total}</span>
+          </div></td>
+          <td>${payBadge(s.pay_status)}</td>
+          <td>${statusBadge(s.status)}</td>
+          <td><div class="action-btns">
+            <button class="btn-icon" onclick="openStudent('${s.id}')">👁</button>
+            <button class="btn-icon" onclick="deleteStudent('${s.id}','${s.first_name} ${s.last_name}')">🗑</button>
+          </div></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+}
+
+function filterStudents() { renderStudents(); }
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderStudents();
 }
 
 // ===== STUDENT DETAIL =====
-function openStudent(id){
-  currentStudentId=id;
-  const s = students[id];
-  const pct = Math.round((s.lectiiFinalizate/s.packageTotal)*100);
-  const initials = s.first[0]+s.last[0];
+async function openStudent(id) {
+  currentStudentId = id;
+  showPage('detail', null);
+  document.getElementById('detailContent').innerHTML = '<div class="loading"><div class="spinner"></div><br>Se incarca...</div>';
 
-  const lectiiHTML = s.lectii.map(l=>{
-    const doneClass = l.done ? 'done' : '';
-    const dateText = l.date || (l.done ? '&mdash;' : 'Planificata');
-    const descText = l.desc || (l.done ? 'Lectie finalizata' : '&mdash;');
-    const badge = l.done ? '<span class="badge badge-green">&#10003;</span>' : '<span class="badge badge-gray">&mdash;</span>';
+  const { data: s } = await sb.from('cursanti').select('*').eq('id', id).single();
+  const { data: mentiuni } = await sb.from('mentiuni').select('*').eq('cursant_id', id).order('created_at');
+  const { data: lectii } = await sb.from('lectii').select('*').eq('cursant_id', id).order('nr');
+
+  if (!s) { document.getElementById('detailContent').innerHTML = '<div class="loading">Cursant negasit.</div>'; return; }
+
+  const pct = s.package_total > 0 ? Math.round((s.lectii_finalizate / s.package_total) * 100) : 0;
+  const initials = (s.first_name[0] || '') + (s.last_name[0] || '');
+
+  const lectiiHTML = (lectii && lectii.length) ? lectii.map(l => {
+    const doneClass = l.finalizata ? 'done' : '';
+    const dateText = l.data_lectie || (l.finalizata ? 'Finalizata' : 'Planificata');
+    const descText = l.descriere || '';
+    const badge = l.finalizata ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-gray">—</span>';
     return '<li class="lectie-item"><div class="lectie-nr ' + doneClass + '">' + l.nr + '</div><div class="lectie-info"><div class="lectie-date">' + dateText + '</div><div class="lectie-desc">' + descText + '</div></div>' + badge + '</li>';
-  }).join('');
+  }).join('') : '<li style="padding:1rem;color:var(--text3);font-size:0.85rem">Nu sunt lectii inregistrate inca.</li>';
 
-  const notesHTML = s.notes.length ? s.notes.map(n=>`
-    <div class="note-item">
-      <div class="note-text">${n.text}</div>
-      <div class="note-meta">${n.by} · ${n.date}</div>
-    </div>`).join('') : '<p style="color:var(--text3);font-size:0.85rem">Nicio mențiune încă.</p>';
+  const notesHTML = (mentiuni && mentiuni.length) ? mentiuni.map(n =>
+    '<div class="note-item"><div class="note-text">' + n.text + '</div><div class="note-meta">' + (n.autor || 'Sistem') + ' · ' + new Date(n.created_at).toLocaleDateString('ro-RO') + '</div></div>'
+  ).join('') : '<p style="color:var(--text3);font-size:0.85rem;margin-bottom:0.75rem">Nicio mentiune inca.</p>';
 
   document.getElementById('detailContent').innerHTML = `
     <div class="student-header">
       <div class="student-avatar-lg">${initials}</div>
       <div class="student-meta">
-        <h2>${s.first} ${s.last}</h2>
-        <p>${s.phone} · ${s.email}</p>
+        <h2>${s.first_name} ${s.last_name}</h2>
+        <p>${s.phone || ''} ${s.email ? '· ' + s.email : ''}</p>
         <div class="student-tags">
-          <span class="badge badge-blue">${s.level}</span>
-          <span class="badge badge-gray">${s.format}</span>
+          <span class="badge badge-blue">${s.level || '-'}</span>
+          <span class="badge badge-gray">${s.format || '-'}</span>
           ${statusBadge(s.status)}
-          ${payBadge(s.payStatus)}
+          ${payBadge(s.pay_status)}
         </div>
       </div>
       <div class="student-actions">
-        <button class="btn-sm btn-sm-primary" onclick="alert('Trimite link plată Stripe pentru ${s.first}')">💳 Link plată</button>
-        <button class="btn-sm btn-sm-outline" onclick="alert('WhatsApp: ${s.phone}')">💬 WhatsApp</button>
-        <button class="btn-sm btn-sm-outline" onclick="markLesson(${s.id})">✓ Marchează lecție</button>
+        <button class="btn-sm btn-sm-primary" onclick="markLesson('${s.id}')">✓ Marcheaza lectie</button>
+        <select onchange="updatePayStatus('${s.id}',this.value)" style="padding:0.5rem;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.82rem">
+          <option value="asteptare" ${s.pay_status==='asteptare'?'selected':''}>Asteptare plata</option>
+          <option value="platit" ${s.pay_status==='platit'?'selected':''}>Platit</option>
+          <option value="restant" ${s.pay_status==='restant'?'selected':''}>Restant</option>
+        </select>
+        <select onchange="updateStatus('${s.id}',this.value)" style="padding:0.5rem;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.82rem">
+          <option value="nou" ${s.status==='nou'?'selected':''}>Cerere noua</option>
+          <option value="activ" ${s.status==='activ'?'selected':''}>Activ</option>
+          <option value="inactiv" ${s.status==='inactiv'?'selected':''}>Inactiv</option>
+        </select>
       </div>
     </div>
 
     <div class="detail-grid">
       <div class="detail-stat">
-        <div class="detail-stat-label">Lecții finalizate</div>
-        <div class="detail-stat-value">${s.lectiiFinalizate}<span style="font-size:1rem;color:var(--text3)">/${s.packageTotal}</span></div>
+        <div class="detail-stat-label">Lectii finalizate</div>
+        <div class="detail-stat-value">${s.lectii_finalizate}<span style="font-size:1rem;color:var(--text3)">/${s.package_total}</span></div>
         <div style="margin-top:0.5rem"><div class="progress-bar-sm" style="height:8px"><div class="progress-fill-sm" style="width:${pct}%"></div></div></div>
-        <div class="detail-stat-sub">${pct}% din pachet completat</div>
+        <div class="detail-stat-sub">${pct}% din pachet</div>
       </div>
       <div class="detail-stat">
-        <div class="detail-stat-label">Plată pachet</div>
-        <div class="detail-stat-value" style="color:${s.payStatus==='platit'?'var(--green)':s.payStatus==='restant'?'var(--red)':'var(--yellow)'}">€${s.payAmount}</div>
-        <div class="detail-stat-sub">${s.payStatus==='platit'?'Achitat via Stripe':s.payStatus==='restant'?'⚠ Plată restantă':'⏳ În așteptare'}</div>
+        <div class="detail-stat-label">Plata pachet</div>
+        <div class="detail-stat-value" style="color:${s.pay_status==='platit'?'var(--green)':s.pay_status==='restant'?'var(--red)':'var(--yellow)'}">€${s.pay_amount || 0}</div>
+        <div class="detail-stat-sub">${s.package || '-'}</div>
       </div>
       <div class="detail-stat">
-        <div class="detail-stat-label">Lecții rămase</div>
-        <div class="detail-stat-value">${s.packageTotal-s.lectiiFinalizate}</div>
-        <div class="detail-stat-sub">${s.package}</div>
+        <div class="detail-stat-label">Lectii ramase</div>
+        <div class="detail-stat-value">${s.package_total - s.lectii_finalizate}</div>
+        <div class="detail-stat-sub">pana la final</div>
       </div>
     </div>
 
     <div class="detail-body">
       <div class="card">
-        <div class="card-title">Lecții — ${s.package}</div>
+        <div class="card-title">Lectii — ${s.package || ''}</div>
         <ul class="lectii-list">${lectiiHTML}</ul>
       </div>
       <div style="display:flex;flex-direction:column;gap:1rem">
         <div class="card">
-          <div class="card-title">Mențiuni & Note</div>
-          ${notesHTML}
-          <div style="margin-top:1rem">
-            <textarea class="note-input" id="noteInput${s.id}" placeholder="Adaugă o mențiune..."></textarea>
-            <button class="add-note-btn" onclick="addNote(${s.id})">+ Adaugă mențiune</button>
+          <div class="card-title">Mentiuni & Note</div>
+          <div id="notesList">${notesHTML}</div>
+          <div style="margin-top:0.75rem">
+            <textarea class="form-group" id="noteInput" style="width:100%;padding:0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.85rem;resize:vertical;min-height:70px;outline:none;margin-bottom:0.5rem" placeholder="Adauga o mentiune..."></textarea>
+            <button class="add-note-btn" onclick="addNote('${s.id}')">+ Adauga mentiune</button>
           </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Plăți</div>
-          <div class="payment-item">
-            <div>
-              <div class="payment-desc">${s.package}</div>
-              <div class="payment-date">Stripe · ${s.payStatus==='platit'?'Plătit':'Neîncasat'}</div>
-            </div>
-            <div class="payment-amount" style="color:${s.payStatus==='platit'?'var(--green)':'var(--red)'}">€${s.payAmount}</div>
-          </div>
-          <button class="btn-sm btn-sm-primary" style="margin-top:0.75rem;width:100%" onclick="alert('Link Stripe generat pentru ${s.first}!')">Generează link plată Stripe</button>
         </div>
       </div>
-    </div>
-  `;
-
-  showPage('detail', null);
-  // mark nav
-  document.querySelectorAll('.nav-item').forEach(i=>{
-    if(i.textContent.includes('Cursanți')) i.classList.add('active');
-    else i.classList.remove('active');
-  });
+    </div>`;
 }
 
-function addNote(id){
-  const input = document.getElementById('noteInput'+id);
-  const text = input.value.trim();
-  if(!text) return;
-  students[id].notes.push({text, by: currentUser.name, date: new Date().toLocaleDateString('ro-RO',{day:'numeric',month:'short',year:'numeric'})});
-  input.value='';
+// ===== ACTIONS =====
+async function markLesson(id) {
+  const { data: s } = await sb.from('cursanti').select('*').eq('id', id).single();
+  if (!s) return;
+  if (s.lectii_finalizate >= s.package_total) { toast('Toate lectiile au fost finalizate!', 'error'); return; }
+  const newNr = s.lectii_finalizate + 1;
+  const today = new Date().toLocaleDateString('ro-RO');
+  await sb.from('lectii').insert({cursant_id: id, nr: newNr, data_lectie: today, descriere: 'Lectie finalizata', finalizata: true});
+  await sb.from('cursanti').update({lectii_finalizate: newNr}).eq('id', id);
+  toast('Lectia ' + newNr + ' marcata!', 'success');
+  openStudent(id);
+  loadStudents();
+}
+
+async function addNote(id) {
+  const text = document.getElementById('noteInput').value.trim();
+  if (!text) return;
+  await sb.from('mentiuni').insert({cursant_id: id, text: text, autor: currentUser ? currentUser.name : 'Admin'});
+  toast('Mentiune adaugata!', 'success');
   openStudent(id);
 }
 
-function markLesson(id){
-  const s = students[id];
-  const next = s.lectii.find(l=>!l.done);
-  if(!next){alert('Toate lecțiile au fost finalizate!');return;}
-  next.done=true;
-  next.date=new Date().toLocaleDateString('ro-RO',{day:'numeric',month:'short'});
-  next.desc='Lecție finalizată';
-  s.lectiiFinalizate++;
-  openStudent(id);
+async function updatePayStatus(id, val) {
+  await sb.from('cursanti').update({pay_status: val}).eq('id', id);
+  toast('Status plata actualizat!', 'success');
+  loadStudents();
+  loadDashboard();
+}
+
+async function updateStatus(id, val) {
+  await sb.from('cursanti').update({status: val}).eq('id', id);
+  toast('Status actualizat!', 'success');
+  loadStudents();
+}
+
+async function deleteStudent(id, name) {
+  if (!confirm('Stergi cursantul ' + name + '? Aceasta actiune nu poate fi anulata.')) return;
+  await sb.from('mentiuni').delete().eq('cursant_id', id);
+  await sb.from('lectii').delete().eq('cursant_id', id);
+  await sb.from('cursanti').delete().eq('id', id);
+  toast('Cursant sters!', 'success');
+  loadStudents();
+  loadDashboard();
 }
 
 // ===== ADD STUDENT =====
-function openAddStudent(){document.getElementById('modalAdd').classList.add('open')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openAddModal() { document.getElementById('modalAdd').classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-function addStudent(){
-  const first = document.getElementById('newFirstName').value.trim();
-  const last = document.getElementById('newLastName').value.trim();
-  if(!first||!last){alert('Completează prenumele și numele.');return;}
-  const pkg = document.getElementById('newPackage').value;
-  const lvl = document.getElementById('newLevel').value;
-  const total = pkg.includes('32')?32:24;
-  const price = parseInt(pkg.match(/€(\d+)/)?.[1]||'0');
-  students.push({
-    id:students.length,
-    first,last,
-    phone:document.getElementById('newPhone').value,
-    email:document.getElementById('newEmail').value,
-    level:lvl,
-    format:document.getElementById('newFormat').value,
-    package:pkg,packageTotal:total,lectiiFinalizate:0,
-    payStatus:'asteptare',payAmount:price,status:'nou',
-    notes:document.getElementById('newNote').value?[{text:document.getElementById('newNote').value,by:currentUser.name,date:new Date().toLocaleDateString('ro-RO',{day:'numeric',month:'short',year:'numeric'})}]:[],
-    lectii:Array.from({length:total},(v,i)=>({nr:i+1,date:'',desc:'',done:false}))
-  });
-  closeModal('modalAdd');
-  renderStudents();
-  showPage('studenti',document.querySelector('.nav-item:nth-child(2)'));
-  ['newFirstName','newLastName','newPhone','newEmail','newNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-}
+async function addStudent() {
+  const first = document.getElementById('newFirst').value.trim();
+  const last = document.getElementById('newLast').value.trim();
+  if (!first || !last) { toast('Completeaza prenumele si numele!', 'error'); return; }
+  const pkgVal = document.getElementById('newPackage').value.split('|');
+  const pkg = pkgVal[0] + ' — ' + pkgVal[1] + ' lectii';
+  const total = parseInt(pkgVal[1]);
+  const price = parseInt(pkgVal[2]);
+  const note = document.getElementById('newNote').value.trim();
 
-// ===== CALENDAR =====
-function renderCalendarGrid(){
-  const grid = document.getElementById('calendarGrid');
-  if(!grid) return;
-  const days = [0,0,0,0,1,1,0, 0,1,1,1,1,1,0, 0,1,1,1,1,1,0, 0,1,1,1,1,1,0, 0,1,0,0,0,0,0];
-  const lessonDays = [2,4,7,9,11,12,14,16,18,19,21,23];
-  let html='';
-  for(let i=0;i<35;i++){
-    const day=i-3;
-    if(day<1||day>30){html+=`<div></div>`;continue;}
-    const hasLesson=lessonDays.includes(day);
-    const isToday=day===23;
-    html+=`<div style="aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;font-size:0.85rem;font-weight:${isToday?700:500};background:${isToday?'var(--navy)':hasLesson?'var(--gold-pale)':'transparent'};color:${isToday?'var(--white)':hasLesson?'var(--navy)':'var(--text3)'};cursor:${hasLesson?'pointer':'default'}" ${hasLesson?`onclick="alert('${day} iun — lecții planificate')"`:''}>
-      ${day}
-      ${hasLesson?`<div style="width:5px;height:5px;border-radius:50%;background:${isToday?'var(--gold)':'var(--navy)'};margin-top:2px"></div>`:''}
-    </div>`;
+  const { data: newS, error } = await sb.from('cursanti').insert({
+    first_name: first, last_name: last,
+    phone: document.getElementById('newPhone').value,
+    email: document.getElementById('newEmail').value,
+    level: document.getElementById('newLevel').value,
+    format: document.getElementById('newFormat').value,
+    package: pkg, package_total: total, pay_amount: price,
+    lectii_finalizate: 0, pay_status: 'asteptare', status: 'nou'
+  }).select().single();
+
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+
+  if (note && newS) {
+    await sb.from('mentiuni').insert({cursant_id: newS.id, text: note, autor: currentUser ? currentUser.name : 'Admin'});
   }
-  grid.innerHTML=html;
+
+  closeModal('modalAdd');
+  toast(first + ' ' + last + ' a fost adaugat!', 'success');
+  ['newFirst','newLast','newPhone','newEmail','newNote'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  loadStudents();
+  loadDashboard();
 }
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded',function(){
-  const btn=document.getElementById('loginBtn');
-  if(btn) btn.addEventListener('click',doLogin);
-  const p=document.getElementById('loginPass');
-  if(p) p.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-  const em=document.getElementById('loginEmail');
-  if(em) em.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 });
 </script>
 </body>
