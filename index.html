@@ -747,6 +747,7 @@
     .test-container { padding: 2rem 1.25rem; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1283,14 +1284,51 @@ calDate = new Date();
 calDate.setDate(1);
 renderCalendar();
 
+/* ---- SUPABASE ---- */
+const { createClient } = supabase;
+const sb = createClient(
+  'https://fyumutgpvkhsprldcygp.supabase.co',
+  'sb_publishable_EH0zGQo_TIc7j0bclqNYSA_lePIlXQi'
+);
+
 /* ---- FORM ---- */
-function submitForm() {
-  const name = document.getElementById('inputName').value.trim();
+async function submitForm() {
+  const nameRaw = document.getElementById('inputName').value.trim();
   const phone = document.getElementById('inputPhone').value.trim();
-  if (!name || !phone) { alert('Te rugăm să completezi numele și telefonul.'); return; }
+  if (!nameRaw || !phone) { alert('Te rugam sa completezi numele si telefonul.'); return; }
+
+  const parts = nameRaw.split(' ');
+  const first_name = parts[0] || nameRaw;
+  const last_name = parts.slice(1).join(' ') || '-';
+  const format = document.getElementById('inputFormat').value || 'Necunoscut';
+  const levelRaw = document.getElementById('inputLevel').value || '';
+  const level = levelRaw ? levelRaw.split(' ')[0] : 'Necunoscut';
+
+  const btn = document.querySelector('.form-submit');
+  btn.textContent = 'Se trimite...';
+  btn.disabled = true;
+
+  const { error } = await sb.from('cursanti').insert({
+    first_name, last_name, phone,
+    format, level,
+    package: 'Cerere initiala',
+    package_total: 0,
+    lectii_finalizate: 0,
+    pay_status: 'asteptare',
+    pay_amount: 0,
+    status: 'nou'
+  });
+
+  if (error) {
+    btn.textContent = 'Trimite cererea →';
+    btn.disabled = false;
+    alert('Eroare la trimitere. Incearca din nou.');
+    return;
+  }
+
   document.querySelector('.contact-form h4').style.display = 'none';
   document.querySelectorAll('.form-group').forEach(g => g.style.display = 'none');
-  document.querySelector('.form-submit').style.display = 'none';
+  btn.style.display = 'none';
   document.getElementById('formSuccess').style.display = 'block';
 }
 </script>
