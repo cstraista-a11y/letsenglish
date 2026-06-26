@@ -842,7 +842,7 @@
     <li><a href="#cursuri">Cursuri</a></li>
     <li><a href="#test">Test rapid</a></li>
     <li><a href="#calendar">Disponibilitate</a></li>
-    <li><a href="#blog">Invata gratuit</a></li>
+    <li><a href="#blog">Învață gratuit</a></li>
     <li><a href="#testimoniale">Recenzii</a></li>
     <li><a href="#contact" class="nav-cta">Rezervă lecție</a></li>
   </ul>
@@ -1188,22 +1188,32 @@
 
 <script>
 /* ---- HERO TYPING ---- */
-const phrases = ["înveți acum", "vorbești cu încredere", "folosești zilnic", "stăpânești complet"];
-let pi = 0, ci = 0, deleting = false;
-const el = document.getElementById('heroTyping');
+// Typing animation
+(function() {
+  const phrases = ["inveti acum", "vorbesti cu incredere", "folosesti zilnic", "stapanesti complet"];
+  let pi = 0, ci = 0, deleting = false;
+  let typingTimer = null;
 
-function type() {
-  const word = phrases[pi];
-  if (!deleting) {
-    el.textContent = word.slice(0, ++ci);
-    if (ci === word.length) { deleting = true; setTimeout(type, 1800); return; }
-  } else {
-    el.textContent = word.slice(0, --ci);
-    if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+  function runType() {
+    const el = document.getElementById('heroTyping');
+    if (!el) return;
+    const word = phrases[pi];
+    if (!deleting) {
+      ci++;
+      el.textContent = word.slice(0, ci);
+      if (ci === word.length) { deleting = true; typingTimer = setTimeout(runType, 1800); return; }
+    } else {
+      ci--;
+      el.textContent = word.slice(0, ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+    }
+    typingTimer = setTimeout(runType, deleting ? 60 : 90);
   }
-  setTimeout(type, deleting ? 60 : 90);
-}
-type();
+
+  window.addEventListener('load', function() {
+    setTimeout(runType, 500);
+  });
+})();
 
 /* ---- QUIZ ---- */
 const questions = [
