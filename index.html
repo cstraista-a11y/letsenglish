@@ -966,12 +966,27 @@
         <div class="options" id="optionsContainer"></div>
       </div>
 
+      <!-- STEP 1: Form to unlock result -->
+      <div id="testGate" style="display:none;text-align:center">
+        <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:0.5rem">Testul s-a terminat! 🎉</p>
+        <div style="font-size:3rem;margin:0.5rem 0">🔒</div>
+        <p style="color:var(--white);font-size:1.1rem;font-weight:600;margin-bottom:0.25rem">Nivelul tău e gata!</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.88rem;margin-bottom:1.5rem">Completează datele de mai jos pentru a vedea rezultatul și a primi recomandări personalizate.</p>
+        <div style="text-align:left;margin-bottom:0.75rem">
+          <input type="text" id="gateNume" placeholder="Numele tău" style="width:100%;padding:0.75rem 1rem;border:1.5px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.08);color:var(--white);font-family:'Inter',sans-serif;font-size:0.9rem;outline:none;margin-bottom:0.6rem">
+          <input type="tel" id="gateTelefon" placeholder="Telefon / WhatsApp" style="width:100%;padding:0.75rem 1rem;border:1.5px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.08);color:var(--white);font-family:'Inter',sans-serif;font-size:0.9rem;outline:none">
+        </div>
+        <button class="btn-gold" onclick="unlockResult()" style="width:100%">Vezi nivelul meu →</button>
+        <button onclick="restartTest()" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:0.78rem;cursor:pointer;margin-top:0.75rem;display:block;width:100%;font-family:'Inter',sans-serif">Refă testul</button>
+      </div>
+
+      <!-- STEP 2: Actual result (shown after form) -->
       <div class="test-result" id="testResult">
         <p style="color:rgba(255,255,255,0.5); font-size:0.85rem;">Nivelul tău este</p>
         <div class="result-level" id="resultLevel">B1</div>
         <div class="result-label" id="resultLabel">Intermediar</div>
         <p class="result-desc" id="resultDesc"></p>
-        <button class="btn-gold" onclick="openContact()">Vreau să încep lecțiile!</button>
+        <button class="btn-gold" onclick="openContact()" style="width:100%">Vreau să încep lecțiile! →</button>
         <button onclick="restartTest()" style="background:transparent;border:none;color:rgba(255,255,255,0.4);font-size:0.8rem;cursor:pointer;margin-top:1rem;display:block;width:100%;">Refă testul</button>
       </div>
     </div>
@@ -1249,20 +1264,57 @@ const levels = [
   { min: 9, max: 10, level: "C1", label: "Avansat", desc: "Impresionant! La nivel C1 lucrăm pe nuanțe, stil și exprimare sofisticată. Continuă să crești!" }
 ];
 
+let pendingResult = null;
+
 function showResult() {
   const lvl = levels.find(l => score >= l.min && score <= l.max) || levels[0];
+  pendingResult = { lvl, score };
   document.getElementById('testBody').style.display = 'none';
-  document.getElementById('testResult').style.display = 'block';
-  document.getElementById('resultLevel').textContent = lvl.level;
-  document.getElementById('resultLabel').textContent = lvl.label;
-  document.getElementById('resultDesc').textContent = `Scor: ${score}/10 — ${lvl.desc}`;
+  document.getElementById('testGate').style.display = 'block';
   document.getElementById('progressFill').style.width = '100%';
 }
 
+async function unlockResult() {
+  const name = document.getElementById('gateNume').value.trim();
+  const phone = document.getElementById('gateTelefon').value.trim();
+  if (!name || !phone) {
+    alert('Te rugăm să completezi numele și telefonul!');
+    return;
+  }
+
+  // Save to Supabase
+  const parts = name.split(' ');
+  const first_name = parts[0] || name;
+  const last_name = parts.slice(1).join(' ') || '-';
+  const level = pendingResult ? pendingResult.lvl.level : 'Necunoscut';
+
+  await sb.from('cursanti').insert({
+    first_name, last_name, phone,
+    level,
+    format: 'Online',
+    package: 'Cerere din test rapid',
+    package_total: 0,
+    lectii_finalizate: 0,
+    pay_status: 'asteptare',
+    pay_amount: 0,
+    status: 'nou'
+  });
+
+  // Show result
+  document.getElementById('testGate').style.display = 'none';
+  document.getElementById('testResult').style.display = 'block';
+  if (pendingResult) {
+    document.getElementById('resultLevel').textContent = pendingResult.lvl.level;
+    document.getElementById('resultLabel').textContent = pendingResult.lvl.label;
+    document.getElementById('resultDesc').textContent = 'Scor: ' + pendingResult.score + '/10 — ' + pendingResult.lvl.desc;
+  }
+}
+
 function restartTest() {
-  currentQ = 0; score = 0; answered = false;
+  currentQ = 0; score = 0; answered = false; pendingResult = null;
   document.getElementById('testBody').style.display = 'block';
   document.getElementById('testResult').style.display = 'none';
+  document.getElementById('testGate').style.display = 'none';
   renderQuestion();
 }
 
