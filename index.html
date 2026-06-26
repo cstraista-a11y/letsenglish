@@ -44,6 +44,82 @@
     overflow-x: hidden;
   }
 
+
+  /* BLOG */
+  #blog { background: var(--white); }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .blog-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(13,27,62,0.1); }
+  .blog-card-img {
+    width: 100%; height: 180px;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+  }
+  .blog-card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+  .blog-cat {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .blog-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; line-height: 1.4; }
+  .blog-card p { font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; flex: 1; }
+  .blog-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 1rem; padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem; color: var(--text-muted);
+  }
+  .blog-read {
+    color: var(--navy); font-weight: 600; font-size: 0.82rem;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.3rem;
+  }
+  .blog-empty { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+  /* ARTICLE PAGE */
+  .article-overlay {
+    position: fixed; inset: 0; background: var(--white);
+    z-index: 1000; overflow-y: auto; display: none;
+  }
+  .article-overlay.open { display: block; }
+  .article-inner { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .article-back {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    color: var(--text-muted); font-size: 0.85rem; cursor: pointer;
+    border: none; background: none; font-family: 'Inter', sans-serif;
+    margin-bottom: 2rem; padding: 0;
+  }
+  .article-back:hover { color: var(--navy); }
+  .article-cat { font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  .article-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 1rem; }
+  .article-meta { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .article-body { font-size: 1rem; color: var(--text-mid); line-height: 1.8; }
+  .article-body h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--navy); margin: 2rem 0 0.75rem; }
+  .article-body h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin: 1.5rem 0 0.5rem; }
+  .article-body p { margin-bottom: 1rem; }
+  .article-body ul, .article-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  .article-body li { margin-bottom: 0.4rem; }
+  .article-body strong { color: var(--navy); }
+  .article-cta-box {
+    background: var(--navy); color: var(--white);
+    border-radius: var(--radius); padding: 2rem; margin-top: 3rem; text-align: center;
+  }
+  .article-cta-box h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .article-cta-box p { color: rgba(255,255,255,0.7); margin-bottom: 1.25rem; font-size: 0.9rem; }
+
   /* NAV */
   nav {
     position: fixed; top: 0; width: 100%; z-index: 100;
@@ -766,6 +842,7 @@
     <li><a href="#cursuri">Cursuri</a></li>
     <li><a href="#test">Test rapid</a></li>
     <li><a href="#calendar">Disponibilitate</a></li>
+    <li><a href="#blog">Invata gratuit</a></li>
     <li><a href="#testimoniale">Recenzii</a></li>
     <li><a href="#contact" class="nav-cta">Rezervă lecție</a></li>
   </ul>
@@ -959,6 +1036,33 @@
     </div>
   </div>
 </section>
+
+<!-- BLOG -->
+<section id="blog" style="background:var(--off-white)">
+  <div class="container">
+    <div class="section-label">Resurse gratuite</div>
+    <h2 class="section-title">Invata engleza gratuit</h2>
+    <p class="section-subtitle">Articole, tips si ghiduri scrise de Tatiana — pentru tine, gratuit.</p>
+    <div class="blog-grid" id="blogGrid">
+      <div class="blog-empty">
+        <p>Articolele se incarca...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARTICLE OVERLAY -->
+<div class="article-overlay" id="articleOverlay">
+  <div class="article-inner">
+    <button class="article-back" onclick="closeArticle()">← Inapoi la articole</button>
+    <div id="articleContent"></div>
+    <div class="article-cta-box">
+      <h3>Vrei sa inveti engleza cu un profesor certificat?</h3>
+      <p>Prima lectie de proba este gratuita. Niciun angajament.</p>
+      <a href="#contact" class="btn-primary" onclick="closeArticle()">Rezerva lectia gratuita →</a>
+    </div>
+  </div>
+</div>
 
 <!-- TESTIMONIALE -->
 <section id="testimoniale">
@@ -1346,6 +1450,83 @@ async function submitForm() {
   btn.style.display = 'none';
   document.getElementById('formSuccess').style.display = 'block';
 }
+
+/* ---- BLOG ---- */
+const EMOJI_MAP = {
+  'Gramatica': '📝', 'Vocabular': '📚', 'Conversatie': '💬',
+  'Pronuntie': '🎤', 'Examene': '🎓', 'Business': '💼', 'General': '✨'
+};
+
+async function loadBlog() {
+  const { data, error } = await sb.from('articole')
+    .select('*')
+    .eq('publicat', true)
+    .order('created_at', { ascending: false });
+
+  const grid = document.getElementById('blogGrid');
+  if (!grid) return;
+
+  if (error || !data || data.length === 0) {
+    grid.innerHTML = `<div class="blog-empty">
+      <p style="font-size:1.5rem;margin-bottom:0.5rem">✏️</p>
+      <p style="color:var(--text-muted)">Articolele vor aparea in curand. Revin!</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = data.map(a => {
+    const emoji = EMOJI_MAP[a.categorie] || '✨';
+    const date = new Date(a.created_at).toLocaleDateString('ro-RO', {day:'numeric', month:'long', year:'numeric'});
+    return `<div class="blog-card" onclick="openArticle('${a.id}')">
+      <div class="blog-card-img" style="background:var(--navy)">${emoji}</div>
+      <div class="blog-card-body">
+        <div class="blog-cat">${a.categorie || 'General'}</div>
+        <h3>${a.titlu}</h3>
+        <p>${a.rezumat || a.continut.substring(0, 120) + '...'}</p>
+        <div class="blog-card-footer">
+          <span>${a.autor || 'Tatiana'} · ${date}</span>
+          <span class="blog-read">Citeste →</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function openArticle(id) {
+  const { data: a } = await sb.from('articole').select('*').eq('id', id).single();
+  if (!a) return;
+  const date = new Date(a.created_at).toLocaleDateString('ro-RO', {day:'numeric', month:'long', year:'numeric'});
+  const htmlContent = a.continut
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+    .split('
+
+').map(p => p.startsWith('<') ? p : `<p>${p}</p>`).join('');
+
+  document.getElementById('articleContent').innerHTML = `
+    <div class="article-cat">${a.categorie || 'General'}</div>
+    <h1 class="article-title">${a.titlu}</h1>
+    <div class="article-meta">De ${a.autor || 'Tatiana'} · ${date}</div>
+    <div class="article-body">${htmlContent}</div>
+  `;
+  document.getElementById('articleOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0,0);
+}
+
+function closeArticle() {
+  document.getElementById('articleOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Load blog on page load
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof sb !== 'undefined') loadBlog();
+});
+
 </script>
 </body>
 </html>

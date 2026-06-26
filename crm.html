@@ -250,6 +250,10 @@ tr:hover td{background:var(--bg)}
         <div class="nav-item" id="nav-studenti" onclick="showPage('studenti',this)">
           <span class="icon">👥</span> Cursanti
         </div>
+        <div class="nav-label">Continut</div>
+        <div class="nav-item" id="nav-blog" onclick="showPage('blog',this)">
+          <span class="icon">✏️</span> Blog & Articole
+        </div>
         <div class="nav-label">Cont</div>
         <div class="nav-item" id="nav-setari" onclick="showPage('setari',this)">
           <span class="icon">⚙️</span> Setari
@@ -311,6 +315,19 @@ tr:hover td{background:var(--bg)}
       <div class="page" id="page-detail">
         <button class="back-btn" onclick="showPage('studenti',document.getElementById('nav-studenti'))">← Inapoi la cursanti</button>
         <div id="detailContent"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+
+
+      <!-- BLOG -->
+      <div class="page" id="page-blog">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem">
+          <div>
+            <h2 style="font-size:1.1rem;font-weight:700;color:var(--navy)">Articole publicate</h2>
+            <p style="font-size:0.82rem;color:var(--text3);margin-top:0.2rem">Scrie si publica articole pe sectiunea "Invata engleza gratuit" de pe site</p>
+          </div>
+          <button class="add-btn" onclick="openArticleModal()">+ Articol nou</button>
+        </div>
+        <div id="articoleList"><div class="loading"><div class="spinner"></div><br>Se incarca...</div></div>
       </div>
 
       <!-- SETARI -->
@@ -423,7 +440,8 @@ function changePassword() {
 function showPage(name, navEl) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  const titles = {dashboard:'Dashboard', studenti:'Cursanti', detail:'Fisa cursantului', setari:'Setari'};
+  if (name === 'blog') loadArticole();
+  const titles = {dashboard:'Dashboard', studenti:'Cursanti', detail:'Fisa cursantului', blog:'Blog & Articole', setari:'Setari'};
   document.getElementById('pageTitle').textContent = titles[name] || name;
   if (navEl) {
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -725,6 +743,94 @@ async function addStudent() {
   loadDashboard();
 }
 
+
+// ===== BLOG =====
+async function loadArticole() {
+  const { data, error } = await sb.from('articole').select('*').order('created_at', {ascending: false});
+  const list = document.getElementById('articoleList');
+  if (!list) return;
+  if (error || !data || data.length === 0) {
+    list.innerHTML = '<div class="loading">Nu sunt articole inca. Apasa "+ Articol nou" pentru a incepe!</div>';
+    return;
+  }
+  list.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Titlu</th><th>Categorie</th><th>Status</th><th>Data</th><th></th></tr></thead>
+    <tbody>${data.map(a => `<tr>
+      <td><div style="font-weight:600;color:var(--navy)">${a.titlu}</div>
+          <div style="font-size:0.75rem;color:var(--text3)">${(a.rezumat||'').substring(0,60)}${a.rezumat&&a.rezumat.length>60?'...':''}</div></td>
+      <td><span class="badge badge-blue">${a.categorie||'General'}</span></td>
+      <td>${a.publicat ? '<span class="badge badge-green">Publicat</span>' : '<span class="badge badge-gray">Draft</span>'}</td>
+      <td style="font-size:0.8rem;color:var(--text3)">${new Date(a.created_at).toLocaleDateString('ro-RO')}</td>
+      <td><div class="action-btns">
+        <button class="btn-icon" onclick="editArticol('${a.id}')" title="Editeaza">✏️</button>
+        <button class="btn-icon" onclick="togglePublicat('${a.id}',${a.publicat})" title="${a.publicat?'Ascunde':'Publica'}">${a.publicat?'👁':'🚀'}</button>
+        <button class="btn-icon" onclick="deleteArticol('${a.id}')" title="Sterge">🗑</button>
+      </div></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function openArticleModal() {
+  document.getElementById('modalArticolTitle').textContent = 'Articol nou';
+  document.getElementById('editArticolId').value = '';
+  ['artTitlu','artRezumat','artContinut'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('artCategorie').value = 'General';
+  document.getElementById('artPublicat').value = 'false';
+  document.getElementById('modalArticol').classList.add('open');
+}
+
+async function editArticol(id) {
+  const { data: a } = await sb.from('articole').select('*').eq('id', id).single();
+  if (!a) return;
+  document.getElementById('modalArticolTitle').textContent = 'Editeaza articol';
+  document.getElementById('editArticolId').value = a.id;
+  document.getElementById('artTitlu').value = a.titlu;
+  document.getElementById('artRezumat').value = a.rezumat || '';
+  document.getElementById('artContinut').value = a.continut;
+  document.getElementById('artCategorie').value = a.categorie || 'General';
+  document.getElementById('artPublicat').value = String(a.publicat);
+  document.getElementById('modalArticol').classList.add('open');
+}
+
+async function saveArticol() {
+  const titlu = document.getElementById('artTitlu').value.trim();
+  const continut = document.getElementById('artContinut').value.trim();
+  if (!titlu || !continut) { toast('Completeaza titlul si continutul!', 'error'); return; }
+  const id = document.getElementById('editArticolId').value;
+  const payload = {
+    titlu,
+    continut,
+    rezumat: document.getElementById('artRezumat').value.trim(),
+    categorie: document.getElementById('artCategorie').value,
+    publicat: document.getElementById('artPublicat').value === 'true',
+    autor: currentUser ? currentUser.name : 'Tatiana',
+    slug: titlu.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g,'')
+  };
+  let error;
+  if (id) {
+    ({ error } = await sb.from('articole').update(payload).eq('id', id));
+  } else {
+    ({ error } = await sb.from('articole').insert(payload));
+  }
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  closeModal('modalArticol');
+  toast(id ? 'Articol actualizat!' : 'Articol salvat!', 'success');
+  loadArticole();
+}
+
+async function togglePublicat(id, current) {
+  await sb.from('articole').update({ publicat: !current }).eq('id', id);
+  toast(!current ? 'Articol publicat pe site!' : 'Articol ascuns!', 'success');
+  loadArticole();
+}
+
+async function deleteArticol(id) {
+  if (!confirm('Stergi acest articol? Nu poate fi recuperat.')) return;
+  await sb.from('articole').delete().eq('id', id);
+  toast('Articol sters!', 'success');
+  loadArticole();
+}
+
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('loginBtn').addEventListener('click', doLogin);
@@ -732,5 +838,38 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 });
 </script>
+
+<!-- MODAL ARTICOL -->
+<div class="modal-overlay" id="modalArticol">
+  <div class="modal" style="max-width:640px">
+    <h3 id="modalArticolTitle">Articol nou</h3>
+    <input type="hidden" id="editArticolId">
+    <div class="form-group"><label>Titlu articol</label><input type="text" id="artTitlu" placeholder="Ex: 5 greseli de engleza pe care le fac toti moldovenii"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Categorie</label>
+        <select id="artCategorie">
+          <option>General</option><option>Gramatica</option><option>Vocabular</option>
+          <option>Conversatie</option><option>Pronuntie</option><option>Examene</option><option>Business</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Status</label>
+        <select id="artPublicat">
+          <option value="false">Draft (nevizibil)</option>
+          <option value="true">Publicat (vizibil pe site)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Rezumat (apare pe card)</label><textarea id="artRezumat" style="min-height:60px" placeholder="Scurt rezumat — max 150 caractere"></textarea></div>
+    <div class="form-group">
+      <label>Continut articol (suporta Markdown: **bold**, ## titlu, - lista)</label>
+      <textarea id="artContinut" style="min-height:250px;font-family:monospace;font-size:0.85rem" placeholder="Scrie articolul aici...&#10;&#10;## Sectiune 1&#10;&#10;Textul tau...&#10;&#10;## Sectiune 2&#10;&#10;- Punct 1&#10;- Punct 2"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modalArticol')">Anuleaza</button>
+      <button class="btn-save" onclick="saveArticol()">Salveaza articolul</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
