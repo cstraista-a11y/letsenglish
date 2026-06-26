@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Let's English — Școala ta de engleză</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-82M17JSP4Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-82M17JSP4Q');
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1325,6 +1333,13 @@ async function submitForm() {
     alert('Eroare la trimitere. Incearca din nou.');
     return;
   }
+
+  // Track conversion in Google Analytics
+  gtag('event', 'generate_lead', {
+    event_category: 'Contact',
+    event_label: 'Formular rezervare lectie',
+    value: 1
+  });
 
   document.querySelector('.contact-form h4').style.display = 'none';
   document.querySelectorAll('.form-group').forEach(g => g.style.display = 'none');
