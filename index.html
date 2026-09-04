@@ -1564,9 +1564,7 @@ async function openArticle(id) {
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/^- (.+)$/gm, '<li>$1</li>')
     .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-    .split('
-
-').map(p => p.startsWith('<') ? p : `<p>${p}</p>`).join('');
+    .split('\n\n').map(p => p.startsWith('<') ? p : `<p>${p}</p>`).join('');
 
   document.getElementById('articleContent').innerHTML = `
     <div class="article-cat">${a.categorie || 'General'}</div>
