@@ -837,7 +837,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Let's <span>English</span></div>
+  <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;" style="text-decoration:none;" class="nav-logo">Let's <span>English</span></a>
   <ul class="nav-links">
     <li><a href="#cursuri">Cursuri</a></li>
     <li><a href="#test">Test rapid</a></li>
@@ -1441,7 +1441,7 @@ function bookSlot(date, time) {
     const nameField = document.getElementById('inputName');
     if (nameField) nameField.focus();
   }, 800);
-  alert(`Ai ales: ${date} la ora ${time}.\nComplectează formularul de mai jos pentru confirmare.`);
+  setTimeout(() => { const msg = document.getElementById('inputMessage'); if (msg) msg.value = 'Doresc o lectie pe ' + date + ' la ora ' + time; }, 500);
 }
 
 function changeMonth(dir) {
@@ -1496,7 +1496,7 @@ async function submitForm() {
   if (error) {
     btn.textContent = 'Trimite cererea →';
     btn.disabled = false;
-    alert('Eroare la trimitere. Incearca din nou.');
+    console.error("Supabase error:", error); alert('Eroare la trimitere. Incearca din nou.');
     return;
   }
 
