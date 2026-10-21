@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Let's English — Școala ta de engleză</title>
+<meta name="description" content="Școală de engleză online și în Chișinău. Profesori certificați TEFL, lecții pentru adulți, copii și companii. Prima lecție de probă e gratuită.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://letsenglish.eu/">
+<meta property="og:title" content="Let's English — Școala ta de engleză">
+<meta property="og:description" content="Lecții de engleză online și în Chișinău, nivel A1–C1. Testează-ți nivelul gratuit și rezervă o lecție de probă.">
+<meta property="og:locale" content="ro_RO">
+<meta name="theme-color" content="#0D1B3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230D1B3E'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' text-anchor='middle' fill='%23E8A714'%3ELE%3C/text%3E%3C/svg%3E">
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-82M17JSP4Q"></script>
 <script>
@@ -157,6 +165,22 @@
   }
 
   .nav-links a:hover { color: var(--gold); }
+
+  .nav-toggle {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 44px; height: 44px; padding: 10px;
+    background: none; border: none; cursor: pointer;
+  }
+  .nav-toggle span { display: block; height: 2px; background: var(--white); border-radius: 2px; transition: transform .2s, opacity .2s; }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .wa-fallback { display: none; margin-top: 1rem; padding: 1rem; border-radius: var(--radius-sm); background: #f0faf3; border: 1px solid #b7e4c7; font-size: 0.9rem; color: #1b4332; }
+  .wa-fallback p { margin-bottom: 0.75rem; }
+  .wa-btn { display: inline-block; background: #25D366; color: #fff !important; padding: 0.65rem 1.2rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; }
+  .slot-chip { display: none; margin-bottom: 1rem; padding: 0.7rem 1rem; border-radius: var(--radius-sm); background: rgba(212,168,67,0.12); border: 1px solid var(--gold); font-size: 0.9rem; color: var(--navy); }
+  .cal-day.past { opacity: 0.3; cursor: default; }
 
   .nav-cta {
     background: var(--gold);
@@ -823,7 +847,20 @@
   /* MOBILE */
   @media (max-width: 768px) {
     nav { padding: 0 1rem; }
-    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed; top: 64px; left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: rgba(13,27,62,0.98);
+      padding: 0.5rem 1.25rem 1.25rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .nav-links li:last-child { border-bottom: none; padding-top: 0.75rem; }
+    .nav-links a { display: block; padding: 0.9rem 0; font-size: 1rem; }
+    .nav-links a.nav-cta { text-align: center; padding: 0.8rem 1rem; }
     .hero { padding: 6rem 1.25rem 3rem; }
     .hero-stats { gap: 1.5rem; }
     .calendar-wrap { grid-template-columns: 1fr; }
@@ -838,7 +875,8 @@
 <!-- NAV -->
 <nav>
   <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;" style="text-decoration:none;" class="nav-logo">Let's <span>English</span></a>
-  <ul class="nav-links">
+  <button class="nav-toggle" aria-label="Deschide meniul" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  <ul class="nav-links" onclick="if(event.target.tagName==='A') closeMenu()">
     <li><a href="#cursuri">Cursuri</a></li>
     <li><a href="#test">Test rapid</a></li>
     <li><a href="#calendar">Disponibilitate</a></li>
@@ -1056,11 +1094,11 @@
 <section id="blog" style="background:var(--off-white)">
   <div class="container">
     <div class="section-label">Resurse gratuite</div>
-    <h2 class="section-title">Invata engleza gratuit</h2>
-    <p class="section-subtitle">Articole, tips si ghiduri scrise de Tatiana — pentru tine, gratuit.</p>
+    <h2 class="section-title">Învață engleza gratuit</h2>
+    <p class="section-subtitle">Articole, sfaturi și ghiduri scrise de Tatiana — pentru tine, gratuit.</p>
     <div class="blog-grid" id="blogGrid">
       <div class="blog-empty">
-        <p>Articolele se incarca...</p>
+        <p>Articolele se încarcă...</p>
       </div>
     </div>
   </div>
@@ -1069,12 +1107,12 @@
 <!-- ARTICLE OVERLAY -->
 <div class="article-overlay" id="articleOverlay">
   <div class="article-inner">
-    <button class="article-back" onclick="closeArticle()">← Inapoi la articole</button>
+    <button class="article-back" onclick="closeArticle()">← Înapoi la articole</button>
     <div id="articleContent"></div>
     <div class="article-cta-box">
-      <h3>Vrei sa inveti engleza cu un profesor certificat?</h3>
-      <p>Prima lectie de proba este gratuita. Niciun angajament.</p>
-      <a href="#contact" class="btn-primary" onclick="closeArticle()">Rezerva lectia gratuita →</a>
+      <h3>Vrei să înveți engleza cu un profesor certificat?</h3>
+      <p>Prima lecție de probă este gratuită. Niciun angajament.</p>
+      <a href="#contact" class="btn-primary" onclick="closeArticle()">Rezervă lecția gratuită →</a>
     </div>
   </div>
 </div>
@@ -1142,6 +1180,7 @@
 
       <div class="contact-form" id="contactForm">
         <h4>Rezervă o lecție gratuită</h4>
+        <div class="slot-chip" id="slotChip"></div>
         <div class="form-group">
           <label>Numele tău</label>
           <input type="text" placeholder="ex. Maria Ionescu" id="inputName">
@@ -1183,15 +1222,31 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2025 Let's English · Chișinău, Moldova · <a href="mailto:tatiana@letsenglish.eu">tatiana@letsenglish.eu</a></p>
+  <p>© <span id="year">2026</span> Let's English · Chișinău, Moldova · <a href="mailto:tatiana@letsenglish.eu">tatiana@letsenglish.eu</a></p>
   <p style="margin-top:0.5rem;font-size:0.78rem;">Certificare TEFL · Online & Offline · A1–C1</p>
 </footer>
 
 <script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---- MOBILE MENU ---- */
+function toggleMenu() {
+  const links = document.querySelector('.nav-links');
+  const btn = document.querySelector('.nav-toggle');
+  const open = links.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open);
+}
+function closeMenu() {
+  document.querySelector('.nav-links').classList.remove('open');
+  const btn = document.querySelector('.nav-toggle');
+  btn.classList.remove('open'); btn.setAttribute('aria-expanded', false);
+}
+
 /* ---- HERO TYPING ---- */
 // Typing animation
 (function() {
-  const phrases = ["inveti acum", "vorbesti cu incredere", "folosesti zilnic", "stapanesti complet"];
+  const phrases = ["înveți acum", "vorbești cu încredere", "folosești zilnic", "stăpânești complet"];
   let pi = 0, ci = 0, deleting = false;
   let typingTimer = null;
 
@@ -1299,17 +1354,21 @@ async function unlockResult() {
   const last_name = parts.slice(1).join(' ') || '-';
   const level = pendingResult ? pendingResult.lvl.level : 'Necunoscut';
 
-  await sb.from('cursanti').insert({
-    first_name, last_name, phone,
-    level,
-    format: 'Online',
-    package: 'Cerere din test rapid',
-    package_total: 0,
-    lectii_finalizate: 0,
-    pay_status: 'asteptare',
-    pay_amount: 0,
-    status: 'nou'
-  });
+  let saveFailed = false;
+  try {
+    const res = await sb.from('cursanti').insert({
+      first_name, last_name, phone,
+      level,
+      format: 'Online',
+      package: 'Cerere din test rapid',
+      package_total: 0,
+      lectii_finalizate: 0,
+      pay_status: 'asteptare',
+      pay_amount: 0,
+      status: 'nou'
+    });
+    if (res.error) saveFailed = true;
+  } catch (e) { saveFailed = true; }
 
   // Show result
   document.getElementById('testGate').style.display = 'none';
@@ -1318,6 +1377,16 @@ async function unlockResult() {
     document.getElementById('resultLevel').textContent = pendingResult.lvl.level;
     document.getElementById('resultLabel').textContent = pendingResult.lvl.label;
     document.getElementById('resultDesc').textContent = 'Scor: ' + pendingResult.score + '/10 — ' + pendingResult.lvl.desc;
+  }
+  if (saveFailed) {
+    console.error('Supabase: rezultatul testului nu s-a salvat');
+    const txt = `Bună ziua! Am făcut testul de nivel pe site.\nNume: ${name}\nTelefon: ${phone}\nNivel: ${level}`;
+    const note = document.createElement('div');
+    note.className = 'wa-fallback';
+    note.style.display = 'block';
+    note.innerHTML = `<p>Vrei recomandări personalizate de la Tatiana? Trimite-i rezultatul pe WhatsApp:</p>
+      <a href="${waLink(txt)}" target="_blank" rel="noopener" class="wa-btn">Trimite rezultatul →</a>`;
+    document.getElementById('testResult').appendChild(note);
   }
 }
 
@@ -1342,32 +1411,32 @@ calDate.setDate(1);
 const weekdays = ["Lu","Ma","Mi","Jo","Vi","Sâ","Du"];
 const months = ["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"];
 
-const availableSlots = {
-  1: ["10:00","12:00","15:00","18:00"],
-  3: ["09:00","11:00","17:00"],
-  5: ["10:00","14:00","19:00"],
-  8: ["09:00","11:00","14:00","18:00"],
-  10: ["10:00","16:00"],
-  12: ["09:00","13:00","17:00","19:00"],
-  14: ["11:00","15:00"],
-  15: ["10:00","12:00","18:00"],
-  17: ["09:00","14:00","17:00"],
-  19: ["10:00","15:00","18:00"],
-  21: ["09:00","11:00","14:00"],
-  22: ["10:00","16:00","19:00"],
-  24: ["09:00","13:00","17:00"],
-  26: ["10:00","14:00","18:00"],
-  28: ["09:00","11:00","15:00","19:00"],
-  29: ["10:00","16:00"]
+// Program săptămânal (se repetă în fiecare lună). Modifică aici orele reale ale Tatianei.
+// 1 = Luni ... 6 = Sâmbătă, 0 = Duminică (închis)
+const weeklySlots = {
+  1: ["09:00","11:00","14:00","17:00","19:00"],
+  2: ["09:00","11:00","14:00","17:00","19:00"],
+  3: ["09:00","11:00","14:00","17:00","19:00"],
+  4: ["09:00","11:00","14:00","17:00","19:00"],
+  5: ["09:00","11:00","14:00","17:00","19:00"],
+  6: ["10:00","12:00","14:00"]
 };
+// Ore deja ocupate pe date concrete, format "AAAA-LL-ZZ": ["ora", ...]
+const takenSlots = {};
 
-const takenSlots = {
-  1: ["10:00"],
-  8: ["09:00","18:00"],
-  12: ["09:00"],
-  15: ["10:00"],
-  22: ["10:00"]
-};
+function dateKey(y, m, d) { return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`; }
+function slotsFor(y, m, d) {
+  const date = new Date(y, m, d);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  if (date < today) return [];
+  let slots = weeklySlots[date.getDay()] || [];
+  if (date.getTime() === today.getTime()) {
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes() + 60; // minim o oră înainte
+    slots = slots.filter(t => { const [h, mi] = t.split(':').map(Number); return h * 60 + mi >= nowMin; });
+  }
+  return slots;
+}
 
 let selectedDay = null;
 
@@ -1398,9 +1467,11 @@ function renderCalendar() {
     d.className = 'cal-day';
     d.textContent = day;
     const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
-    const hasSlots = availableSlots[day];
+    const isPast = new Date(year, month, day) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const hasSlots = slotsFor(year, month, day).length > 0;
     if (isToday) d.classList.add('today');
-    if (hasSlots) d.classList.add('available');
+    if (isPast) d.classList.add('past');
+    else if (hasSlots) d.classList.add('available');
     else d.classList.add('busy');
     if (selectedDay === day) d.classList.add('selected');
     if (hasSlots) d.onclick = () => selectDay(day);
@@ -1411,10 +1482,10 @@ function renderCalendar() {
 function selectDay(day) {
   selectedDay = day;
   renderCalendar();
-  const slots = availableSlots[day] || [];
-  const taken = takenSlots[day] || [];
   const m = calDate.getMonth();
   const y = calDate.getFullYear();
+  const slots = slotsFor(y, m, day);
+  const taken = takenSlots[dateKey(y, m, day)] || [];
   document.getElementById('scheduleTitle').textContent = `${day} ${months[m]} ${y}`;
   document.getElementById('scheduleSubtitle').textContent = `${slots.length - taken.filter(t => slots.includes(t)).length} locuri disponibile`;
   const container = document.getElementById('scheduleSlots');
@@ -1437,16 +1508,24 @@ function selectDay(day) {
 }
 
 function bookSlot(date, time) {
+  window.selectedSlot = { date, time };
+  const chip = document.getElementById('slotChip');
+  if (chip) {
+    chip.innerHTML = `📅 Ai ales: <strong>${date}, ora ${time}</strong> · <a href="#calendar" style="color:var(--navy)">schimbă</a>`;
+    chip.style.display = 'block';
+  }
   document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
   setTimeout(() => {
     const nameField = document.getElementById('inputName');
-    if (nameField) nameField.focus();
-  }, 800);
-  setTimeout(() => { const msg = document.getElementById('inputMessage'); if (msg) msg.value = 'Doresc o lectie pe ' + date + ' la ora ' + time; }, 500);
+    if (nameField) nameField.focus({ preventScroll: true });
+  }, 700);
 }
 
 function changeMonth(dir) {
-  calDate.setMonth(calDate.getMonth() + dir);
+  const now = new Date();
+  const target = new Date(calDate.getFullYear(), calDate.getMonth() + dir, 1);
+  if (target < new Date(now.getFullYear(), now.getMonth(), 1)) return;
+  calDate = target;
   selectedDay = null;
   renderCalendar();
   document.getElementById('scheduleTitle').textContent = 'Selectează o dată';
@@ -1460,17 +1539,32 @@ calDate.setDate(1);
 renderCalendar();
 
 /* ---- SUPABASE ---- */
-const { createClient } = supabase;
-const sb = createClient(
+// Dacă biblioteca Supabase nu se încarcă, site-ul continuă să funcționeze (cererile merg pe WhatsApp)
+const sb = window.supabase ? window.supabase.createClient(
   'https://fyumutgpvkhsprldcygp.supabase.co',
   'sb_publishable_EH0zGQo_TIc7j0bclqNYSA_lePIlXQi'
-);
+) : { from: () => { throw new Error('Supabase indisponibil'); } };
+
+/* ---- WHATSAPP FALLBACK (dacă serverul nu răspunde, cererea nu se pierde) ---- */
+function waLink(text) { return 'https://wa.me/37369438143?text=' + encodeURIComponent(text); }
+function showWhatsAppFallback(text) {
+  let box = document.getElementById('waFallback');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'waFallback';
+    box.className = 'wa-fallback';
+    document.querySelector('.form-submit').insertAdjacentElement('afterend', box);
+  }
+  box.innerHTML = `<p>Serverul nu răspunde momentan. Trimite cererea direct pe WhatsApp — e gata completată:</p>
+    <a href="${waLink(text)}" target="_blank" rel="noopener" class="wa-btn">Trimite pe WhatsApp →</a>`;
+  box.style.display = 'block';
+}
 
 /* ---- FORM ---- */
 async function submitForm() {
   const nameRaw = document.getElementById('inputName').value.trim();
   const phone = document.getElementById('inputPhone').value.trim();
-  if (!nameRaw || !phone) { alert('Te rugam sa completezi numele si telefonul.'); return; }
+  if (!nameRaw || !phone) { alert('Te rugăm să completezi numele și telefonul.'); return; }
 
   const parts = nameRaw.split(' ');
   const first_name = parts[0] || nameRaw;
@@ -1483,21 +1577,28 @@ async function submitForm() {
   btn.textContent = 'Se trimite...';
   btn.disabled = true;
 
-  const { error } = await sb.from('cursanti').insert({
+  const slotInfo = window.selectedSlot ? ` — ${window.selectedSlot.date}, ora ${window.selectedSlot.time}` : '';
+  let error = null;
+  try {
+    const res = await sb.from('cursanti').insert({
     first_name, last_name, phone,
     format, level,
-    package: 'Cerere initiala',
+    package: 'Cerere initiala' + slotInfo,
     package_total: 0,
     lectii_finalizate: 0,
     pay_status: 'asteptare',
     pay_amount: 0,
     status: 'nou'
   });
+    error = res.error;
+  } catch (e) { error = e; }
 
   if (error) {
+    console.error('Supabase error:', error);
+    const waText = `Bună ziua! Doresc o lecție de probă.\nNume: ${nameRaw}\nTelefon: ${phone}\nFormat: ${format}\nNivel: ${level}${slotInfo ? '\nOra aleasă: ' + slotInfo.replace(' — ', '') : ''}`;
+    showWhatsAppFallback(waText);
     btn.textContent = 'Trimite cererea →';
     btn.disabled = false;
-    console.error("Supabase error:", error); alert('Eroare la trimitere. Incearca din nou.');
     return;
   }
 
@@ -1512,6 +1613,8 @@ async function submitForm() {
   document.querySelectorAll('.form-group').forEach(g => g.style.display = 'none');
   btn.style.display = 'none';
   document.getElementById('formSuccess').style.display = 'block';
+  const chip = document.getElementById('slotChip'); if (chip) chip.style.display = 'none';
+  const wa = document.getElementById('waFallback'); if (wa) wa.style.display = 'none';
 }
 
 /* ---- BLOG ---- */
@@ -1521,10 +1624,13 @@ const EMOJI_MAP = {
 };
 
 async function loadBlog() {
-  const { data, error } = await sb.from('articole')
-    .select('*')
-    .eq('publicat', true)
-    .order('created_at', { ascending: false });
+  let data = null, error = null;
+  try {
+    ({ data, error } = await sb.from('articole')
+      .select('*')
+      .eq('publicat', true)
+      .order('created_at', { ascending: false }));
+  } catch (e) { error = e; }
 
   const grid = document.getElementById('blogGrid');
   if (!grid) return;
@@ -1532,7 +1638,7 @@ async function loadBlog() {
   if (error || !data || data.length === 0) {
     grid.innerHTML = `<div class="blog-empty">
       <p style="font-size:1.5rem;margin-bottom:0.5rem">✏️</p>
-      <p style="color:var(--text-muted)">Articolele vor aparea in curand. Revin!</p>
+      <p style="color:var(--text-muted)">Articolele vor apărea în curând. Revino!</p>
     </div>`;
     return;
   }
@@ -1548,7 +1654,7 @@ async function loadBlog() {
         <p>${a.rezumat || a.continut.substring(0, 120) + '...'}</p>
         <div class="blog-card-footer">
           <span>${a.autor || 'Tatiana'} · ${date}</span>
-          <span class="blog-read">Citeste →</span>
+          <span class="blog-read">Citește →</span>
         </div>
       </div>
     </div>`;
