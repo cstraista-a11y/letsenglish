@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>Let's English — CRM</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -206,11 +207,67 @@ tr:hover td{background:var(--bg)}
   .stats-grid{grid-template-columns:1fr}
   .detail-grid{grid-template-columns:1fr}
 }
+
+/* ===== PIPELINE (v2) ===== */
+:root{--purple:#7C3AED;--purple-bg:#EDE9FE;--orange:#EA580C;--orange-bg:#FFEDD5}
+.badge-purple{background:var(--purple-bg);color:var(--purple)}
+.badge-orange{background:var(--orange-bg);color:var(--orange)}
+.nav-count{margin-left:auto;background:var(--red);color:#fff;font-size:0.68rem;font-weight:700;border-radius:1rem;padding:0.05rem 0.45rem;min-width:18px;text-align:center}
+.nav-item.active .nav-count{background:var(--navy);color:var(--gold)}
+.login-link{background:none;border:none;color:var(--text3);font-size:0.78rem;cursor:pointer;margin-top:0.75rem;font-family:'Inter',sans-serif;text-decoration:underline;display:block;width:100%}
+.login-ok{background:var(--green-bg);color:var(--green);font-size:0.82rem;padding:0.6rem 0.8rem;border-radius:var(--radius-sm);margin-bottom:1rem;display:none}
+
+.todo-list{list-style:none}
+.todo-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 0;border-bottom:1px solid var(--border);cursor:pointer}
+.todo-item:last-child{border-bottom:none}
+.todo-item:hover .student-name{color:var(--blue)}
+.todo-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.todo-main{flex:1;min-width:0}
+.todo-why{font-size:0.75rem;color:var(--text3)}
+.todo-actions{display:flex;gap:0.35rem}
+.qa{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--white);text-decoration:none;font-size:0.95rem;cursor:pointer}
+.qa:hover{background:var(--bg2)}
+.qa.wa{background:#E7F8EE;border-color:#B7E4C7}
+
+.funnel{display:flex;flex-direction:column;gap:0.45rem}
+.funnel-row{display:grid;grid-template-columns:130px 1fr 40px;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--text2)}
+.funnel-bar{height:10px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.funnel-bar span{display:block;height:100%;background:var(--navy);border-radius:5px}
+.funnel-row b{text-align:right;color:var(--navy)}
+
+.dash-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.chips{display:flex;gap:0.4rem;flex-wrap:wrap}
+.chip{padding:0.45rem 0.8rem;border:1.5px solid var(--border);border-radius:2rem;background:var(--white);font-size:0.8rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--text2);white-space:nowrap}
+.chip.active{border-color:var(--navy);background:var(--navy);color:var(--white);font-weight:600}
+.chip .n{opacity:0.6;margin-left:0.25rem}
+.late{color:var(--red);font-weight:600}
+.sub{font-size:0.75rem;color:var(--text3)}
+
+.stepper{display:flex;gap:0.35rem;flex-wrap:wrap;margin:1rem 0 0}
+.step{flex:1;min-width:110px;padding:0.55rem 0.5rem;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--white);font-size:0.76rem;font-weight:600;color:var(--text3);cursor:pointer;text-align:center;font-family:'Inter',sans-serif}
+.step.done{background:var(--bg2);color:var(--text2)}
+.step.current{background:var(--navy);border-color:var(--navy);color:var(--white)}
+.step.lost.current{background:var(--text3);border-color:var(--text3)}
+.info-list{list-style:none}
+.info-list li{display:flex;justify-content:space-between;gap:1rem;padding:0.45rem 0;border-bottom:1px solid var(--border);font-size:0.84rem}
+.info-list li:last-child{border-bottom:none}
+.info-list span:first-child{color:var(--text3)}
+.info-list span:last-child{color:var(--navy);font-weight:500;text-align:right}
+.btn-wa{background:#25D366;color:#fff;border-color:#25D366}
+.btn-wa:hover{background:#1EBE5A}
+.alert-row{background:var(--red-bg);color:var(--red);border-radius:var(--radius-sm);padding:0.6rem 0.8rem;font-size:0.82rem;font-weight:600;margin-bottom:1rem}
+.tpl-preview{width:100%;min-height:150px;padding:0.75rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.88rem;line-height:1.5;outline:none}
+@media(max-width:900px){.dash-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.funnel-row{grid-template-columns:100px 1fr 32px}.hide-sm{display:none}}
+
+.toast:empty{display:none}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr 1fr}.stat-value{font-size:1.6rem}.stat-card{padding:1rem}}
+.toast{transform:translateY(calc(100% + 2rem));opacity:0;transition:transform .3s,opacity .3s}
+.toast.show{transform:translateY(0);opacity:1}
 </style>
 </head>
 <body>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <!-- LOGIN -->
@@ -220,17 +277,19 @@ tr:hover td{background:var(--bg)}
       <h1>Let's <span>English</span></h1>
       <p>Panou de administrare</p>
     </div>
-    <div class="login-error" id="loginError">Email sau parola incorecta.</div>
+    <div class="login-error" id="loginError">Email sau parolă incorectă.</div>
+    <div class="login-ok" id="loginOk"></div>
     <div class="form-group">
       <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="tatiana@letsenglish.eu">
+      <input type="email" id="loginEmail" placeholder="nume@letsenglish.eu" autocomplete="username">
     </div>
     <div class="form-group">
-      <label>Parola</label>
-      <input type="password" id="loginPass" placeholder="••••••••">
+      <label>Parolă</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
     </div>
-    <button class="login-btn" id="loginBtn">Intra in cont</button>
-    <p class="login-hint">Acces restrictionat — doar pentru echipa Let's English</p>
+    <button class="login-btn" id="loginBtn">Intră în cont</button>
+    <button class="login-link" id="forgotBtn">Am uitat parola / prima autentificare</button>
+    <p class="login-hint">Acces restricționat — doar pentru echipa Let's English</p>
   </div>
 </div>
 
@@ -240,31 +299,34 @@ tr:hover td{background:var(--bg)}
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-logo">
         <h2>Let's <span>English</span></h2>
-        <p>Admin CRM</p>
+        <p>CRM</p>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-label">General</div>
+        <div class="nav-label">Vânzări</div>
         <div class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard',this)">
-          <span class="icon">📊</span> Dashboard
+          <span class="icon">📊</span> Azi
         </div>
-        <div class="nav-item" id="nav-studenti" onclick="showPage('studenti',this)">
-          <span class="icon">👥</span> Cursanti
+        <div class="nav-item" id="nav-leaduri" onclick="showPage('leaduri',this)">
+          <span class="icon">🎯</span> Lead-uri <span class="nav-count" id="navUrgent" style="display:none">0</span>
         </div>
-        <div class="nav-label">Continut</div>
+        <div class="nav-label">Școală</div>
+        <div class="nav-item" id="nav-cursanti" onclick="showPage('cursanti',this)">
+          <span class="icon">👥</span> Cursanți
+        </div>
         <div class="nav-item" id="nav-blog" onclick="showPage('blog',this)">
           <span class="icon">✏️</span> Blog & Articole
         </div>
         <div class="nav-label">Cont</div>
         <div class="nav-item" id="nav-setari" onclick="showPage('setari',this)">
-          <span class="icon">⚙️</span> Setari
+          <span class="icon">⚙️</span> Setări
         </div>
       </nav>
       <div class="sidebar-user">
         <div class="user-info">
-          <div class="user-avatar" id="userAvatar">T</div>
+          <div class="user-avatar" id="userAvatar">·</div>
           <div>
             <div class="user-name" id="userName">...</div>
-            <div class="user-role">Administrator</div>
+            <div class="user-role">Echipa Let's English</div>
           </div>
         </div>
         <button class="logout-btn" onclick="doLogout()">Deconectare</button>
@@ -276,66 +338,92 @@ tr:hover td{background:var(--bg)}
     <header class="topbar">
       <div class="topbar-left">
         <button class="hamburger" onclick="toggleSidebar()">☰</button>
-        <span class="page-title" id="pageTitle">Dashboard</span>
+        <span class="page-title" id="pageTitle">Azi</span>
       </div>
       <div class="topbar-right">
-        <button class="add-btn" onclick="openAddModal()">+ Cursant nou</button>
+        <button class="add-btn" onclick="openAddModal()">+ Lead nou</button>
       </div>
     </header>
 
     <main class="main">
 
-      <!-- DASHBOARD -->
+      <!-- AZI -->
       <div class="page active" id="page-dashboard">
-        <div class="stats-grid" id="dashStats">
-          <div class="stat-card"><div class="spinner"></div></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Cursanti recenti</div>
-          <div id="recentStudents"><div class="loading"><div class="spinner"></div><br>Se incarca...</div></div>
+        <div class="stats-grid" id="dashStats"><div class="stat-card"><div class="spinner"></div></div></div>
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-title">De făcut acum <span class="sub" id="todoCount"></span></div>
+            <ul class="todo-list" id="todoList"></ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:1.25rem">
+            <div class="card">
+              <div class="card-title">Pipeline</div>
+              <div class="funnel" id="funnel"></div>
+            </div>
+            <div class="card">
+              <div class="card-title">De unde vin clienții <span class="sub">ultimele 90 zile</span></div>
+              <div id="sources"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- STUDENTI -->
-      <div class="page" id="page-studenti">
+      <!-- LEAD-URI -->
+      <div class="page" id="page-leaduri">
         <div class="toolbar">
           <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Cauta cursant..." id="searchInput" oninput="filterStudents()">
+            <input type="text" placeholder="Caută după nume sau telefon..." id="leadSearch" oninput="renderLeads()">
           </div>
-          <button class="filter-btn active" onclick="setFilter('toti',this)">Toti</button>
-          <button class="filter-btn" onclick="setFilter('activ',this)">Activi</button>
-          <button class="filter-btn" onclick="setFilter('nou',this)">Cereri noi</button>
-          <button class="filter-btn" onclick="setFilter('restant',this)">Restantieri</button>
         </div>
-        <div id="studentsTable"><div class="loading"><div class="spinner"></div><br>Se incarca...</div></div>
+        <div class="chips" id="leadChips" style="margin-bottom:1rem"></div>
+        <div id="leadsTable"><div class="loading"><div class="spinner"></div><br>Se încarcă...</div></div>
+      </div>
+
+      <!-- CURSANTI -->
+      <div class="page" id="page-cursanti">
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Caută cursant..." id="searchInput" oninput="renderStudents()">
+          </div>
+          <button class="filter-btn active" onclick="setFilter('toti',this)">Toți</button>
+          <button class="filter-btn" onclick="setFilter('activ',this)">Activi</button>
+          <button class="filter-btn" onclick="setFilter('restant',this)">Restanțieri</button>
+          <button class="filter-btn" onclick="setFilter('inactiv',this)">Inactivi</button>
+        </div>
+        <div id="studentsTable"><div class="loading"><div class="spinner"></div><br>Se încarcă...</div></div>
       </div>
 
       <!-- DETAIL -->
       <div class="page" id="page-detail">
-        <button class="back-btn" onclick="showPage('studenti',document.getElementById('nav-studenti'))">← Inapoi la cursanti</button>
+        <button class="back-btn" onclick="goBack()">← Înapoi</button>
         <div id="detailContent"><div class="loading"><div class="spinner"></div></div></div>
       </div>
-
 
       <!-- BLOG -->
       <div class="page" id="page-blog">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem">
           <div>
             <h2 style="font-size:1.1rem;font-weight:700;color:var(--navy)">Articole publicate</h2>
-            <p style="font-size:0.82rem;color:var(--text3);margin-top:0.2rem">Scrie si publica articole pe sectiunea "Invata engleza gratuit" de pe site</p>
+            <p style="font-size:0.82rem;color:var(--text3);margin-top:0.2rem">Scrie și publică articole în secțiunea „Învață engleza gratuit” de pe site</p>
           </div>
           <button class="add-btn" onclick="openArticleModal()">+ Articol nou</button>
         </div>
-        <div id="articoleList"><div class="loading"><div class="spinner"></div><br>Se incarca...</div></div>
+        <div id="articoleList"><div class="loading"><div class="spinner"></div><br>Se încarcă...</div></div>
       </div>
 
       <!-- SETARI -->
       <div class="page" id="page-setari">
         <div class="card" style="max-width:480px">
-          <div class="card-title">Schimba parola</div>
-          <div class="form-group"><label>Parola noua</label><input type="password" id="newPass" placeholder="Parola noua"></div>
-          <button class="btn-save" onclick="changePassword()">Salveaza</button>
+          <div class="card-title">Schimbă parola</div>
+          <div class="form-group"><label>Parola nouă (minim 8 caractere)</label><input type="password" id="newPass" autocomplete="new-password"></div>
+          <button class="btn-save" onclick="changePassword()">Salvează</button>
+        </div>
+        <div class="card" style="max-width:480px;margin-top:1rem">
+          <div class="card-title">Link-uri cu sursă pentru reclame și bio</div>
+          <p class="sub" style="margin-bottom:0.75rem">Pune aceste link-uri în bio și în reclame, ca CRM-ul să știe exact de unde a venit fiecare lead.</p>
+          <ul class="info-list" id="utmLinks"></ul>
         </div>
       </div>
 
@@ -343,503 +431,102 @@ tr:hover td{background:var(--bg)}
   </div>
 </div>
 
-<!-- MODAL ADD STUDENT -->
+<!-- MODAL: LEAD NOU -->
 <div class="modal-overlay" id="modalAdd">
   <div class="modal">
-    <h3>Cursant nou</h3>
+    <h3>Lead nou</h3>
     <div class="form-row">
       <div class="form-group"><label>Prenume</label><input type="text" id="newFirst" placeholder="Maria"></div>
       <div class="form-group"><label>Nume</label><input type="text" id="newLast" placeholder="Popescu"></div>
     </div>
     <div class="form-group"><label>Telefon</label><input type="tel" id="newPhone" placeholder="+373 XX XXX XXX"></div>
-    <div class="form-group"><label>Email</label><input type="email" id="newEmail" placeholder="maria@email.com"></div>
+    <div class="form-group"><label>Email (opțional)</label><input type="email" id="newEmail"></div>
     <div class="form-row">
       <div class="form-group"><label>Nivel</label>
-        <select id="newLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option></select>
+        <select id="newLevel"><option>Necunoscut</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option></select>
       </div>
       <div class="form-group"><label>Format</label>
         <select id="newFormat"><option>Online</option><option>Offline</option><option>B2B</option></select>
       </div>
     </div>
-    <div class="form-group"><label>Pachet</label>
-      <select id="newPackage" onchange="updatePrice()">
-        <option value="A1|32|140">A1 — 32 lectii (140 EUR)</option>
-        <option value="A2|24|160">A2 — 24 lectii (160 EUR)</option>
-        <option value="B1|24|180">B1 — 24 lectii (180 EUR)</option>
-        <option value="B2|24|200">B2 — 24 lectii (200 EUR)</option>
-        <option value="C1|24|220">C1 — 24 lectii (220 EUR)</option>
-      </select>
+    <div class="form-group"><label>De unde a venit</label>
+      <select id="newSursa"><option>recomandare</option><option>instagram</option><option>tiktok</option><option>facebook</option><option>google</option><option>telefon direct</option><option>altele</option></select>
     </div>
-    <div class="form-group"><label>Mentiune initiala (optional)</label><textarea id="newNote" placeholder="Ex: Vrea sa se pregateasca pentru interviu..."></textarea></div>
+    <div class="form-group"><label>Notă (opțional)</label><textarea id="newNote" placeholder="Ex: Vrea să se pregătească pentru interviu..."></textarea></div>
     <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal('modalAdd')">Anuleaza</button>
-      <button class="btn-save" onclick="addStudent()">Salveaza</button>
+      <button class="btn-cancel" onclick="closeModal('modalAdd')">Anulează</button>
+      <button class="btn-save" onclick="addLead()">Salvează</button>
     </div>
   </div>
 </div>
 
-<script>
-// ===== SUPABASE =====
-const SUPA_URL = 'https://fyumutgpvkhsprldcygp.supabase.co';
-const SUPA_KEY = 'sb_publishable_EH0zGQo_TIc7j0bclqNYSA_lePIlXQi';
-const { createClient } = supabase;
-const sb = createClient(SUPA_URL, SUPA_KEY);
-
-// ===== USERS (local auth pentru simplitate) =====
-const USERS = [
-  {email:'tatiana@letsenglish.eu', pass:'admin123', name:'Tatiana', avatar:'T'},
-  {email:'ana@letsenglish.eu', pass:'prof123', name:'Ana', avatar:'A'},
-  {email:'mihai@letsenglish.eu', pass:'prof123', name:'Mihai', avatar:'M'}
-];
-
-let currentUser = null;
-let allStudents = [];
-let currentFilter = 'toti';
-let currentStudentId = null;
-
-// ===== TOAST =====
-function toast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + type;
-  setTimeout(() => t.classList.add('show'), 10);
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ===== AUTH =====
-function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  const user = USERS.find(u => u.email === email && u.pass === pass);
-  if (!user) {
-    document.getElementById('loginError').style.display = 'block';
-    return;
-  }
-  currentUser = user;
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('userName').textContent = user.name;
-  document.getElementById('userAvatar').textContent = user.avatar;
-  loadDashboard();
-  loadStudents();
-}
-
-function doLogout() {
-  currentUser = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-}
-
-function changePassword() {
-  const np = document.getElementById('newPass').value;
-  if (!np || np.length < 6) { toast('Parola trebuie sa aiba cel putin 6 caractere', 'error'); return; }
-  toast('Parola schimbata! (Actualizeaza in cod)', 'success');
-}
-
-// ===== NAVIGATION =====
-function showPage(name, navEl) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  if (name === 'blog') loadArticole();
-  const titles = {dashboard:'Dashboard', studenti:'Cursanti', detail:'Fisa cursantului', blog:'Blog & Articole', setari:'Setari'};
-  document.getElementById('pageTitle').textContent = titles[name] || name;
-  if (navEl) {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    navEl.classList.add('active');
-  }
-  closeSidebar();
-}
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('mobileOverlay').classList.toggle('open');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('mobileOverlay').classList.remove('open');
-}
-
-// ===== BADGES =====
-function payBadge(s) {
-  if (s === 'platit') return '<span class="badge badge-green">Platit</span>';
-  if (s === 'restant') return '<span class="badge badge-red">Restant</span>';
-  return '<span class="badge badge-yellow">Asteptare</span>';
-}
-function statusBadge(s) {
-  if (s === 'activ') return '<span class="badge badge-green">Activ</span>';
-  if (s === 'nou') return '<span class="badge badge-blue">Cerere noua</span>';
-  return '<span class="badge badge-gray">Inactiv</span>';
-}
-
-// ===== DASHBOARD =====
-async function loadDashboard() {
-  const { data: students } = await sb.from('cursanti').select('*');
-  if (!students) return;
-  const activi = students.filter(s => s.status === 'activ').length;
-  const noi = students.filter(s => s.status === 'nou').length;
-  const restanti = students.filter(s => s.pay_status === 'restant').length;
-  const total = students.reduce((a, s) => a + (s.pay_status === 'platit' ? s.pay_amount : 0), 0);
-
-  document.getElementById('dashStats').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Cursanti activi</div>
-      <div class="stat-value">${activi}</div>
-      <div class="stat-sub">${noi} cereri noi</div>
+<!-- MODAL: WHATSAPP -->
+<div class="modal-overlay" id="modalWA">
+  <div class="modal">
+    <h3>Mesaj WhatsApp</h3>
+    <div class="form-group"><label>Șablon</label><select id="waTpl" onchange="fillTemplate()"></select></div>
+    <textarea class="tpl-preview" id="waText"></textarea>
+    <p class="sub" style="margin-top:0.5rem">Verifică textul. Se deschide WhatsApp cu mesajul completat — trimiți tu.</p>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modalWA')">Anulează</button>
+      <button class="btn-save btn-wa" style="background:#25D366" onclick="sendWA()">Deschide WhatsApp →</button>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Total cursanti</div>
-      <div class="stat-value">${students.length}</div>
-      <div class="stat-sub">in baza de date</div>
+  </div>
+</div>
+
+<!-- MODAL: PIERDUT -->
+<div class="modal-overlay" id="modalLost">
+  <div class="modal">
+    <h3>De ce s-a pierdut lead-ul?</h3>
+    <div class="form-group"><select id="lostReason"></select></div>
+    <div class="form-group"><label>Detalii (opțional)</label><textarea id="lostNote"></textarea></div>
+    <p class="sub">Motivele se adună pe pagina „Azi” — așa vezi ce trebuie schimbat în ofertă.</p>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modalLost')">Anulează</button>
+      <button class="btn-save" onclick="confirmLost()">Marchează pierdut</button>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Venituri incasate</div>
-      <div class="stat-value">€${total}</div>
-      <div class="stat-sub">via plati marcate</div>
+  </div>
+</div>
+
+<!-- MODAL: CLIENT -->
+<div class="modal-overlay" id="modalClient">
+  <div class="modal">
+    <h3>Felicitări! Ce pachet a ales?</h3>
+    <div class="form-group"><label>Pachet</label>
+      <select id="clientPackage">
+        <option value="A1|32|140">A1 — 32 lecții (140 EUR)</option>
+        <option value="A2|24|160">A2 — 24 lecții (160 EUR)</option>
+        <option value="B1|24|180">B1 — 24 lecții (180 EUR)</option>
+        <option value="B2|24|200">B2 — 24 lecții (200 EUR)</option>
+        <option value="C1|24|220">C1 — 24 lecții (220 EUR)</option>
+        <option value="custom">Altul (completez manual)</option>
+      </select>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Plati restante</div>
-      <div class="stat-value" style="color:var(--red)">${restanti}</div>
-      <div class="stat-sub">necesita atentie</div>
-    </div>`;
-
-  const recent = students.slice(-5).reverse();
-  document.getElementById('recentStudents').innerHTML = recent.length ? `
-    <table><thead><tr><th>Cursant</th><th>Nivel</th><th>Status</th><th>Plata</th></tr></thead>
-    <tbody>${recent.map(s => `<tr>
-      <td><span class="student-name" onclick="openStudent('${s.id}')">${s.first_name} ${s.last_name}</span></td>
-      <td><span class="badge badge-blue">${s.level || '-'}</span></td>
-      <td>${statusBadge(s.status)}</td>
-      <td>${payBadge(s.pay_status)}</td>
-    </tr>`).join('')}</tbody></table>` : '<div class="loading">Nu sunt cursanti inca.</div>';
-}
-
-// ===== STUDENTS =====
-async function loadStudents() {
-  const { data, error } = await sb.from('cursanti').select('*').order('created_at', {ascending: false});
-  if (error) { toast('Eroare la incarcare', 'error'); return; }
-  allStudents = data || [];
-  renderStudents();
-}
-
-function renderStudents() {
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  let list = allStudents.filter(s => {
-    const matchSearch = (s.first_name + ' ' + s.last_name + ' ' + (s.email||'')).toLowerCase().includes(search);
-    const matchFilter = currentFilter === 'toti' || s.status === currentFilter || (currentFilter === 'restant' && s.pay_status === 'restant');
-    return matchSearch && matchFilter;
-  });
-
-  if (!list.length) {
-    document.getElementById('studentsTable').innerHTML = '<div class="loading">Nu au fost gasiti cursanti.</div>';
-    return;
-  }
-
-  document.getElementById('studentsTable').innerHTML = `
-    <div class="table-wrap"><table>
-      <thead><tr><th>Cursant</th><th>Nivel</th><th>Pachet</th><th>Progres</th><th>Plata</th><th>Status</th><th></th></tr></thead>
-      <tbody>${list.map(s => {
-        const pct = s.package_total > 0 ? Math.round((s.lectii_finalizate / s.package_total) * 100) : 0;
-        return `<tr>
-          <td><div class="student-name" onclick="openStudent('${s.id}')">${s.first_name} ${s.last_name}</div>
-              <div style="font-size:0.75rem;color:var(--text3)">${s.phone || ''}</div></td>
-          <td><span class="badge badge-blue">${s.level || '-'}</span></td>
-          <td style="font-size:0.82rem">${s.package || '-'}</td>
-          <td><div class="progress-wrap">
-            <div class="progress-bar-sm"><div class="progress-fill-sm" style="width:${pct}%"></div></div>
-            <span class="progress-text">${s.lectii_finalizate}/${s.package_total}</span>
-          </div></td>
-          <td>${payBadge(s.pay_status)}</td>
-          <td>${statusBadge(s.status)}</td>
-          <td><div class="action-btns">
-            <button class="btn-icon" onclick="openStudent('${s.id}')">👁</button>
-            <button class="btn-icon" onclick="deleteStudent('${s.id}','${s.first_name} ${s.last_name}')">🗑</button>
-          </div></td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table></div>`;
-}
-
-function filterStudents() { renderStudents(); }
-function setFilter(f, btn) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderStudents();
-}
-
-// ===== STUDENT DETAIL =====
-async function openStudent(id) {
-  currentStudentId = id;
-  showPage('detail', null);
-  document.getElementById('detailContent').innerHTML = '<div class="loading"><div class="spinner"></div><br>Se incarca...</div>';
-
-  const { data: s } = await sb.from('cursanti').select('*').eq('id', id).single();
-  const { data: mentiuni } = await sb.from('mentiuni').select('*').eq('cursant_id', id).order('created_at');
-  const { data: lectii } = await sb.from('lectii').select('*').eq('cursant_id', id).order('nr');
-
-  if (!s) { document.getElementById('detailContent').innerHTML = '<div class="loading">Cursant negasit.</div>'; return; }
-
-  const pct = s.package_total > 0 ? Math.round((s.lectii_finalizate / s.package_total) * 100) : 0;
-  const initials = (s.first_name[0] || '') + (s.last_name[0] || '');
-
-  const lectiiHTML = (lectii && lectii.length) ? lectii.map(l => {
-    const doneClass = l.finalizata ? 'done' : '';
-    const dateText = l.data_lectie || (l.finalizata ? 'Finalizata' : 'Planificata');
-    const descText = l.descriere || '';
-    const badge = l.finalizata ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-gray">—</span>';
-    return '<li class="lectie-item"><div class="lectie-nr ' + doneClass + '">' + l.nr + '</div><div class="lectie-info"><div class="lectie-date">' + dateText + '</div><div class="lectie-desc">' + descText + '</div></div>' + badge + '</li>';
-  }).join('') : '<li style="padding:1rem;color:var(--text3);font-size:0.85rem">Nu sunt lectii inregistrate inca.</li>';
-
-  const notesHTML = (mentiuni && mentiuni.length) ? mentiuni.map(n =>
-    '<div class="note-item"><div class="note-text">' + n.text + '</div><div class="note-meta">' + (n.autor || 'Sistem') + ' · ' + new Date(n.created_at).toLocaleDateString('ro-RO') + '</div></div>'
-  ).join('') : '<p style="color:var(--text3);font-size:0.85rem;margin-bottom:0.75rem">Nicio mentiune inca.</p>';
-
-  document.getElementById('detailContent').innerHTML = `
-    <div class="student-header">
-      <div class="student-avatar-lg">${initials}</div>
-      <div class="student-meta">
-        <h2>${s.first_name} ${s.last_name}</h2>
-        <p>${s.phone || ''} ${s.email ? '· ' + s.email : ''}</p>
-        <div class="student-tags">
-          <span class="badge badge-blue">${s.level || '-'}</span>
-          <span class="badge badge-gray">${s.format || '-'}</span>
-          ${statusBadge(s.status)}
-          ${payBadge(s.pay_status)}
-        </div>
-      </div>
-      <div class="student-actions">
-        <button class="btn-sm btn-sm-primary" onclick="markLesson('${s.id}')">✓ Marcheaza lectie</button>
-        <select onchange="updatePayStatus('${s.id}',this.value)" style="padding:0.5rem;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.82rem">
-          <option value="asteptare" ${s.pay_status==='asteptare'?'selected':''}>Asteptare plata</option>
-          <option value="platit" ${s.pay_status==='platit'?'selected':''}>Platit</option>
-          <option value="restant" ${s.pay_status==='restant'?'selected':''}>Restant</option>
-        </select>
-        <select onchange="updateStatus('${s.id}',this.value)" style="padding:0.5rem;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.82rem">
-          <option value="nou" ${s.status==='nou'?'selected':''}>Cerere noua</option>
-          <option value="activ" ${s.status==='activ'?'selected':''}>Activ</option>
-          <option value="inactiv" ${s.status==='inactiv'?'selected':''}>Inactiv</option>
-        </select>
-      </div>
+    <div class="form-row" id="clientCustom" style="display:none">
+      <div class="form-group"><label>Nr. lecții</label><input type="number" id="clientLessons" min="1"></div>
+      <div class="form-group"><label>Preț (EUR)</label><input type="number" id="clientPrice" min="0"></div>
     </div>
-
-    <div class="detail-grid">
-      <div class="detail-stat">
-        <div class="detail-stat-label">Lectii finalizate</div>
-        <div class="detail-stat-value">${s.lectii_finalizate}<span style="font-size:1rem;color:var(--text3)">/${s.package_total}</span></div>
-        <div style="margin-top:0.5rem"><div class="progress-bar-sm" style="height:8px"><div class="progress-fill-sm" style="width:${pct}%"></div></div></div>
-        <div class="detail-stat-sub">${pct}% din pachet</div>
-      </div>
-      <div class="detail-stat">
-        <div class="detail-stat-label">Plata pachet</div>
-        <div class="detail-stat-value" style="color:${s.pay_status==='platit'?'var(--green)':s.pay_status==='restant'?'var(--red)':'var(--yellow)'}">€${s.pay_amount || 0}</div>
-        <div class="detail-stat-sub">${s.package || '-'}</div>
-      </div>
-      <div class="detail-stat">
-        <div class="detail-stat-label">Lectii ramase</div>
-        <div class="detail-stat-value">${s.package_total - s.lectii_finalizate}</div>
-        <div class="detail-stat-sub">pana la final</div>
-      </div>
+    <div class="form-group"><label>Plată</label>
+      <select id="clientPay"><option value="platit">Achitat</option><option value="asteptare">Urmează să achite</option></select>
     </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modalClient')">Anulează</button>
+      <button class="btn-save" onclick="confirmClient()">Devine client</button>
+    </div>
+  </div>
+</div>
 
-    <div class="detail-body">
-      <div class="card">
-        <div class="card-title">Lectii — ${s.package || ''}</div>
-        <ul class="lectii-list">${lectiiHTML}</ul>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:1rem">
-        <div class="card">
-          <div class="card-title">Mentiuni & Note</div>
-          <div id="notesList">${notesHTML}</div>
-          <div style="margin-top:0.75rem">
-            <textarea class="form-group" id="noteInput" style="width:100%;padding:0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.85rem;resize:vertical;min-height:70px;outline:none;margin-bottom:0.5rem" placeholder="Adauga o mentiune..."></textarea>
-            <button class="add-note-btn" onclick="addNote('${s.id}')">+ Adauga mentiune</button>
-          </div>
-        </div>
-      </div>
-    </div>`;
-}
+<!-- MODAL: PAROLA NOUA (din link-ul de resetare) -->
+<div class="modal-overlay" id="modalRecovery">
+  <div class="modal">
+    <h3>Setează parola</h3>
+    <div class="form-group"><label>Parola nouă (minim 8 caractere)</label><input type="password" id="recoveryPass" autocomplete="new-password"></div>
+    <div class="modal-footer">
+      <button class="btn-save" onclick="saveRecovery()">Salvează și intră</button>
+    </div>
+  </div>
+</div>
 
-// ===== ACTIONS =====
-async function markLesson(id) {
-  const { data: s } = await sb.from('cursanti').select('*').eq('id', id).single();
-  if (!s) return;
-  if (s.lectii_finalizate >= s.package_total) { toast('Toate lectiile au fost finalizate!', 'error'); return; }
-  const newNr = s.lectii_finalizate + 1;
-  const today = new Date().toLocaleDateString('ro-RO');
-  await sb.from('lectii').insert({cursant_id: id, nr: newNr, data_lectie: today, descriere: 'Lectie finalizata', finalizata: true});
-  await sb.from('cursanti').update({lectii_finalizate: newNr}).eq('id', id);
-  toast('Lectia ' + newNr + ' marcata!', 'success');
-  openStudent(id);
-  loadStudents();
-}
-
-async function addNote(id) {
-  const text = document.getElementById('noteInput').value.trim();
-  if (!text) return;
-  await sb.from('mentiuni').insert({cursant_id: id, text: text, autor: currentUser ? currentUser.name : 'Admin'});
-  toast('Mentiune adaugata!', 'success');
-  openStudent(id);
-}
-
-async function updatePayStatus(id, val) {
-  await sb.from('cursanti').update({pay_status: val}).eq('id', id);
-  toast('Status plata actualizat!', 'success');
-  loadStudents();
-  loadDashboard();
-}
-
-async function updateStatus(id, val) {
-  await sb.from('cursanti').update({status: val}).eq('id', id);
-  toast('Status actualizat!', 'success');
-  loadStudents();
-}
-
-async function deleteStudent(id, name) {
-  if (!confirm('Stergi cursantul ' + name + '? Aceasta actiune nu poate fi anulata.')) return;
-  await sb.from('mentiuni').delete().eq('cursant_id', id);
-  await sb.from('lectii').delete().eq('cursant_id', id);
-  await sb.from('cursanti').delete().eq('id', id);
-  toast('Cursant sters!', 'success');
-  loadStudents();
-  loadDashboard();
-}
-
-// ===== ADD STUDENT =====
-function openAddModal() { document.getElementById('modalAdd').classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-async function addStudent() {
-  const first = document.getElementById('newFirst').value.trim();
-  const last = document.getElementById('newLast').value.trim();
-  if (!first || !last) { toast('Completeaza prenumele si numele!', 'error'); return; }
-  const pkgVal = document.getElementById('newPackage').value.split('|');
-  const pkg = pkgVal[0] + ' — ' + pkgVal[1] + ' lectii';
-  const total = parseInt(pkgVal[1]);
-  const price = parseInt(pkgVal[2]);
-  const note = document.getElementById('newNote').value.trim();
-
-  const { data: newS, error } = await sb.from('cursanti').insert({
-    first_name: first, last_name: last,
-    phone: document.getElementById('newPhone').value,
-    email: document.getElementById('newEmail').value,
-    level: document.getElementById('newLevel').value,
-    format: document.getElementById('newFormat').value,
-    package: pkg, package_total: total, pay_amount: price,
-    lectii_finalizate: 0, pay_status: 'asteptare', status: 'nou'
-  }).select().single();
-
-  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
-
-  if (note && newS) {
-    await sb.from('mentiuni').insert({cursant_id: newS.id, text: note, autor: currentUser ? currentUser.name : 'Admin'});
-  }
-
-  closeModal('modalAdd');
-  toast(first + ' ' + last + ' a fost adaugat!', 'success');
-  ['newFirst','newLast','newPhone','newEmail','newNote'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  loadStudents();
-  loadDashboard();
-}
-
-
-// ===== BLOG =====
-async function loadArticole() {
-  const { data, error } = await sb.from('articole').select('*').order('created_at', {ascending: false});
-  const list = document.getElementById('articoleList');
-  if (!list) return;
-  if (error || !data || data.length === 0) {
-    list.innerHTML = '<div class="loading">Nu sunt articole inca. Apasa "+ Articol nou" pentru a incepe!</div>';
-    return;
-  }
-  list.innerHTML = `<div class="table-wrap"><table>
-    <thead><tr><th>Titlu</th><th>Categorie</th><th>Status</th><th>Data</th><th></th></tr></thead>
-    <tbody>${data.map(a => `<tr>
-      <td><div style="font-weight:600;color:var(--navy)">${a.titlu}</div>
-          <div style="font-size:0.75rem;color:var(--text3)">${(a.rezumat||'').substring(0,60)}${a.rezumat&&a.rezumat.length>60?'...':''}</div></td>
-      <td><span class="badge badge-blue">${a.categorie||'General'}</span></td>
-      <td>${a.publicat ? '<span class="badge badge-green">Publicat</span>' : '<span class="badge badge-gray">Draft</span>'}</td>
-      <td style="font-size:0.8rem;color:var(--text3)">${new Date(a.created_at).toLocaleDateString('ro-RO')}</td>
-      <td><div class="action-btns">
-        <button class="btn-icon" onclick="editArticol('${a.id}')" title="Editeaza">✏️</button>
-        <button class="btn-icon" onclick="togglePublicat('${a.id}',${a.publicat})" title="${a.publicat?'Ascunde':'Publica'}">${a.publicat?'👁':'🚀'}</button>
-        <button class="btn-icon" onclick="deleteArticol('${a.id}')" title="Sterge">🗑</button>
-      </div></td>
-    </tr>`).join('')}</tbody>
-  </table></div>`;
-}
-
-function openArticleModal() {
-  document.getElementById('modalArticolTitle').textContent = 'Articol nou';
-  document.getElementById('editArticolId').value = '';
-  ['artTitlu','artRezumat','artContinut'].forEach(id => { document.getElementById(id).value = ''; });
-  document.getElementById('artCategorie').value = 'General';
-  document.getElementById('artPublicat').value = 'false';
-  document.getElementById('modalArticol').classList.add('open');
-}
-
-async function editArticol(id) {
-  const { data: a } = await sb.from('articole').select('*').eq('id', id).single();
-  if (!a) return;
-  document.getElementById('modalArticolTitle').textContent = 'Editeaza articol';
-  document.getElementById('editArticolId').value = a.id;
-  document.getElementById('artTitlu').value = a.titlu;
-  document.getElementById('artRezumat').value = a.rezumat || '';
-  document.getElementById('artContinut').value = a.continut;
-  document.getElementById('artCategorie').value = a.categorie || 'General';
-  document.getElementById('artPublicat').value = String(a.publicat);
-  document.getElementById('modalArticol').classList.add('open');
-}
-
-async function saveArticol() {
-  const titlu = document.getElementById('artTitlu').value.trim();
-  const continut = document.getElementById('artContinut').value.trim();
-  if (!titlu || !continut) { toast('Completeaza titlul si continutul!', 'error'); return; }
-  const id = document.getElementById('editArticolId').value;
-  const payload = {
-    titlu,
-    continut,
-    rezumat: document.getElementById('artRezumat').value.trim(),
-    categorie: document.getElementById('artCategorie').value,
-    publicat: document.getElementById('artPublicat').value === 'true',
-    autor: currentUser ? currentUser.name : 'Tatiana',
-    slug: titlu.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g,'')
-  };
-  let error;
-  if (id) {
-    ({ error } = await sb.from('articole').update(payload).eq('id', id));
-  } else {
-    ({ error } = await sb.from('articole').insert(payload));
-  }
-  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
-  closeModal('modalArticol');
-  toast(id ? 'Articol actualizat!' : 'Articol salvat!', 'success');
-  loadArticole();
-}
-
-async function togglePublicat(id, current) {
-  await sb.from('articole').update({ publicat: !current }).eq('id', id);
-  toast(!current ? 'Articol publicat pe site!' : 'Articol ascuns!', 'success');
-  loadArticole();
-}
-
-async function deleteArticol(id) {
-  if (!confirm('Stergi acest articol? Nu poate fi recuperat.')) return;
-  await sb.from('articole').delete().eq('id', id);
-  toast('Articol sters!', 'success');
-  loadArticole();
-}
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('loginBtn').addEventListener('click', doLogin);
-  document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-  document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-});
-</script>
-
-<!-- MODAL ARTICOL -->
 <div class="modal-overlay" id="modalArticol">
   <div class="modal" style="max-width:640px">
     <h3 id="modalArticolTitle">Articol nou</h3>
@@ -861,15 +548,711 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     <div class="form-group"><label>Rezumat (apare pe card)</label><textarea id="artRezumat" style="min-height:60px" placeholder="Scurt rezumat — max 150 caractere"></textarea></div>
     <div class="form-group">
-      <label>Continut articol (suporta Markdown: **bold**, ## titlu, - lista)</label>
+      <label>Conținut (suportă Markdown: **bold**, ## titlu, - listă)</label>
       <textarea id="artContinut" style="min-height:250px;font-family:monospace;font-size:0.85rem" placeholder="Scrie articolul aici...&#10;&#10;## Sectiune 1&#10;&#10;Textul tau...&#10;&#10;## Sectiune 2&#10;&#10;- Punct 1&#10;- Punct 2"></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal('modalArticol')">Anuleaza</button>
-      <button class="btn-save" onclick="saveArticol()">Salveaza articolul</button>
+      <button class="btn-cancel" onclick="closeModal('modalArticol')">Anulează</button>
+      <button class="btn-save" onclick="saveArticol()">Salvează articolul</button>
     </div>
   </div>
 </div>
 
+<script>
+// ===== SUPABASE =====
+// Cheia publică e sigură aici: accesul la date e controlat de reguli în baza de date (RLS),
+// iar parolele sunt gestionate de Supabase Auth — nu mai stau în cod.
+const SUPA_URL = 'https://fyumutgpvkhsprldcygp.supabase.co';
+const SUPA_KEY = 'sb_publishable_EH0zGQo_TIc7j0bclqNYSA_lePIlXQi';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const ETAPE = [
+  { k: 'nou',              l: 'Nou',              c: 'blue' },
+  { k: 'contactat',        l: 'Contactat',        c: 'yellow' },
+  { k: 'proba_programata', l: 'Probă programată', c: 'purple' },
+  { k: 'proba_facuta',     l: 'Probă făcută',     c: 'orange' },
+  { k: 'client',           l: 'Client',           c: 'green' },
+  { k: 'pierdut',          l: 'Pierdut',          c: 'gray' }
+];
+const ETAPA = Object.fromEntries(ETAPE.map(e => [e.k, e]));
+const MOTIVE = ['Prețul', 'Nu mai răspunde', 'Nu are timp acum', 'A ales altă școală', 'Nivel / format nepotrivit', 'Doar curios', 'Altul'];
+const HOUR = 3600e3, DAY = 24 * HOUR;
+
+let currentUser = null;      // { email, nume }
+let team = [];
+let all = [];                // toți din tabelul cursanti
+let leadFilter = 'activi';
+let studentFilter = 'toti';
+let currentId = null;
+let lastList = 'dashboard';
+let recoveryMode = false;
+
+// ===== UTILITARE =====
+function esc(v) {
+  return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function digits(p) { return String(p || '').replace(/\D/g, ''); }
+function waNumber(p) {
+  let d = digits(p);
+  if (d.startsWith('00')) d = d.slice(2);
+  if (d.length === 9 && d.startsWith('0')) d = '373' + d.slice(1);       // 069xxxxxx → 37369xxxxxx
+  if (d.length === 8 && /^[67]/.test(d)) d = '373' + d;                 // 69xxxxxx
+  return d;
+}
+function fullName(s) { return [s.first_name, s.last_name && s.last_name !== '-' ? s.last_name : ''].join(' ').trim() || '(fără nume)'; }
+function fmtDT(v) {
+  if (!v) return '';
+  const d = new Date(v);
+  return d.toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' }) + ', ' + d.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+}
+function ago(v) {
+  if (!v) return '';
+  const ms = Date.now() - new Date(v).getTime();
+  if (ms < HOUR) return Math.max(1, Math.round(ms / 60000)) + ' min';
+  if (ms < DAY) return Math.round(ms / HOUR) + ' h';
+  const d = Math.round(ms / DAY); return d === 1 ? '1 zi' : d + ' zile';
+}
+function toLocalInput(v) {
+  if (!v) return '';
+  const d = new Date(v); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 16);
+}
+function etapaBadge(k) { const e = ETAPA[k] || ETAPA.nou; return `<span class="badge badge-${e.c}">${e.l}</span>`; }
+function payBadge(s) {
+  if (s === 'platit') return '<span class="badge badge-green">Plătit</span>';
+  if (s === 'restant') return '<span class="badge badge-red">Restant</span>';
+  return '<span class="badge badge-yellow">Așteptare</span>';
+}
+function toast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type;
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function isLead(s) { return (s.etapa || 'nou') !== 'client'; }
+function isOpen(s) { return !['client', 'pierdut'].includes(s.etapa || 'nou'); }
+function dupCount(s) {
+  const d = digits(s.phone).slice(-8);
+  if (d.length < 8) return 0;
+  return all.filter(o => o.id !== s.id && digits(o.phone).slice(-8) === d).length;
+}
+
+// Ce trebuie făcut cu acest om și cât de urgent (null = nimic)
+function urgency(s) {
+  const e = s.etapa || 'nou', now = Date.now();
+  if (e === 'nou') {
+    const age = now - new Date(s.created_at).getTime();
+    return { lvl: age > 2 * HOUR ? 3 : 2, color: age > 2 * HOUR ? 'var(--red)' : 'var(--blue)',
+             why: `Lead nou, necontactat de ${ago(s.created_at)}` + (s.ora_dorita ? ` · vrea ${s.ora_dorita}` : '') };
+  }
+  if (!isOpen(s)) return null;
+  if (s.next_action_at) {
+    const t = new Date(s.next_action_at).getTime();
+    if (t < now) return { lvl: 3, color: 'var(--red)', why: `Întârziat ${ago(s.next_action_at)}: ${s.next_action || 'următorul pas'}` };
+    if (new Date(t).toDateString() === new Date().toDateString())
+      return { lvl: 2, color: 'var(--purple)', why: `Azi la ${new Date(t).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}: ${s.next_action || (e === 'proba_programata' ? 'lecție de probă' : 'următorul pas')}` };
+    return null;
+  }
+  const since = now - new Date(s.etapa_changed_at || s.created_at).getTime();
+  if (e === 'proba_facuta' && since > 2 * DAY) return { lvl: 2, color: 'var(--orange)', why: `A făcut proba acum ${ago(s.etapa_changed_at)} și n-a decis — fă oferta` };
+  if (e === 'contactat' && since > 3 * DAY) return { lvl: 1, color: 'var(--orange)', why: `Blocat la „contactat” de ${ago(s.etapa_changed_at)} — fără pas următor` };
+  if (e === 'proba_programata') return { lvl: 1, color: 'var(--orange)', why: 'Probă programată fără dată — pune data' };
+  return null;
+}
+
+// ===== AUTH =====
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const password = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  err.style.display = 'none';
+  if (!email || !password) { err.textContent = 'Completează emailul și parola.'; err.style.display = 'block'; return; }
+  const btn = document.getElementById('loginBtn'); btn.disabled = true; btn.textContent = 'Se verifică...';
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  btn.disabled = false; btn.textContent = 'Intră în cont';
+  if (error) { err.textContent = 'Email sau parolă incorectă.'; err.style.display = 'block'; }
+}
+
+async function forgotPassword() {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const err = document.getElementById('loginError'), ok = document.getElementById('loginOk');
+  err.style.display = 'none'; ok.style.display = 'none';
+  if (!email) { err.textContent = 'Scrie mai întâi emailul tău de echipă.'; err.style.display = 'block'; return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+  if (error) { err.textContent = 'Nu am putut trimite emailul. Încearcă din nou peste un minut.'; err.style.display = 'block'; return; }
+  ok.textContent = 'Ți-am trimis pe email un link pentru a seta parola.'; ok.style.display = 'block';
+}
+
+async function onSession(session) {
+  if (!session) { showLogin(); return; }
+  const email = (session.user.email || '').toLowerCase();
+  const { data, error } = await sb.from('echipa').select('email,nume');
+  const me = (data || []).find(m => m.email.toLowerCase() === email);
+  if (error || !me) {
+    await sb.auth.signOut();
+    const err = document.getElementById('loginError');
+    err.textContent = 'Acest cont nu face parte din echipă.'; err.style.display = 'block';
+    return;
+  }
+  team = data; currentUser = me;
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('userName').textContent = me.nume;
+  document.getElementById('userAvatar').textContent = (me.nume || '?')[0].toUpperCase();
+  if (recoveryMode) document.getElementById('modalRecovery').classList.add('open');
+  await loadAll();
+  startLive();
+}
+function showLogin() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+}
+async function doLogout() { await sb.auth.signOut(); showLogin(); }
+
+async function changePassword() {
+  const np = document.getElementById('newPass').value;
+  if (!np || np.length < 8) { toast('Parola trebuie să aibă cel puțin 8 caractere', 'error'); return; }
+  const { error } = await sb.auth.updateUser({ password: np });
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  document.getElementById('newPass').value = '';
+  toast('Parola a fost schimbată', 'success');
+}
+async function saveRecovery() {
+  const np = document.getElementById('recoveryPass').value;
+  if (!np || np.length < 8) { toast('Minim 8 caractere', 'error'); return; }
+  const { error } = await sb.auth.updateUser({ password: np });
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  recoveryMode = false; closeModal('modalRecovery'); toast('Parola e setată', 'success');
+  history.replaceState(null, '', location.pathname);
+}
+
+// ===== DATE =====
+async function loadAll() {
+  const { data, error } = await sb.from('cursanti').select('*').order('created_at', { ascending: false });
+  if (error) { toast('Eroare la încărcare: ' + error.message, 'error'); return; }
+  all = data || [];
+  renderDashboard(); renderLeads(); renderStudents();
+  const urgentN = all.filter(s => (urgency(s) || {}).lvl >= 3).length;
+  const nav = document.getElementById('navUrgent');
+  nav.textContent = urgentN; nav.style.display = urgentN ? 'inline-block' : 'none';
+  document.title = (urgentN ? `(${urgentN}) ` : '') + "Let's English — CRM";
+  if (document.getElementById('page-detail').classList.contains('active') && currentId) renderDetail(currentId, false);
+}
+
+let liveStarted = false;
+function startLive() {
+  if (liveStarted) return; liveStarted = true;
+  try {
+    sb.channel('cursanti-live')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'cursanti' }, p => {
+        toast('🔔 Lead nou: ' + fullName(p.new), 'success'); loadAll();
+      })
+      .subscribe();
+  } catch (e) {}
+  setInterval(loadAll, 120000);
+}
+
+async function update(id, fields, msg) {
+  const { error } = await sb.from('cursanti').update(fields).eq('id', id);
+  if (error) { toast('Eroare: ' + error.message, 'error'); return false; }
+  if (msg) toast(msg, 'success');
+  await loadAll();
+  return true;
+}
+async function note(id, text) {
+  await sb.from('mentiuni').insert({ cursant_id: id, text, autor: currentUser ? currentUser.nume : 'Echipa' });
+}
+
+// ===== NAVIGARE =====
+function showPage(name, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (name === 'blog') loadArticole();
+  if (name === 'setari') renderUtm();
+  if (['dashboard', 'leaduri', 'cursanti'].includes(name)) lastList = name;
+  const titles = { dashboard: 'Azi', leaduri: 'Lead-uri', cursanti: 'Cursanți', detail: 'Fișă', blog: 'Blog & Articole', setari: 'Setări' };
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+  if (navEl) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    navEl.classList.add('active');
+  }
+  closeSidebar();
+  window.scrollTo(0, 0);
+}
+function goBack() { showPage(lastList, document.getElementById('nav-' + lastList)); }
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mobileOverlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mobileOverlay').classList.remove('open');
+}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ===== PAGINA "AZI" =====
+function quickActions(s) {
+  const tel = digits(s.phone) ? `<a class="qa" href="tel:${esc(s.phone)}" title="Sună" onclick="event.stopPropagation();logCall('${s.id}')">📞</a>` : '';
+  const wa = waNumber(s.phone) ? `<button class="qa wa" title="WhatsApp" onclick="event.stopPropagation();openWA('${s.id}')">💬</button>` : '';
+  return tel + wa;
+}
+function renderDashboard() {
+  const now = Date.now();
+  const last30 = all.filter(s => now - new Date(s.created_at).getTime() < 30 * DAY);
+  const leads30 = last30.length;
+  const clients30 = last30.filter(s => s.etapa === 'client').length;
+  const conv = leads30 ? Math.round(clients30 / leads30 * 100) : 0;
+  const openLeads = all.filter(isOpen).length;
+  const probe = all.filter(s => s.etapa === 'proba_programata').length;
+  const venit = all.filter(s => s.pay_status === 'platit').reduce((a, s) => a + (Number(s.pay_amount) || 0), 0);
+  const nou = all.filter(s => (s.etapa || 'nou') === 'nou');
+  const contacted = all.filter(s => s.contactat_at && s.created_at && now - new Date(s.created_at).getTime() < 30 * DAY);
+  const avgMin = contacted.length ? Math.round(contacted.reduce((a, s) => a + (new Date(s.contactat_at) - new Date(s.created_at)), 0) / contacted.length / 60000) : null;
+  const speed = avgMin === null ? '—' : avgMin < 60 ? avgMin + ' min' : Math.round(avgMin / 60) + ' h';
+
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Lead-uri noi</div><div class="stat-value" style="color:${nou.length ? 'var(--red)' : 'var(--navy)'}">${nou.length}</div><div class="stat-sub">necontactate încă</div></div>
+    <div class="stat-card"><div class="stat-label">În lucru</div><div class="stat-value">${openLeads}</div><div class="stat-sub">${probe} probe programate</div></div>
+    <div class="stat-card"><div class="stat-label">Conversie 30 zile</div><div class="stat-value">${conv}%</div><div class="stat-sub">${clients30 === 1 ? '1 client' : clients30 + ' clienți'} din ${leads30} lead-uri</div></div>
+    <div class="stat-card"><div class="stat-label">Timp de răspuns</div><div class="stat-value">${speed}</div><div class="stat-sub">medie, ultimele 30 zile</div></div>
+    <div class="stat-card"><div class="stat-label">Încasat</div><div class="stat-value">€${venit}</div><div class="stat-sub">plăți marcate</div></div>`;
+
+  const todo = all.map(s => ({ s, u: urgency(s) })).filter(x => x.u).sort((a, b) => b.u.lvl - a.u.lvl || new Date(a.s.created_at) - new Date(b.s.created_at));
+  document.getElementById('todoCount').textContent = todo.length ? todo.length + ' acțiuni' : '';
+  document.getElementById('todoList').innerHTML = todo.length ? todo.slice(0, 25).map(({ s, u }) => `
+    <li class="todo-item" onclick="openStudent('${s.id}')">
+      <span class="todo-dot" style="background:${u.color}"></span>
+      <div class="todo-main">
+        <div class="student-name">${esc(fullName(s))} ${etapaBadge(s.etapa)}</div>
+        <div class="todo-why">${esc(u.why)}</div>
+      </div>
+      <div class="todo-actions">${quickActions(s)}</div>
+    </li>`).join('') : '<li class="loading" style="padding:2rem">🎉 Nimic urgent. Toate lead-urile au un pas următor.</li>';
+
+  const counts = ETAPE.map(e => ({ e, n: all.filter(s => (s.etapa || 'nou') === e.k).length }));
+  const max = Math.max(1, ...counts.map(c => c.n));
+  document.getElementById('funnel').innerHTML = counts.map(({ e, n }) => `
+    <div class="funnel-row"><span>${e.l}</span><div class="funnel-bar"><span style="width:${n / max * 100}%;background:var(--${e.c === 'gray' ? 'text3' : e.c})"></span></div><b>${n}</b></div>`).join('');
+
+  const last90 = all.filter(s => now - new Date(s.created_at).getTime() < 90 * DAY);
+  const bySrc = {};
+  last90.forEach(s => { const k = s.sursa || (s.origine === 'manual' ? 'adăugat manual' : 'necunoscut'); (bySrc[k] = bySrc[k] || { n: 0, c: 0 }).n++; if (s.etapa === 'client') bySrc[k].c++; });
+  const rows = Object.entries(bySrc).sort((a, b) => b[1].n - a[1].n);
+  const lost = {};
+  all.filter(s => s.etapa === 'pierdut' && s.motiv_pierdut).forEach(s => lost[s.motiv_pierdut] = (lost[s.motiv_pierdut] || 0) + 1);
+  const lostRows = Object.entries(lost).sort((a, b) => b[1] - a[1]);
+  document.getElementById('sources').innerHTML = (rows.length ? `<table><thead><tr><th>Sursa</th><th>Lead-uri</th><th>Clienți</th><th>Conv.</th></tr></thead><tbody>${
+    rows.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${v.n}</td><td>${v.c}</td><td>${Math.round(v.c / v.n * 100)}%</td></tr>`).join('')}</tbody></table>`
+    : '<p class="sub">Încă nu sunt date.</p>')
+    + (lostRows.length ? `<div class="card-title" style="margin-top:1.25rem">De ce pierdem</div><ul class="info-list">${lostRows.map(([k, n]) => `<li><span>${esc(k)}</span><span>${n}</span></li>`).join('')}</ul>` : '');
+}
+
+// ===== LEAD-URI =====
+function renderLeads() {
+  const leads = all.filter(isLead);
+  const filters = [
+    { k: 'activi', l: 'În lucru', f: isOpen },
+    { k: 'urgente', l: '🔴 Urgente', f: s => (urgency(s) || {}).lvl >= 2 },
+    { k: 'ale_mele', l: 'Ale mele', f: s => isOpen(s) && currentUser && s.responsabil === currentUser.nume },
+    ...ETAPE.filter(e => e.k !== 'client').map(e => ({ k: e.k, l: e.l, f: s => (s.etapa || 'nou') === e.k })),
+    { k: 'toate', l: 'Toate', f: () => true }
+  ];
+  document.getElementById('leadChips').innerHTML = filters.map(f =>
+    `<button class="chip ${leadFilter === f.k ? 'active' : ''}" onclick="leadFilter='${f.k}';renderLeads()">${f.l}<span class="n">${leads.filter(f.f).length}</span></button>`).join('');
+  const q = document.getElementById('leadSearch').value.toLowerCase().trim();
+  const qd = digits(q);
+  const flt = filters.find(f => f.k === leadFilter) || filters[0];
+  const list = leads.filter(flt.f).filter(s => !q || fullName(s).toLowerCase().includes(q) || (qd.length >= 3 && digits(s.phone).includes(qd)));
+  if (!list.length) { document.getElementById('leadsTable').innerHTML = '<div class="loading">Niciun lead aici.</div>'; return; }
+  document.getElementById('leadsTable').innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Lead</th><th>Etapă</th><th class="hide-sm">Sursă / scop</th><th>Următorul pas</th><th></th></tr></thead>
+    <tbody>${list.map(s => {
+      const u = urgency(s), dup = dupCount(s);
+      const next = s.next_action_at ? `<div class="${new Date(s.next_action_at) < new Date() ? 'late' : ''}">${esc(fmtDT(s.next_action_at))}</div><div class="sub">${esc(s.next_action || '')}</div>`
+        : (u ? `<div class="sub" style="color:${u.color}">${esc(u.why)}</div>` : '<span class="sub">—</span>');
+      return `<tr>
+        <td><div class="student-name" onclick="openStudent('${s.id}')">${esc(fullName(s))}</div>
+            <div class="sub">${esc(s.phone || '')} · acum ${ago(s.created_at)} ${dup ? `<span class="badge badge-orange">dublură ×${dup + 1}</span>` : ''}</div></td>
+        <td>${etapaBadge(s.etapa)}${s.responsabil ? `<div class="sub">${esc(s.responsabil)}</div>` : ''}</td>
+        <td class="hide-sm"><div>${esc(s.sursa || '—')}${s.origine === 'test' ? ' · test' : ''}</div><div class="sub">${esc(s.obiectiv || s.level || '')}</div></td>
+        <td>${next}</td>
+        <td><div class="action-btns">${quickActions(s)}</div></td>
+      </tr>`; }).join('')}</tbody></table></div>`;
+}
+
+// ===== CURSANȚI (clienți) =====
+function setFilter(f, btn) {
+  studentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); renderStudents();
+}
+function renderStudents() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const list = all.filter(s => s.etapa === 'client')
+    .filter(s => (fullName(s) + ' ' + (s.email || '') + ' ' + (s.phone || '')).toLowerCase().includes(q))
+    .filter(s => studentFilter === 'toti' || (studentFilter === 'restant' ? s.pay_status === 'restant' : s.status === studentFilter));
+  if (!list.length) { document.getElementById('studentsTable').innerHTML = '<div class="loading">Nu au fost găsiți cursanți.</div>'; return; }
+  document.getElementById('studentsTable').innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Cursant</th><th>Nivel</th><th class="hide-sm">Pachet</th><th>Progres</th><th>Plată</th><th></th></tr></thead>
+    <tbody>${list.map(s => {
+      const pct = s.package_total > 0 ? Math.round((s.lectii_finalizate / s.package_total) * 100) : 0;
+      return `<tr>
+        <td><div class="student-name" onclick="openStudent('${s.id}')">${esc(fullName(s))}</div><div class="sub">${esc(s.phone || '')}</div></td>
+        <td><span class="badge badge-blue">${esc(s.level || '-')}</span></td>
+        <td class="hide-sm" style="font-size:0.82rem">${esc(s.package || '-')}</td>
+        <td><div class="progress-wrap"><div class="progress-bar-sm"><div class="progress-fill-sm" style="width:${pct}%"></div></div>
+            <span class="progress-text">${s.lectii_finalizate || 0}/${s.package_total || 0}</span></div></td>
+        <td>${payBadge(s.pay_status)}</td>
+        <td><div class="action-btns">${quickActions(s)}</div></td>
+      </tr>`; }).join('')}</tbody></table></div>`;
+}
+
+// ===== FIȘA =====
+function openStudent(id) { currentId = id; showPage('detail', null); renderDetail(id, true); }
+
+async function renderDetail(id, loading) {
+  const box = document.getElementById('detailContent');
+  if (loading) box.innerHTML = '<div class="loading"><div class="spinner"></div><br>Se încarcă...</div>';
+  const s = all.find(x => x.id === id);
+  if (!s) { box.innerHTML = '<div class="loading">Nu a fost găsit.</div>'; return; }
+  const [{ data: mentiuni }, { data: lectii }] = await Promise.all([
+    sb.from('mentiuni').select('*').eq('cursant_id', id).order('created_at', { ascending: false }),
+    sb.from('lectii').select('*').eq('cursant_id', id).order('nr')
+  ]);
+  const etapa = s.etapa || 'nou';
+  const idx = ETAPE.findIndex(e => e.k === etapa);
+  const u = urgency(s), dup = dupCount(s);
+  const initials = ((s.first_name || '?')[0] + ((s.last_name && s.last_name !== '-') ? s.last_name[0] : '')).toUpperCase();
+  const steps = ETAPE.map((e, i) => `<button class="step ${e.k === etapa ? 'current' : i < idx && etapa !== 'pierdut' ? 'done' : ''} ${e.k === 'pierdut' ? 'lost' : ''}" onclick="setEtapa('${s.id}','${e.k}')">${e.l}</button>`).join('');
+  const respOpts = ['<option value="">— nimeni —</option>', ...team.map(m => `<option ${s.responsabil === m.nume ? 'selected' : ''}>${esc(m.nume)}</option>`)].join('');
+  const isClient = etapa === 'client';
+  const pct = s.package_total > 0 ? Math.round((s.lectii_finalizate / s.package_total) * 100) : 0;
+
+  const notesHTML = (mentiuni && mentiuni.length) ? mentiuni.map(n =>
+    `<div class="note-item"><div class="note-text">${esc(n.text)}</div><div class="note-meta">${esc(n.autor || 'Sistem')} · ${esc(fmtDT(n.created_at))}</div></div>`).join('')
+    : '<p class="sub" style="margin-bottom:0.75rem">Nicio notă încă.</p>';
+
+  const lectiiHTML = (lectii && lectii.length) ? lectii.map(l =>
+    `<li class="lectie-item"><div class="lectie-nr ${l.finalizata ? 'done' : ''}">${esc(l.nr)}</div><div class="lectie-info"><div class="lectie-date">${esc(l.data_lectie || (l.finalizata ? 'Finalizată' : 'Planificată'))}</div><div class="lectie-desc">${esc(l.descriere || '')}</div></div>${l.finalizata ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-gray">—</span>'}</li>`).join('')
+    : '<li class="sub" style="padding:1rem 0">Nu sunt lecții înregistrate încă.</li>';
+
+  box.innerHTML = `
+    ${u && u.lvl >= 3 ? `<div class="alert-row">⏰ ${esc(u.why)}</div>` : ''}
+    <div class="student-header" style="flex-direction:column;align-items:stretch">
+      <div style="display:flex;gap:1.25rem;align-items:flex-start;flex-wrap:wrap">
+        <div class="student-avatar-lg">${esc(initials)}</div>
+        <div class="student-meta">
+          <h2>${esc(fullName(s))}</h2>
+          <p>${esc(s.phone || '')}${s.email ? ' · ' + esc(s.email) : ''}</p>
+          <div class="student-tags">${etapaBadge(etapa)}<span class="badge badge-blue">${esc(s.level || '-')}</span><span class="badge badge-gray">${esc(s.format || '-')}</span>${isClient ? payBadge(s.pay_status) : ''}${dup ? `<span class="badge badge-orange">a mai scris ${dup === 1 ? 'o dată' : 'de ' + dup + ' ori'}</span>` : ''}</div>
+        </div>
+        <div class="student-actions">
+          ${digits(s.phone) ? `<a class="btn-sm btn-sm-primary" style="text-decoration:none" href="tel:${esc(s.phone)}" onclick="logCall('${s.id}')">📞 Sună</a>` : ''}
+          ${waNumber(s.phone) ? `<button class="btn-sm btn-wa" onclick="openWA('${s.id}')">💬 WhatsApp</button>` : ''}
+        </div>
+      </div>
+      <div class="stepper">${steps}</div>
+      ${etapa === 'pierdut' && s.motiv_pierdut ? `<p class="sub" style="margin-top:0.5rem">Motiv: ${esc(s.motiv_pierdut)}</p>` : ''}
+    </div>
+
+    <div class="detail-body">
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        ${!isClient ? `
+        <div class="card">
+          <div class="card-title">Următorul pas</div>
+          <div class="form-group"><label>Ce urmează</label>
+            <input list="nextOpts" id="nextText" value="${esc(s.next_action || '')}" placeholder="ex. Lecție de probă / Revin cu oferta">
+            <datalist id="nextOpts"><option>Sun din nou</option><option>Lecție de probă</option><option>Trimit oferta</option><option>Revin după salariu</option><option>Confirm plata</option></datalist>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Când</label><input type="datetime-local" id="nextAt" value="${toLocalInput(s.next_action_at || (etapa === 'nou' ? s.slot_at : null))}"></div>
+            <div class="form-group"><label>Cine</label><select id="nextWho">${respOpts}</select></div>
+          </div>
+          <button class="btn-save" onclick="saveNext('${s.id}')">Salvează pasul</button>
+        </div>` : `
+        <div class="detail-grid" style="margin-bottom:0">
+          <div class="detail-stat"><div class="detail-stat-label">Lecții</div><div class="detail-stat-value">${s.lectii_finalizate || 0}<span style="font-size:1rem;color:var(--text3)">/${s.package_total || 0}</span></div>
+            <div style="margin-top:0.5rem"><div class="progress-bar-sm" style="height:8px"><div class="progress-fill-sm" style="width:${pct}%"></div></div></div></div>
+          <div class="detail-stat"><div class="detail-stat-label">Pachet</div><div class="detail-stat-value" style="font-size:1.2rem">€${esc(s.pay_amount || 0)}</div><div class="detail-stat-sub">${esc(s.package || '-')}</div></div>
+          <div class="detail-stat"><div class="detail-stat-label">Plată</div>
+            <select onchange="update('${s.id}',{pay_status:this.value},'Plata actualizată')" style="margin-top:0.4rem;padding:0.45rem;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;width:100%">
+              <option value="asteptare" ${s.pay_status === 'asteptare' ? 'selected' : ''}>Așteptare</option>
+              <option value="platit" ${s.pay_status === 'platit' ? 'selected' : ''}>Plătit</option>
+              <option value="restant" ${s.pay_status === 'restant' ? 'selected' : ''}>Restant</option>
+            </select>
+            <select onchange="update('${s.id}',{status:this.value},'Status actualizat')" style="margin-top:0.4rem;padding:0.45rem;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;width:100%">
+              <option value="activ" ${s.status === 'activ' ? 'selected' : ''}>Activ</option>
+              <option value="inactiv" ${s.status === 'inactiv' ? 'selected' : ''}>Inactiv / a terminat</option>
+            </select>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Lecții <button class="btn-sm btn-sm-primary" onclick="markLesson('${s.id}')">✓ Marchează lecție</button></div>
+          <ul class="lectii-list">${lectiiHTML}</ul>
+        </div>`}
+        <div class="card">
+          <div class="card-title">Note și istoric</div>
+          <textarea id="noteInput" style="width:100%;padding:0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.85rem;resize:vertical;min-height:70px;outline:none;margin-bottom:0.5rem" placeholder="Ce ați vorbit? Ce obiecții a avut?"></textarea>
+          <button class="add-note-btn" onclick="addNote('${s.id}')">+ Adaugă notă</button>
+          <div style="margin-top:1rem">${notesHTML}</div>
+        </div>
+      </div>
+      <div class="card" style="align-self:start">
+        <div class="card-title">Detalii lead</div>
+        <ul class="info-list">
+          <li><span>Scop</span><span>${esc(s.obiectiv || '—')}</span></li>
+          <li><span>Ora dorită</span><span>${esc(s.ora_dorita || '—')}</span></li>
+          <li><span>Sursă</span><span>${esc(s.sursa || '—')}</span></li>
+          ${s.utm_campaign ? `<li><span>Campanie</span><span>${esc(s.utm_campaign)}</span></li>` : ''}
+          <li><span>A venit prin</span><span>${esc({ formular: 'Formular', test: 'Test de nivel', manual: 'Adăugat manual' }[s.origine] || s.origine || '—')}</span></li>
+          <li><span>Creat</span><span>${esc(fmtDT(s.created_at))}</span></li>
+          <li><span>Primul contact</span><span>${s.contactat_at ? esc(fmtDT(s.contactat_at)) + ` <span class="sub">(după ${ago_between(s.created_at, s.contactat_at)})</span>` : '—'}</span></li>
+          <li><span>Acord date</span><span>${s.consimtamant ? '✓ ' + esc(fmtDT(s.consimtamant_at)) : '—'}</span></li>
+        </ul>
+        <button class="btn-sm btn-sm-outline" style="margin-top:1rem;width:100%;color:var(--red)" onclick="deleteStudent('${s.id}')">Șterge definitiv</button>
+      </div>
+    </div>`;
+}
+function ago_between(a, b) {
+  const ms = new Date(b) - new Date(a);
+  if (ms < HOUR) return Math.max(1, Math.round(ms / 60000)) + ' min';
+  if (ms < DAY) return Math.round(ms / HOUR) + ' h';
+  const d = Math.round(ms / DAY); return d === 1 ? '1 zi' : d + ' zile';
+}
+
+// ===== ACȚIUNI PE LEAD =====
+async function setEtapa(id, etapa) {
+  const s = all.find(x => x.id === id); if (!s || (s.etapa || 'nou') === etapa) return;
+  if (etapa === 'pierdut') {
+    document.getElementById('lostReason').innerHTML = MOTIVE.map(m => `<option>${m}</option>`).join('');
+    document.getElementById('lostNote').value = '';
+    openModal('modalLost'); return;
+  }
+  if (etapa === 'client') { openModal('modalClient'); return; }
+  const fields = { etapa };
+  if (etapa === 'proba_programata' && !s.next_action_at) {
+    fields.next_action = 'Lecție de probă';
+    if (s.slot_at && new Date(s.slot_at) > new Date()) fields.next_action_at = s.slot_at;
+  }
+  if (etapa === 'proba_facuta') { fields.next_action = 'Trimit oferta'; fields.next_action_at = new Date(Date.now() + DAY).toISOString(); }
+  if (!s.responsabil && currentUser) fields.responsabil = currentUser.nume;
+  await note(id, `Etapă: ${ETAPA[s.etapa || 'nou'].l} → ${ETAPA[etapa].l}`);
+  await update(id, fields, 'Etapă: ' + ETAPA[etapa].l);
+  if (etapa === 'proba_programata' && !fields.next_action_at) toast('Pune data lecției de probă la „Următorul pas”');
+}
+async function confirmLost() {
+  const motiv = document.getElementById('lostReason').value;
+  const det = document.getElementById('lostNote').value.trim();
+  closeModal('modalLost');
+  await note(currentId, 'Pierdut — ' + motiv + (det ? ': ' + det : ''));
+  await update(currentId, { etapa: 'pierdut', motiv_pierdut: motiv, next_action: null, next_action_at: null }, 'Marcat ca pierdut');
+}
+document.addEventListener('change', e => {
+  if (e.target.id === 'clientPackage') document.getElementById('clientCustom').style.display = e.target.value === 'custom' ? 'grid' : 'none';
+});
+async function confirmClient() {
+  const v = document.getElementById('clientPackage').value;
+  let pkg, total, price;
+  if (v === 'custom') {
+    total = parseInt(document.getElementById('clientLessons').value, 10);
+    price = parseInt(document.getElementById('clientPrice').value, 10);
+    if (!total || isNaN(price)) { toast('Completează lecțiile și prețul', 'error'); return; }
+    pkg = `Personalizat — ${total} lecții`;
+  } else {
+    const p = v.split('|'); pkg = `${p[0]} — ${p[1]} lecții`; total = +p[1]; price = +p[2];
+  }
+  closeModal('modalClient');
+  await note(currentId, `🎉 A devenit client: ${pkg}, ${price} EUR`);
+  await update(currentId, { etapa: 'client', status: 'activ', package: pkg, package_total: total, pay_amount: price,
+    pay_status: document.getElementById('clientPay').value, next_action: null, next_action_at: null }, 'Client nou! 🎉');
+}
+async function saveNext(id) {
+  const txt = document.getElementById('nextText').value.trim();
+  const at = document.getElementById('nextAt').value;
+  const who = document.getElementById('nextWho').value || null;
+  const s = all.find(x => x.id === id);
+  const fields = { next_action: txt || null, next_action_at: at ? new Date(at).toISOString() : null, responsabil: who };
+  if (s && (s.etapa || 'nou') === 'nou') fields.etapa = 'contactat';
+  if (/prob/i.test(txt) && s && ['nou', 'contactat'].includes(s.etapa || 'nou') && at) fields.etapa = 'proba_programata';
+  if (txt || at) await note(id, `Pas următor: ${txt || '—'}${at ? ' · ' + fmtDT(new Date(at)) : ''}${who ? ' · ' + who : ''}`);
+  await update(id, fields, 'Salvat');
+}
+async function logCall(id) {
+  const s = all.find(x => x.id === id); if (!s) return;
+  await note(id, '📞 Apel inițiat');
+  if ((s.etapa || 'nou') === 'nou') await update(id, { etapa: 'contactat', responsabil: s.responsabil || (currentUser && currentUser.nume) }, 'Marcat „contactat”');
+}
+async function addNote(id) {
+  const el = document.getElementById('noteInput'); const text = el.value.trim();
+  if (!text) return;
+  await note(id, text); el.value = '';
+  toast('Notă adăugată', 'success'); renderDetail(id, false);
+}
+async function markLesson(id) {
+  const s = all.find(x => x.id === id); if (!s) return;
+  if ((s.lectii_finalizate || 0) >= (s.package_total || 0)) { toast('Toate lecțiile pachetului sunt făcute', 'error'); return; }
+  const nr = (s.lectii_finalizate || 0) + 1;
+  await sb.from('lectii').insert({ cursant_id: id, nr, data_lectie: new Date().toLocaleDateString('ro-RO'), descriere: 'Lecție finalizată', finalizata: true });
+  await update(id, { lectii_finalizate: nr }, 'Lecția ' + nr + ' marcată');
+}
+async function deleteStudent(id) {
+  const s = all.find(x => x.id === id);
+  if (!confirm('Ștergi definitiv ' + fullName(s) + '? Nu se poate anula.')) return;
+  await sb.from('mentiuni').delete().eq('cursant_id', id);
+  await sb.from('lectii').delete().eq('cursant_id', id);
+  await sb.from('cursanti').delete().eq('id', id);
+  toast('Șters', 'success'); goBack(); loadAll();
+}
+
+// ===== WHATSAPP =====
+const TEMPLATES = [
+  { k: 'prima', l: 'Primul mesaj (formular)', t: s => `Bună ziua, ${s.first_name}! Sunt ${currentUser.nume} de la Let's English. Am primit cererea dumneavoastră${s.ora_dorita ? ' pentru ' + s.ora_dorita : ''}${s.obiectiv ? ' (' + s.obiectiv.toLowerCase() + ')' : ''}. Când vă este comod să vorbim 5 minute, ca să pregătesc lecția de probă exact pentru dumneavoastră?` },
+  { k: 'test', l: 'După testul de nivel', t: s => `Bună ziua, ${s.first_name}! Sunt ${currentUser.nume} de la Let's English. Ați făcut testul de nivel pe site și ați obținut ${s.level || 'un rezultat bun'}. Vă pot explica în 5 minute ce înseamnă și ce pași vă duc la nivelul următor. Când vă sun?` },
+  { k: 'confirmare', l: 'Confirmare lecție de probă', t: s => `Bună, ${s.first_name}! Vă confirm lecția de probă gratuită${s.next_action_at ? ' — ' + fmtDT(s.next_action_at) : ''}. Vă trimit linkul cu 10 minute înainte. Pe curând!` },
+  { k: 'reamintire', l: 'Reamintire (ziua lecției)', t: s => `Bună, ${s.first_name}! Ne vedem azi${s.next_action_at ? ' la ' + new Date(s.next_action_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }) : ''} la lecția de probă. Dacă s-a schimbat ceva, scrieți-mi aici.` },
+  { k: 'oferta', l: 'Oferta după probă', t: s => `${s.first_name}, mulțumesc pentru lecția de azi! Din ce am văzut, cel mai potrivit pentru dumneavoastră este pachetul ${s.level || ''} — lecții individuale, la orele care vă convin. Vă trimit detaliile și prețul aici?` },
+  { k: 'revenire', l: 'Revenire (nu a răspuns)', t: s => `Bună, ${s.first_name}! Revin scurt — mai este actuală dorința de a lucra la engleză? Dacă acum nu e momentul potrivit, spuneți-mi și vă scriu mai târziu.` },
+  { k: 'liber', l: 'Mesaj liber', t: s => `Bună, ${s.first_name}! ` }
+];
+function openWA(id) {
+  currentId = id;
+  const s = all.find(x => x.id === id);
+  const e = s.etapa || 'nou';
+  const def = e === 'nou' ? (s.origine === 'test' ? 'test' : 'prima') : e === 'proba_programata' ? 'confirmare' : e === 'proba_facuta' ? 'oferta' : e === 'contactat' ? 'revenire' : 'liber';
+  document.getElementById('waTpl').innerHTML = TEMPLATES.map(t => `<option value="${t.k}" ${t.k === def ? 'selected' : ''}>${t.l}</option>`).join('');
+  fillTemplate(); openModal('modalWA');
+}
+function fillTemplate() {
+  const s = all.find(x => x.id === currentId);
+  const t = TEMPLATES.find(t => t.k === document.getElementById('waTpl').value);
+  document.getElementById('waText').value = t.t(s).replace(/\s+/g, ' ').replace(' .', '.');
+}
+async function sendWA() {
+  const s = all.find(x => x.id === currentId);
+  const text = document.getElementById('waText').value;
+  window.open('https://wa.me/' + waNumber(s.phone) + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  closeModal('modalWA');
+  await note(s.id, '💬 WhatsApp: ' + text.slice(0, 140) + (text.length > 140 ? '…' : ''));
+  const fields = {};
+  if ((s.etapa || 'nou') === 'nou') { fields.etapa = 'contactat'; fields.responsabil = s.responsabil || currentUser.nume; }
+  if (!s.next_action_at && isOpen(s)) { fields.next_action = 'Verific dacă a răspuns'; fields.next_action_at = new Date(Date.now() + DAY).toISOString(); }
+  if (Object.keys(fields).length) await update(s.id, fields, 'Salvat în istoric'); else renderDetail(s.id, false);
+}
+
+// ===== LEAD NOU MANUAL =====
+function openAddModal() { openModal('modalAdd'); }
+async function addLead() {
+  const first = document.getElementById('newFirst').value.trim();
+  const last = document.getElementById('newLast').value.trim() || '-';
+  if (!first) { toast('Completează prenumele', 'error'); return; }
+  const noteTxt = document.getElementById('newNote').value.trim();
+  const { data, error } = await sb.from('cursanti').insert({
+    first_name: first, last_name: last,
+    phone: document.getElementById('newPhone').value.trim(),
+    email: document.getElementById('newEmail').value.trim() || null,
+    level: document.getElementById('newLevel').value,
+    format: document.getElementById('newFormat').value,
+    sursa: document.getElementById('newSursa').value,
+    origine: 'manual', etapa: 'nou', status: 'nou', responsabil: currentUser.nume,
+    package: 'Lead manual', package_total: 0, lectii_finalizate: 0, pay_status: 'asteptare', pay_amount: 0
+  }).select().single();
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  if (noteTxt) await note(data.id, noteTxt);
+  closeModal('modalAdd');
+  ['newFirst', 'newLast', 'newPhone', 'newEmail', 'newNote'].forEach(i => document.getElementById(i).value = '');
+  toast('Lead adăugat', 'success');
+  await loadAll(); openStudent(data.id);
+}
+
+// ===== LINK-URI CU SURSĂ =====
+function renderUtm() {
+  const base = 'https://letsenglish.eu/';
+  const links = [['Bio Instagram', 'instagram', 'bio'], ['Bio TikTok', 'tiktok', 'bio'], ['Reclamă Facebook/Instagram', 'facebook', 'ads'], ['Reclamă TikTok', 'tiktok', 'ads'], ['Google Business', 'google', 'maps']];
+  document.getElementById('utmLinks').innerHTML = links.map(([l, src, med]) => {
+    const u = `${base}?utm_source=${src}&utm_medium=${med}`;
+    return `<li><span>${l}</span><span><a href="#" onclick="navigator.clipboard.writeText('${u}');toast('Copiat','success');return false" style="color:var(--blue);font-size:0.78rem">copiază</a></span></li>`;
+  }).join('');
+}
+
+// ===== BLOG =====
+async function loadArticole() {
+  const { data, error } = await sb.from('articole').select('*').order('created_at', { ascending: false });
+  const list = document.getElementById('articoleList');
+  if (error || !data || !data.length) { list.innerHTML = '<div class="loading">Nu sunt articole încă. Apasă „+ Articol nou”.</div>'; return; }
+  list.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Titlu</th><th>Categorie</th><th>Status</th><th class="hide-sm">Data</th><th></th></tr></thead>
+    <tbody>${data.map(a => `<tr>
+      <td><div style="font-weight:600;color:var(--navy)">${esc(a.titlu)}</div><div class="sub">${esc((a.rezumat || '').substring(0, 60))}${a.rezumat && a.rezumat.length > 60 ? '…' : ''}</div></td>
+      <td><span class="badge badge-blue">${esc(a.categorie || 'General')}</span></td>
+      <td>${a.publicat ? '<span class="badge badge-green">Publicat</span>' : '<span class="badge badge-gray">Ciornă</span>'}</td>
+      <td class="hide-sm sub">${new Date(a.created_at).toLocaleDateString('ro-RO')}</td>
+      <td><div class="action-btns">
+        <button class="btn-icon" onclick="editArticol('${a.id}')" title="Editează">✏️</button>
+        <button class="btn-icon" onclick="togglePublicat('${a.id}',${!!a.publicat})" title="${a.publicat ? 'Ascunde' : 'Publică'}">${a.publicat ? '👁' : '🚀'}</button>
+        <button class="btn-icon" onclick="deleteArticol('${a.id}')" title="Șterge">🗑</button>
+      </div></td></tr>`).join('')}</tbody></table></div>`;
+}
+function openArticleModal() {
+  document.getElementById('modalArticolTitle').textContent = 'Articol nou';
+  document.getElementById('editArticolId').value = '';
+  ['artTitlu', 'artRezumat', 'artContinut'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('artCategorie').value = 'General';
+  document.getElementById('artPublicat').value = 'false';
+  openModal('modalArticol');
+}
+async function editArticol(id) {
+  const { data: a } = await sb.from('articole').select('*').eq('id', id).single();
+  if (!a) return;
+  document.getElementById('modalArticolTitle').textContent = 'Editează articol';
+  document.getElementById('editArticolId').value = a.id;
+  document.getElementById('artTitlu').value = a.titlu;
+  document.getElementById('artRezumat').value = a.rezumat || '';
+  document.getElementById('artContinut').value = a.continut;
+  document.getElementById('artCategorie').value = a.categorie || 'General';
+  document.getElementById('artPublicat').value = String(a.publicat);
+  openModal('modalArticol');
+}
+async function saveArticol() {
+  const titlu = document.getElementById('artTitlu').value.trim();
+  const continut = document.getElementById('artContinut').value.trim();
+  if (!titlu || !continut) { toast('Completează titlul și conținutul', 'error'); return; }
+  const id = document.getElementById('editArticolId').value;
+  const payload = {
+    titlu, continut,
+    rezumat: document.getElementById('artRezumat').value.trim(),
+    categorie: document.getElementById('artCategorie').value,
+    publicat: document.getElementById('artPublicat').value === 'true',
+    autor: currentUser ? currentUser.nume : 'Tatiana',
+    slug: titlu.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+  };
+  const { error } = id ? await sb.from('articole').update(payload).eq('id', id) : await sb.from('articole').insert(payload);
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  closeModal('modalArticol'); toast(id ? 'Articol actualizat' : 'Articol salvat', 'success'); loadArticole();
+}
+async function togglePublicat(id, current) {
+  await sb.from('articole').update({ publicat: !current }).eq('id', id);
+  toast(!current ? 'Articol publicat pe site' : 'Articol ascuns', 'success'); loadArticole();
+}
+async function deleteArticol(id) {
+  if (!confirm('Ștergi acest articol? Nu poate fi recuperat.')) return;
+  await sb.from('articole').delete().eq('id', id);
+  toast('Articol șters', 'success'); loadArticole();
+}
+
+// ===== PORNIRE =====
+document.addEventListener('DOMContentLoaded', async function () {
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('forgotBtn').addEventListener('click', forgotPassword);
+  ['loginPass', 'loginEmail'].forEach(i => document.getElementById(i).addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); }));
+  if (/type=(recovery|invite|signup)/.test(location.hash)) recoveryMode = true;
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') recoveryMode = true;
+    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'PASSWORD_RECOVERY') { if (!currentUser) onSession(session); }
+    if (event === 'SIGNED_OUT') showLogin();
+  });
+});
+</script>
 </body>
 </html>

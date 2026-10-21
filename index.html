@@ -181,6 +181,11 @@
   .wa-btn { display: inline-block; background: #25D366; color: #fff !important; padding: 0.65rem 1.2rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; }
   .slot-chip { display: none; margin-bottom: 1rem; padding: 0.7rem 1rem; border-radius: var(--radius-sm); background: rgba(212,168,67,0.12); border: 1px solid var(--gold); font-size: 0.9rem; color: var(--navy); }
   .cal-day.past { opacity: 0.3; cursor: default; }
+  .consent { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.8rem; line-height: 1.45; color: var(--text-muted); margin: 0.25rem 0 1rem; cursor: pointer; text-align: left; }
+  .consent input { margin-top: 0.2rem; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--gold); }
+  .consent-dark { color: rgba(255,255,255,0.6); }
+  .consent.missing { color: #DC2626; }
+  .consent-dark.missing { color: #FCA5A5; }
 
   .nav-cta {
     background: var(--gold);
@@ -1014,6 +1019,7 @@
           <input type="text" id="gateNume" placeholder="Numele tău" style="width:100%;padding:0.75rem 1rem;border:1.5px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.08);color:var(--white);font-family:'Inter',sans-serif;font-size:0.9rem;outline:none;margin-bottom:0.6rem">
           <input type="tel" id="gateTelefon" placeholder="Telefon / WhatsApp" style="width:100%;padding:0.75rem 1rem;border:1.5px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.08);color:var(--white);font-family:'Inter',sans-serif;font-size:0.9rem;outline:none">
         </div>
+        <label class="consent consent-dark"><input type="checkbox" id="gateConsent"> Sunt de acord ca Let's English să mă contacteze și să-mi prelucreze datele pentru a organiza lecțiile.</label>
         <button class="btn-gold" onclick="unlockResult()" style="width:100%">Vezi nivelul meu →</button>
         <button onclick="restartTest()" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:0.78rem;cursor:pointer;margin-top:0.75rem;display:block;width:100%;font-family:'Inter',sans-serif">Refă testul</button>
       </div>
@@ -1209,6 +1215,20 @@
             <option>C1 – Avansat</option>
           </select>
         </div>
+        <div class="form-group">
+          <label>Pentru ce ai nevoie de engleză?</label>
+          <select id="inputGoal">
+            <option value="">Alege...</option>
+            <option>Job / carieră</option>
+            <option>Interviu de angajare</option>
+            <option>Plecare peste hotare</option>
+            <option>Examen (IELTS, Cambridge, BAC)</option>
+            <option>Călătorii și conversație</option>
+            <option>Pentru copil</option>
+            <option>Echipă / companie</option>
+          </select>
+        </div>
+        <label class="consent"><input type="checkbox" id="inputConsent"> Sunt de acord ca Let's English să mă contacteze și să-mi prelucreze datele pentru a organiza lecțiile.</label>
         <button class="form-submit" onclick="submitForm()">Trimite cererea →</button>
         <div class="form-success" id="formSuccess">
           <div class="big">🎉</div>
@@ -1228,6 +1248,48 @@
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---- SURSA LEAD-ULUI (de unde a venit vizitatorul) ---- */
+(function captureSource() {
+  try {
+    const q = new URLSearchParams(location.search);
+    const prev = JSON.parse(sessionStorage.getItem('le_src') || 'null');
+    if (prev && !q.get('utm_source')) return;
+    sessionStorage.setItem('le_src', JSON.stringify({
+      utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'), utm_campaign: q.get('utm_campaign'),
+      fbclid: !!q.get('fbclid'), ttclid: !!q.get('ttclid'), gclid: !!q.get('gclid'),
+      referrer: document.referrer || null
+    }));
+  } catch (e) {}
+})();
+function leadMeta(origine) {
+  let src = {};
+  try { src = JSON.parse(sessionStorage.getItem('le_src') || '{}') || {}; } catch (e) {}
+  const ref = (src.referrer || '').toLowerCase();
+  const u = (src.utm_source || '').toLowerCase();
+  let sursa = 'direct';
+  if (u) sursa = u;
+  else if (src.ttclid || ref.includes('tiktok')) sursa = 'tiktok';
+  else if (ref.includes('instagram')) sursa = 'instagram';
+  else if (src.fbclid || ref.includes('facebook') || ref.includes('fb.')) sursa = 'facebook';
+  else if (src.gclid || ref.includes('google')) sursa = 'google';
+  else if (ref.includes('t.me') || ref.includes('telegram')) sursa = 'telegram';
+  else if (ref && !ref.includes('letsenglish.eu')) sursa = 'alt site';
+  return {
+    origine, sursa,
+    utm_source: src.utm_source || null, utm_medium: src.utm_medium || null, utm_campaign: src.utm_campaign || null,
+    referrer: src.referrer || null,
+    consimtamant: true, consimtamant_at: new Date().toISOString(),
+    etapa: 'nou'
+  };
+}
+function validPhone(p) { return (p.replace(/\D/g, '').length >= 8); }
+function needConsent(id) {
+  const box = document.getElementById(id);
+  if (box && box.checked) { box.closest('label').classList.remove('missing'); return false; }
+  if (box) box.closest('label').classList.add('missing');
+  return true;
+}
 
 /* ---- MOBILE MENU ---- */
 function toggleMenu() {
@@ -1335,6 +1397,7 @@ let pendingResult = null;
 function showResult() {
   const lvl = levels.find(l => score >= l.min && score <= l.max) || levels[0];
   pendingResult = { lvl, score };
+  try { gtag('event', 'test_completed', { event_category: 'Test', event_label: lvl.level, value: score }); } catch (e) {}
   document.getElementById('testBody').style.display = 'none';
   document.getElementById('testGate').style.display = 'block';
   document.getElementById('progressFill').style.width = '100%';
@@ -1347,6 +1410,8 @@ async function unlockResult() {
     alert('Te rugăm să completezi numele și telefonul!');
     return;
   }
+  if (!validPhone(phone)) { alert('Verifică numărul de telefon — pare incomplet.'); return; }
+  if (needConsent('gateConsent')) { alert('Bifează acordul ca să vezi rezultatul.'); return; }
 
   // Save to Supabase
   const parts = name.split(' ');
@@ -1361,6 +1426,7 @@ async function unlockResult() {
       level,
       format: 'Online',
       package: 'Cerere din test rapid',
+      ...leadMeta('test'),
       package_total: 0,
       lectii_finalizate: 0,
       pay_status: 'asteptare',
@@ -1369,6 +1435,7 @@ async function unlockResult() {
     });
     if (res.error) saveFailed = true;
   } catch (e) { saveFailed = true; }
+  try { gtag('event', 'generate_lead', { event_category: 'Test', event_label: 'Test de nivel ' + level, value: 1 }); } catch (e) {}
 
   // Show result
   document.getElementById('testGate').style.display = 'none';
@@ -1499,7 +1566,7 @@ function selectDay(day) {
         <div class="slot-time">${time}</div>
         <div class="slot-type">${isTaken ? 'Loc ocupat' : 'Lecție individuală / grup'}</div>
       </div>
-      <button class="slot-btn ${isTaken ? 'taken' : ''}" ${isTaken ? 'disabled' : `onclick="bookSlot('${day} ${months[m]}', '${time}')"`}>
+      <button class="slot-btn ${isTaken ? 'taken' : ''}" ${isTaken ? 'disabled' : `onclick="bookSlot('${day} ${months[m]}', '${time}', '${dateKey(y, m, day)}')"`}>
         ${isTaken ? 'Ocupat' : 'Rezervă'}
       </button>
     `;
@@ -1507,8 +1574,9 @@ function selectDay(day) {
   });
 }
 
-function bookSlot(date, time) {
-  window.selectedSlot = { date, time };
+function bookSlot(date, time, iso) {
+  window.selectedSlot = { date, time, iso };
+  try { gtag('event', 'select_slot', { event_category: 'Calendar', event_label: iso + ' ' + time }); } catch (e) {}
   const chip = document.getElementById('slotChip');
   if (chip) {
     chip.innerHTML = `📅 Ai ales: <strong>${date}, ora ${time}</strong> · <a href="#calendar" style="color:var(--navy)">schimbă</a>`;
@@ -1565,6 +1633,9 @@ async function submitForm() {
   const nameRaw = document.getElementById('inputName').value.trim();
   const phone = document.getElementById('inputPhone').value.trim();
   if (!nameRaw || !phone) { alert('Te rugăm să completezi numele și telefonul.'); return; }
+  if (!validPhone(phone)) { alert('Verifică numărul de telefon — pare incomplet.'); return; }
+  if (needConsent('inputConsent')) { alert('Bifează acordul ca Tatiana să te poată contacta.'); return; }
+  const obiectiv = document.getElementById('inputGoal').value || null;
 
   const parts = nameRaw.split(' ');
   const first_name = parts[0] || nameRaw;
@@ -1583,7 +1654,11 @@ async function submitForm() {
     const res = await sb.from('cursanti').insert({
     first_name, last_name, phone,
     format, level,
-    package: 'Cerere initiala' + slotInfo,
+    package: 'Cerere initiala',
+    obiectiv,
+    ora_dorita: window.selectedSlot ? `${window.selectedSlot.date}, ora ${window.selectedSlot.time}` : null,
+    slot_at: window.selectedSlot && window.selectedSlot.iso ? new Date(`${window.selectedSlot.iso}T${window.selectedSlot.time}:00`).toISOString() : null,
+    ...leadMeta('formular'),
     package_total: 0,
     lectii_finalizate: 0,
     pay_status: 'asteptare',
@@ -1595,7 +1670,7 @@ async function submitForm() {
 
   if (error) {
     console.error('Supabase error:', error);
-    const waText = `Bună ziua! Doresc o lecție de probă.\nNume: ${nameRaw}\nTelefon: ${phone}\nFormat: ${format}\nNivel: ${level}${slotInfo ? '\nOra aleasă: ' + slotInfo.replace(' — ', '') : ''}`;
+    const waText = `Bună ziua! Doresc o lecție de probă.\nNume: ${nameRaw}\nTelefon: ${phone}\nFormat: ${format}\nNivel: ${level}${obiectiv ? '\nScop: ' + obiectiv : ''}${slotInfo ? '\nOra aleasă: ' + slotInfo.replace(' — ', '') : ''}`;
     showWhatsAppFallback(waText);
     btn.textContent = 'Trimite cererea →';
     btn.disabled = false;
@@ -1614,6 +1689,7 @@ async function submitForm() {
   btn.style.display = 'none';
   document.getElementById('formSuccess').style.display = 'block';
   const chip = document.getElementById('slotChip'); if (chip) chip.style.display = 'none';
+  const consent = document.querySelector('#contactForm .consent'); if (consent) consent.style.display = 'none';
   const wa = document.getElementById('waFallback'); if (wa) wa.style.display = 'none';
 }
 
