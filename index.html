@@ -1102,11 +1102,8 @@
     <div class="section-label">Resurse gratuite</div>
     <h2 class="section-title">Învață engleza gratuit</h2>
     <p class="section-subtitle">Articole, sfaturi și ghiduri scrise de Tatiana — pentru tine, gratuit.</p>
-    <div class="blog-grid" id="blogGrid">
-      <div class="blog-empty">
-        <p>Articolele se încarcă...</p>
-      </div>
-    </div>
+    <div class="blog-grid" id="blogGrid"><a class="blog-card" href="/blog/cat-dureaza-sa-inveti-engleza/" style="text-decoration:none"><div class="blog-card-img" style="background:var(--navy)">🧭</div><div class="blog-card-body"><div class="blog-cat">Ghiduri</div><h3>Cât durează să înveți engleza? Orele reale pentru fiecare nivel, de la A1 la C2</h3><p>Câte ore de studiu îți trebuie pentru nivelul B1, B2 sau C1 în engleză, după estimările Cambridge, și cum îți calculezi propriul calendar.</p><div class="blog-card-footer"><span>Tatiana · 6 min</span><span class="blog-read">Citește →</span></div></div></a><a class="blog-card" href="/blog/greseli-frecvente-in-engleza/" style="text-decoration:none"><div class="blog-card-img" style="background:var(--navy)">📝</div><div class="blog-card-body"><div class="blog-cat">Gramatică</div><h3>12 greșeli frecvente în engleză pe care le fac vorbitorii de română (și cum să le corectezi)</h3><p>„I am agree&quot;, „informations&quot;, „since 3 years&quot;. Greșelile tipice ale vorbitorilor de română în engleză și forma corectă pentru fiecare.</p><div class="blog-card-footer"><span>Tatiana · 7 min</span><span class="blog-read">Citește →</span></div></div></a><a class="blog-card" href="/blog/interviu-de-angajare-in-engleza/" style="text-decoration:none"><div class="blog-card-img" style="background:var(--navy)">💼</div><div class="blog-card-body"><div class="blog-cat">Business</div><h3>Interviul de angajare în engleză: 8 întrebări care apar aproape mereu și cum să răspunzi</h3><p>Întrebările clasice de la interviul în engleză, metoda STAR și exemple de răspunsuri pe care le poți adapta experienței tale.</p><div class="blog-card-footer"><span>Tatiana · 8 min</span><span class="blog-read">Citește →</span></div></div></a></div>
+    <p style="text-align:center;margin-top:2rem"><a href="/blog/" class="course-cta">Vezi toate articolele →</a></p>
   </div>
 </section>
 
@@ -1711,15 +1708,10 @@ async function loadBlog() {
   const grid = document.getElementById('blogGrid');
   if (!grid) return;
 
-  if (error || !data || data.length === 0) {
-    grid.innerHTML = `<div class="blog-empty">
-      <p style="font-size:1.5rem;margin-bottom:0.5rem">✏️</p>
-      <p style="color:var(--text-muted)">Articolele vor apărea în curând. Revino!</p>
-    </div>`;
-    return;
-  }
+  // articolele statice (SEO) sunt deja în pagină; din CRM adăugăm doar ce e publicat acolo
+  if (error || !data || data.length === 0) return;
 
-  grid.innerHTML = data.map(a => {
+  grid.insertAdjacentHTML('beforeend', data.map(a => {
     const emoji = EMOJI_MAP[a.categorie] || '✨';
     const date = new Date(a.created_at).toLocaleDateString('ro-RO', {day:'numeric', month:'long', year:'numeric'});
     return `<div class="blog-card" onclick="openArticle('${a.id}')">
@@ -1734,7 +1726,7 @@ async function loadBlog() {
         </div>
       </div>
     </div>`;
-  }).join('');
+  }).join(''));
 }
 
 async function openArticle(id) {
