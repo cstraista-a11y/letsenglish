@@ -264,6 +264,48 @@ tr:hover td{background:var(--bg)}
 @media(max-width:480px){.stats-grid{grid-template-columns:1fr 1fr}.stat-value{font-size:1.6rem}.stat-card{padding:1rem}}
 .toast{transform:translateY(calc(100% + 2rem));opacity:0;transition:transform .3s,opacity .3s}
 .toast.show{transform:translateY(0);opacity:1}
+
+/* ===== GRUPE & CATALOG ===== */
+.grupe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.grupa-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;cursor:pointer;transition:border-color .15s;text-align:left;font-family:'Inter',sans-serif;width:100%;color:inherit}
+.grupa-card:hover,.grupa-card:focus-visible{border-color:var(--navy)}
+.grupa-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.grupa-top h3{font-size:1rem;font-weight:700;color:var(--navy)}
+.lesson-bar{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end}
+.lesson-bar .form-group{margin:0}
+.reg-list{display:flex;flex-direction:column}
+.reg-row{display:grid;grid-template-columns:minmax(150px,1.2fr) auto 88px minmax(160px,2fr);gap:.75rem;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--border)}
+.reg-row:last-child{border-bottom:none}
+.reg-status{display:flex;gap:4px}
+.pz{width:42px;height:42px;border-radius:8px;border:1.5px solid var(--border2);background:var(--white);font-weight:700;font-size:.85rem;color:var(--text2);cursor:pointer;font-family:'Inter',sans-serif}
+.pz:hover{border-color:var(--navy)}
+.pz.on{color:#fff}
+.pz.on.pz-green{background:var(--green);border-color:var(--green)}
+.pz.on.pz-yellow{background:var(--yellow);border-color:var(--yellow)}
+.pz.on.pz-blue{background:var(--blue);border-color:var(--blue)}
+.pz.on.pz-red{background:var(--red);border-color:var(--red)}
+.reg-nota,.reg-com{padding:.55rem .7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;width:100%;min-height:42px;box-sizing:border-box;background:var(--white);color:var(--text)}
+.reg-nota:focus,.reg-com:focus{border-color:var(--navy)}
+.reg-legend{margin-bottom:.25rem}
+.mb-list{max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.mb-item{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-bottom:1px solid var(--border);cursor:pointer;font-size:.88rem}
+.mb-item:last-child{border-bottom:none}
+.mb-item input{width:18px;height:18px;flex-shrink:0}
+.mb-new{margin-top:1rem}
+.mb-new summary{cursor:pointer;font-weight:600;color:var(--navy);font-size:.88rem;margin-bottom:.75rem}
+.check-row{display:flex;align-items:center;gap:.5rem;font-size:.88rem;color:var(--text2);cursor:pointer}
+.check-row input{width:18px;height:18px}
+.dirty-note{color:var(--yellow);font-weight:600}
+@media(max-width:768px){
+  .reg-row{grid-template-columns:1fr 88px}
+  .reg-name,.reg-com{grid-column:1/-1}
+  .lesson-bar .form-group{width:100%}
+}
+.top-search{width:260px;padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:'Inter',sans-serif;outline:none;background:var(--bg)}
+.top-search:focus{border-color:var(--navy);background:var(--white)}
+.search-filters{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.search-filters select{padding:0.6rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.88rem;font-family:'Inter',sans-serif;background:var(--white);color:var(--text);min-width:180px}
+@media(max-width:768px){.top-search{display:none}.search-filters select{flex:1}}
 </style>
 </head>
 <body>
@@ -302,6 +344,9 @@ tr:hover td{background:var(--bg)}
         <p>CRM</p>
       </div>
       <nav class="sidebar-nav">
+        <div class="nav-item" id="nav-cautare" onclick="openCautare()">
+          <span class="icon">🔍</span> Căutare
+        </div>
         <div class="nav-label">Vânzări</div>
         <div class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard',this)">
           <span class="icon">📊</span> Azi
@@ -312,6 +357,9 @@ tr:hover td{background:var(--bg)}
         <div class="nav-label">Școală</div>
         <div class="nav-item" id="nav-cursanti" onclick="showPage('cursanti',this)">
           <span class="icon">👥</span> Cursanți
+        </div>
+        <div class="nav-item" id="nav-grupe" onclick="showPage('grupe',this)">
+          <span class="icon">🗂️</span> Grupe & catalog
         </div>
         <div class="nav-item" id="nav-blog" onclick="showPage('blog',this)">
           <span class="icon">✏️</span> Blog & Articole
@@ -341,6 +389,7 @@ tr:hover td{background:var(--bg)}
         <span class="page-title" id="pageTitle">Azi</span>
       </div>
       <div class="topbar-right">
+        <input type="search" class="top-search" placeholder="Caută: nume, telefon, sat, țară" aria-label="Caută în CRM" onkeydown="topSearch(event)">
         <button class="add-btn" onclick="openAddModal()">+ Lead nou</button>
       </div>
     </header>
@@ -395,6 +444,44 @@ tr:hover td{background:var(--bg)}
         <div id="studentsTable"><div class="loading"><div class="spinner"></div><br>Se încarcă...</div></div>
       </div>
 
+      <!-- CAUTARE -->
+      <div class="page" id="page-cautare">
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="search" id="cauta" placeholder="Nume, telefon, localitate sau țară..." oninput="renderCautare()" aria-label="Caută">
+          </div>
+        </div>
+        <div class="search-filters">
+          <select id="cautaTara" onchange="renderCautare()" aria-label="Țară"></select>
+          <select id="cautaLoc" onchange="renderCautare()" aria-label="Localitate"></select>
+          <span class="sub" id="cautareN" style="align-self:center"></span>
+        </div>
+        <div id="cautareRez"></div>
+        <p class="sub" style="margin-top:0.5rem">Unde țara nu e completată, o deducem din prefixul telefonului (+373, +40, +39...).</p>
+      </div>
+
+      <!-- GRUPE -->
+      <div class="page" id="page-grupe">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem">
+          <div>
+            <h2 style="font-size:1.1rem;font-weight:700;color:var(--navy)">Grupe</h2>
+            <p style="font-size:0.82rem;color:var(--text3);margin-top:0.2rem">Deschide o grupă ca să faci catalogul: prezență, notă și comentariu pentru fiecare elev.</p>
+          </div>
+          <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+            <label class="check-row"><input type="checkbox" id="grupeArhiva" onchange="renderGrupe()"> Arată și arhivate</label>
+            <button class="add-btn" onclick="openGrupaModal()">+ Grupă nouă</button>
+          </div>
+        </div>
+        <div id="grupeList"><div class="loading"><div class="spinner"></div><br>Se încarcă...</div></div>
+      </div>
+
+      <!-- O GRUPĂ -->
+      <div class="page" id="page-grupa">
+        <button class="back-btn" onclick="showPage('grupe', document.getElementById('nav-grupe'))">← Toate grupele</button>
+        <div id="grupaContent"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+
       <!-- DETAIL -->
       <div class="page" id="page-detail">
         <button class="back-btn" onclick="goBack()">← Înapoi</button>
@@ -441,6 +528,11 @@ tr:hover td{background:var(--bg)}
     </div>
     <div class="form-group"><label>Telefon</label><input type="tel" id="newPhone" placeholder="+373 XX XXX XXX"></div>
     <div class="form-group"><label>Email (opțional)</label><input type="email" id="newEmail"></div>
+    <div class="form-row">
+      <div class="form-group"><label for="newLoc">Localitate</label><input type="text" id="newLoc" placeholder="Băcioi"></div>
+      <div class="form-group"><label for="newTara">Țară</label><input type="text" id="newTara" list="taraOpts" placeholder="Moldova"></div>
+    </div>
+    <datalist id="taraOpts"><option>Moldova</option><option>România</option><option>Italia</option><option>Marea Britanie</option><option>Irlanda</option><option>Germania</option><option>Franța</option><option>Spania</option><option>Portugalia</option><option>Israel</option><option>SUA / Canada</option></datalist>
     <div class="form-row">
       <div class="form-group"><label>Nivel</label>
         <select id="newLevel"><option>Necunoscut</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option></select>
@@ -554,6 +646,57 @@ tr:hover td{background:var(--bg)}
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal('modalArticol')">Anulează</button>
       <button class="btn-save" onclick="saveArticol()">Salvează articolul</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: GRUPA -->
+<div class="modal-overlay" id="modalGrupa">
+  <div class="modal">
+    <h3 id="modalGrupaTitle">Grupă nouă</h3>
+    <input type="hidden" id="grId">
+    <div class="form-group"><label for="grNume">Nume grupă</label><input type="text" id="grNume" placeholder="Ex: Băcioi — Cei mici"></div>
+    <div class="form-row">
+      <div class="form-group"><label for="grNivel">Nivel</label>
+        <select id="grNivel"><option value="">—</option><option>Pre A1</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option></select>
+      </div>
+      <div class="form-group"><label for="grVarsta">Vârstă</label><input type="text" id="grVarsta" placeholder="6–9 ani"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="grOrar">Orar</label><input type="text" id="grOrar" placeholder="Marți și joi, 15:00"></div>
+      <div class="form-group"><label for="grLocatie">Locație</label><input type="text" id="grLocatie" placeholder="Băcioi / Online"></div>
+    </div>
+    <div class="form-group"><label for="grProfesor">Profesor</label><select id="grProfesor"></select></div>
+    <label class="check-row"><input type="checkbox" id="grActiva" checked> Grupă activă (debifează ca s-o arhivezi)</label>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modalGrupa')">Anulează</button>
+      <button class="btn-save" onclick="saveGrupa()">Salvează</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ELEVII GRUPEI -->
+<div class="modal-overlay" id="modalMembri">
+  <div class="modal" style="max-width:560px">
+    <h3>Elevii grupei</h3>
+    <div class="search-box" style="margin-bottom:0.75rem">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="mbSearch" placeholder="Caută după nume sau telefon..." oninput="renderMembriPicker()" aria-label="Caută elev">
+    </div>
+    <div id="mbList" class="mb-list"></div>
+    <p class="sub" id="mbCount" style="margin-top:0.5rem"></p>
+    <details class="mb-new">
+      <summary>+ Elev nou, care nu e încă în CRM</summary>
+      <div class="form-row">
+        <div class="form-group"><label for="mbFirst">Prenume</label><input type="text" id="mbFirst"></div>
+        <div class="form-group"><label for="mbLast">Nume</label><input type="text" id="mbLast"></div>
+      </div>
+      <div class="form-group"><label for="mbPhone">Telefon (elev sau părinte)</label><input type="tel" id="mbPhone" placeholder="+373 XX XXX XXX"></div>
+      <button class="btn-sm btn-sm-primary" onclick="addElevNou()">Creează și bifează</button>
+    </details>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modalMembri')">Anulează</button>
+      <button class="btn-save" onclick="saveMembri()">Salvează</button>
     </div>
   </div>
 </div>
@@ -738,6 +881,7 @@ async function loadAll() {
   nav.textContent = urgentN; nav.style.display = urgentN ? 'inline-block' : 'none';
   document.title = (urgentN ? `(${urgentN}) ` : '') + "Let's English — CRM";
   if (document.getElementById('page-detail').classList.contains('active') && currentId) renderDetail(currentId, false);
+  if (document.getElementById('page-cautare').classList.contains('active')) { fillCautareFiltre(); renderCautare(); }
 }
 
 let liveStarted = false;
@@ -770,8 +914,9 @@ function showPage(name, navEl) {
   document.getElementById('page-' + name).classList.add('active');
   if (name === 'blog') loadArticole();
   if (name === 'setari') renderUtm();
-  if (['dashboard', 'leaduri', 'cursanti'].includes(name)) lastList = name;
-  const titles = { dashboard: 'Azi', leaduri: 'Lead-uri', cursanti: 'Cursanți', detail: 'Fișă', blog: 'Blog & Articole', setari: 'Setări' };
+  if (name === 'grupe') loadGrupe();
+  if (['dashboard', 'leaduri', 'cursanti', 'grupe', 'grupa'].includes(name)) lastList = name;
+  const titles = { dashboard: 'Azi', leaduri: 'Lead-uri', cursanti: 'Cursanți', detail: 'Fișă', blog: 'Blog & Articole', setari: 'Setări', grupe: 'Grupe & catalog', cautare: 'Căutare', grupa: currentGrupa ? currentGrupa.nume : 'Catalog' };
   document.getElementById('pageTitle').textContent = titles[name] || name;
   if (navEl) {
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -864,7 +1009,7 @@ function renderLeads() {
   const q = document.getElementById('leadSearch').value.toLowerCase().trim();
   const qd = digits(q);
   const flt = filters.find(f => f.k === leadFilter) || filters[0];
-  const list = leads.filter(flt.f).filter(s => !q || fullName(s).toLowerCase().includes(q) || (qd.length >= 3 && digits(s.phone).includes(qd)));
+  const list = leads.filter(flt.f).filter(s => matchesQuery(s, q));
   if (!list.length) { document.getElementById('leadsTable').innerHTML = '<div class="loading">Niciun lead aici.</div>'; return; }
   document.getElementById('leadsTable').innerHTML = `<div class="table-wrap"><table>
     <thead><tr><th>Lead</th><th>Etapă</th><th class="hide-sm">Sursă / scop</th><th>Următorul pas</th><th></th></tr></thead>
@@ -891,7 +1036,7 @@ function setFilter(f, btn) {
 function renderStudents() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const list = all.filter(s => s.etapa === 'client')
-    .filter(s => (fullName(s) + ' ' + (s.email || '') + ' ' + (s.phone || '')).toLowerCase().includes(q))
+    .filter(s => matchesQuery(s, q))
     .filter(s => studentFilter === 'toti' || (studentFilter === 'restant' ? s.pay_status === 'restant' : s.status === studentFilter));
   if (!list.length) { document.getElementById('studentsTable').innerHTML = '<div class="loading">Nu au fost găsiți cursanți.</div>'; return; }
   document.getElementById('studentsTable').innerHTML = `<div class="table-wrap"><table>
@@ -1011,6 +1156,11 @@ async function renderDetail(id, loading) {
           <li><span>Primul contact</span><span>${s.contactat_at ? esc(fmtDT(s.contactat_at)) + ` <span class="sub">(după ${ago_between(s.created_at, s.contactat_at)})</span>` : '—'}</span></li>
           <li><span>Acord date</span><span>${s.consimtamant ? '✓ ' + esc(fmtDT(s.consimtamant_at)) : '—'}</span></li>
         </ul>
+        <div class="form-row" style="margin-top:1rem">
+          <div class="form-group"><label for="detLoc">Localitate</label><input type="text" id="detLoc" value="${esc(s.localitate || '')}" placeholder="ex. Băcioi"></div>
+          <div class="form-group"><label for="detTara">Țară</label><input type="text" id="detTara" list="taraOpts" value="${esc(s.tara || '')}" placeholder="${esc(taraDinTelefon(s.phone) || 'Moldova')}"></div>
+        </div>
+        <button class="btn-sm btn-sm-outline" style="width:100%" onclick="saveLoc('${s.id}')">Salvează localitatea și țara</button>
         <button class="btn-sm btn-sm-outline" style="margin-top:1rem;width:100%;color:var(--red)" onclick="deleteStudent('${s.id}')">Șterge definitiv</button>
       </div>
     </div>`;
@@ -1152,6 +1302,8 @@ async function addLead() {
     first_name: first, last_name: last,
     phone: document.getElementById('newPhone').value.trim(),
     email: document.getElementById('newEmail').value.trim() || null,
+    localitate: document.getElementById('newLoc').value.trim() || null,
+    tara: document.getElementById('newTara').value.trim() || null,
     level: document.getElementById('newLevel').value,
     format: document.getElementById('newFormat').value,
     sursa: document.getElementById('newSursa').value,
@@ -1161,7 +1313,7 @@ async function addLead() {
   if (error) { toast('Eroare: ' + error.message, 'error'); return; }
   if (noteTxt) await note(data.id, noteTxt);
   closeModal('modalAdd');
-  ['newFirst', 'newLast', 'newPhone', 'newEmail', 'newNote'].forEach(i => document.getElementById(i).value = '');
+  ['newFirst', 'newLast', 'newPhone', 'newEmail', 'newNote', 'newLoc', 'newTara'].forEach(i => document.getElementById(i).value = '');
   toast('Lead adăugat', 'success');
   await loadAll(); openStudent(data.id);
 }
@@ -1239,6 +1391,441 @@ async function deleteArticol(id) {
   if (!confirm('Ștergi acest articol? Nu poate fi recuperat.')) return;
   await sb.from('articole').delete().eq('id', id);
   toast('Articol șters', 'success'); loadArticole();
+}
+
+// ===== GRUPE & CATALOG =====
+const PREZ = [
+  { k: 'prezent',   l: 'P', t: 'Prezent',        c: 'green' },
+  { k: 'intarziat', l: 'Î', t: 'Întârziat',      c: 'yellow' },
+  { k: 'motivat',   l: 'M', t: 'Absent motivat', c: 'blue' },
+  { k: 'absent',    l: 'A', t: 'Absent',         c: 'red' }
+];
+let grupe = [], membri = [], sesiuniAll = [];
+let currentGrupa = null, currentSesiune = null, sesiuniGrupa = [], prezenteGrupa = [];
+let regDraft = {};          // cursant_id -> { status, nota, comentariu, _dirty }
+let grupaTab = 'catalog';
+let mbSel = new Set();
+
+function todayISO() { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
+function fmtDate(d) { return d ? new Date(d + 'T12:00:00').toLocaleDateString('ro-RO', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ''; }
+function byId(id) { return all.find(s => String(s.id) === String(id)); }
+function membersOf(gid) {
+  return membri.filter(x => x.grupa_id === gid).map(x => byId(x.cursant_id)).filter(Boolean)
+    .sort((a, b) => fullName(a).localeCompare(fullName(b), 'ro'));
+}
+function regDirty() { return Object.values(regDraft).some(d => d._dirty); }
+
+async function loadGrupe() {
+  const [g, m, s] = await Promise.all([
+    sb.from('grupe').select('*').order('created_at', { ascending: true }),
+    sb.from('grupa_membri').select('*'),
+    sb.from('sesiuni').select('id,grupa_id,data')
+  ]);
+  if (g.error) { document.getElementById('grupeList').innerHTML = `<div class="loading">Eroare: ${esc(g.error.message)}</div>`; return; }
+  grupe = g.data || []; membri = m.data || []; sesiuniAll = s.data || [];
+  renderGrupe();
+}
+
+function renderGrupe() {
+  const el = document.getElementById('grupeList');
+  const arh = document.getElementById('grupeArhiva').checked;
+  const list = grupe.filter(g => arh || g.activa !== false);
+  if (!list.length) { el.innerHTML = '<div class="loading">Nicio grupă încă. Apasă „+ Grupă nouă”.</div>'; return; }
+  el.innerHTML = `<div class="grupe-grid">${list.map(g => {
+    const n = membersOf(g.id).length;
+    const ses = sesiuniAll.filter(x => x.grupa_id === g.id).sort((a, b) => b.data.localeCompare(a.data));
+    return `<button type="button" class="grupa-card" onclick="openGrupa('${g.id}')">
+      <div class="grupa-top"><h3>${esc(g.nume)}</h3>${g.activa === false ? '<span class="badge badge-gray">Arhivată</span>' : ''}</div>
+      <div class="sub">${esc([g.nivel, g.varsta].filter(Boolean).join(' · ') || '—')}</div>
+      <ul class="info-list" style="margin-top:0.75rem">
+        <li><span>Orar</span><span>${esc(g.orar || '—')}</span></li>
+        <li><span>Locație</span><span>${esc(g.locatie || '—')}</span></li>
+        <li><span>Profesor</span><span>${esc(g.profesor || '—')}</span></li>
+        <li><span>Elevi</span><span>${n}</span></li>
+        <li><span>Lecții ținute</span><span>${ses.length}${ses[0] ? ' · ultima ' + esc(fmtDate(ses[0].data)) : ''}</span></li>
+      </ul></button>`;
+  }).join('')}</div>`;
+}
+
+// ----- o grupă -----
+async function openGrupa(id) {
+  currentGrupa = grupe.find(g => g.id === id); if (!currentGrupa) return;
+  grupaTab = 'catalog';
+  showPage('grupa', null);
+  document.getElementById('nav-grupe').classList.add('active');
+  document.getElementById('pageTitle').textContent = currentGrupa.nume;
+  document.getElementById('grupaContent').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  await loadGrupaData();
+  const azi = sesiuniGrupa.find(s => s.data === todayISO());
+  selectSesiune(azi ? azi.id : (sesiuniGrupa[0] ? sesiuniGrupa[0].id : null), true);
+}
+async function loadGrupaData() {
+  const { data: ses, error } = await sb.from('sesiuni').select('*').eq('grupa_id', currentGrupa.id).order('data', { ascending: false });
+  if (error) { toast('Eroare: ' + error.message, 'error'); }
+  sesiuniGrupa = ses || [];
+  const ids = sesiuniGrupa.map(s => s.id);
+  if (ids.length) {
+    const { data: pr } = await sb.from('prezente').select('*').in('sesiune_id', ids);
+    prezenteGrupa = pr || [];
+  } else prezenteGrupa = [];
+}
+function selectSesiune(id, force) {
+  if (!force && regDirty() && !confirm('Ai modificări nesalvate în catalog. Treci la altă lecție fără să salvezi?')) { renderGrupa(); return; }
+  currentSesiune = sesiuniGrupa.find(s => s.id === id) || null;
+  regDraft = {};
+  if (currentSesiune) prezenteGrupa.filter(p => p.sesiune_id === currentSesiune.id)
+    .forEach(p => { regDraft[p.cursant_id] = { status: p.status, nota: p.nota ?? '', comentariu: p.comentariu || '' }; });
+  renderGrupa();
+}
+
+function statsElev(cid) {
+  const rec = prezenteGrupa.filter(p => String(p.cursant_id) === String(cid));
+  const present = rec.filter(p => p.status === 'prezent' || p.status === 'intarziat').length;
+  const note = rec.filter(p => p.nota !== null && p.nota !== undefined && p.nota !== '').map(p => Number(p.nota));
+  return {
+    marked: rec.length, present,
+    absent: rec.filter(p => p.status === 'absent').length,
+    motivat: rec.filter(p => p.status === 'motivat').length,
+    pct: rec.length ? Math.round(present / rec.length * 100) : null,
+    media: note.length ? note.reduce((a, b) => a + b, 0) / note.length : null,
+    nNote: note.length, rec
+  };
+}
+
+function renderGrupa() {
+  const g = currentGrupa, elevi = membersOf(g.id);
+  const head = `<div class="student-header">
+    <div class="student-meta"><h2>${esc(g.nume)}</h2>
+      <p>${esc([g.nivel, g.varsta, g.orar, g.locatie].filter(Boolean).join(' · ') || 'Completează detaliile grupei din „Editează”')}</p>
+      <div class="student-tags">${g.profesor ? `<span class="badge badge-blue">${esc(g.profesor)}</span>` : ''}<span class="badge badge-gray">${elevi.length} ${elevi.length === 1 ? 'elev' : 'elevi'}</span><span class="badge badge-gray">${sesiuniGrupa.length} ${sesiuniGrupa.length === 1 ? 'lecție' : 'lecții'}</span>${g.activa === false ? '<span class="badge badge-gray">Arhivată</span>' : ''}</div>
+    </div>
+    <div class="student-actions">
+      <button class="btn-sm btn-sm-outline" onclick="openMembri()">+ Elevi</button>
+      <button class="btn-sm btn-sm-outline" onclick="openGrupaModal('${g.id}')">Editează</button>
+    </div></div>`;
+  const tabs = `<div class="chips" style="margin-bottom:1rem">
+    <button class="chip ${grupaTab === 'catalog' ? 'active' : ''}" onclick="grupaTab='catalog';renderGrupa()">Catalog</button>
+    <button class="chip ${grupaTab === 'rezumat' ? 'active' : ''}" onclick="grupaTab='rezumat';renderGrupa()">Rezumat pe elevi</button></div>`;
+  document.getElementById('grupaContent').innerHTML = head + tabs + (grupaTab === 'catalog' ? catalogHTML(elevi) : rezumatHTML(elevi));
+}
+
+function catalogHTML(elevi) {
+  const opts = sesiuniGrupa.map(s => `<option value="${s.id}" ${currentSesiune && s.id === currentSesiune.id ? 'selected' : ''}>${esc(fmtDate(s.data))}${s.tema ? ' — ' + esc(s.tema) : ''}</option>`).join('');
+  const bar = `<div class="card" style="margin-bottom:1rem"><div class="lesson-bar">
+      <div class="form-group" style="flex:1;min-width:200px"><label for="sesSelect">Lecția</label>
+        ${sesiuniGrupa.length ? `<select id="sesSelect" onchange="selectSesiune(this.value)">${opts}</select>` : '<div class="sub" style="padding:0.7rem 0">Nicio lecție încă</div>'}</div>
+      <div class="form-group"><label for="newSesData">Lecție nouă</label>
+        <div style="display:flex;gap:0.5rem"><input type="date" id="newSesData" value="${todayISO()}" style="min-width:150px"><button class="btn-sm btn-sm-primary" onclick="newSesiune()">Deschide</button></div></div>
+    </div></div>`;
+  if (!elevi.length) return bar + '<div class="card"><div class="loading">Grupa nu are elevi. Apasă „+ Elevi”.</div></div>';
+  if (!currentSesiune) return bar + '<div class="card"><div class="loading">Alege data și apasă „Deschide” ca să începi catalogul.</div></div>';
+  const rows = elevi.map(s => {
+    const d = regDraft[s.id] || {}, st = statsElev(s.id);
+    return `<div class="reg-row">
+      <div class="reg-name"><div class="student-name" onclick="openStudent('${s.id}')">${esc(fullName(s))}</div>
+        <div class="sub">${st.pct === null ? 'fără istoric' : st.pct + '% prezență'}${st.media !== null ? ' · media ' + st.media.toFixed(1) : ''}</div></div>
+      <div class="reg-status" role="group" aria-label="Prezența: ${esc(fullName(s))}">${PREZ.map(p =>
+        `<button type="button" class="pz pz-${p.c} ${d.status === p.k ? 'on' : ''}" title="${p.t}" aria-label="${p.t}" aria-pressed="${d.status === p.k}" onclick="setPrez('${s.id}','${p.k}')">${p.l}</button>`).join('')}</div>
+      <input class="reg-nota" type="text" inputmode="decimal" maxlength="4" placeholder="Notă" aria-label="Nota: ${esc(fullName(s))}" value="${esc(d.nota ?? '')}" oninput="setReg('${s.id}','nota',this.value)">
+      <input class="reg-com" type="text" placeholder="Comentariu" aria-label="Comentariu: ${esc(fullName(s))}" value="${esc(d.comentariu || '')}" oninput="setReg('${s.id}','comentariu',this.value)">
+    </div>`;
+  }).join('');
+  const marked = elevi.filter(s => (regDraft[s.id] || {}).status).length;
+  return bar + `<div class="card">
+    <div class="card-title" style="flex-wrap:wrap;gap:0.5rem"><span>${esc(fmtDate(currentSesiune.data))}</span>
+      <span style="display:flex;gap:0.6rem;align-items:center"><span class="sub" id="regCount">${marked}/${elevi.length} marcați${regDirty() ? ' · <span class="dirty-note">nesalvat</span>' : ''}</span>
+      <button class="btn-sm btn-sm-outline" onclick="totiPrezenti()">Toți prezenți</button></span></div>
+    <div class="form-group"><label for="sesTema">Tema lecției (opțional)</label><input type="text" id="sesTema" value="${esc(currentSesiune.tema || '')}" placeholder="Ex: Past Simple, vocabular de iarnă" oninput="regDraft.__tema={_dirty:true}"></div>
+    <div class="reg-legend sub">P — prezent · Î — întârziat · M — absent motivat · A — absent. Nota e de la 1 la 10.</div>
+    <div class="reg-list">${rows}</div>
+    <div class="modal-footer" style="justify-content:space-between;flex-wrap:wrap">
+      <button class="btn-cancel" onclick="deleteSesiune()">Șterge lecția</button>
+      <button class="btn-save" onclick="saveCatalog()">Salvează catalogul</button></div></div>`;
+}
+
+function setPrez(id, k) {
+  const d = regDraft[id] = regDraft[id] || {};
+  d.status = d.status === k ? null : k; d._dirty = true;
+  const y = window.scrollY; renderGrupa(); window.scrollTo(0, y);
+}
+function setReg(id, f, v) {
+  const d = regDraft[id] = regDraft[id] || {};
+  d[f] = v; d._dirty = true;
+  const c = document.getElementById('regCount');
+  if (c && !c.querySelector('.dirty-note')) c.insertAdjacentHTML('beforeend', ' · <span class="dirty-note">nesalvat</span>');
+}
+function totiPrezenti() {
+  membersOf(currentGrupa.id).forEach(s => { const d = regDraft[s.id] = regDraft[s.id] || {}; if (!d.status) { d.status = 'prezent'; d._dirty = true; } });
+  const y = window.scrollY; renderGrupa(); window.scrollTo(0, y);
+}
+
+async function newSesiune() {
+  const data = document.getElementById('newSesData').value || todayISO();
+  const ex = sesiuniGrupa.find(s => s.data === data);
+  if (ex) { selectSesiune(ex.id); return; }
+  if (regDirty() && !confirm('Ai modificări nesalvate în catalog. Deschizi altă lecție fără să salvezi?')) return;
+  const { data: row, error } = await sb.from('sesiuni').insert({ grupa_id: currentGrupa.id, data }).select().single();
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  sesiuniGrupa.push(row); sesiuniGrupa.sort((a, b) => b.data.localeCompare(a.data));
+  sesiuniAll.push({ id: row.id, grupa_id: row.grupa_id, data: row.data });
+  selectSesiune(row.id, true);
+  toast('Lecția e deschisă. Marchează prezența.', 'success');
+}
+
+async function saveCatalog() {
+  if (!currentSesiune) return;
+  const temaEl = document.getElementById('sesTema');
+  const tema = temaEl ? temaEl.value.trim() : '';
+  const rows = [], toDelete = [], bad = [];
+  for (const [cid, d] of Object.entries(regDraft)) {
+    if (cid === '__tema' || !d._dirty) continue;
+    const raw = String(d.nota ?? '').trim().replace(',', '.');
+    const nota = raw === '' ? null : Number(raw);
+    const com = String(d.comentariu || '').trim();
+    if (nota !== null && (isNaN(nota) || nota < 1 || nota > 10)) { bad.push(cid); continue; }
+    if (!d.status && nota === null && !com) { toDelete.push(cid); continue; }
+    rows.push({ sesiune_id: currentSesiune.id, cursant_id: cid, status: d.status || 'prezent', nota, comentariu: com || null, updated_at: new Date().toISOString() });
+  }
+  if (bad.length) { toast('Nota trebuie să fie între 1 și 10: ' + bad.map(id => fullName(byId(id) || {})).join(', '), 'error'); return; }
+  if (tema !== (currentSesiune.tema || '')) {
+    const { error } = await sb.from('sesiuni').update({ tema: tema || null }).eq('id', currentSesiune.id);
+    if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  }
+  if (rows.length) {
+    const { error } = await sb.from('prezente').upsert(rows, { onConflict: 'sesiune_id,cursant_id' });
+    if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  }
+  if (toDelete.length) {
+    const { error } = await sb.from('prezente').delete().eq('sesiune_id', currentSesiune.id).in('cursant_id', toDelete);
+    if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  }
+  const keep = currentSesiune.id;
+  await loadGrupaData();
+  selectSesiune(keep, true);
+  toast('Catalogul e salvat', 'success');
+}
+
+async function deleteSesiune() {
+  if (!currentSesiune) return;
+  if (!confirm(`Ștergi lecția din ${fmtDate(currentSesiune.data)} cu toată prezența, notele și comentariile ei? Nu poate fi recuperată.`)) return;
+  const id = currentSesiune.id;
+  const { error } = await sb.from('sesiuni').delete().eq('id', id);
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  sesiuniAll = sesiuniAll.filter(s => s.id !== id);
+  await loadGrupaData();
+  selectSesiune(sesiuniGrupa[0] ? sesiuniGrupa[0].id : null, true);
+  toast('Lecția a fost ștearsă', 'success');
+}
+
+function rezumatHTML(elevi) {
+  if (!elevi.length) return '<div class="card"><div class="loading">Grupa nu are elevi.</div></div>';
+  const sesDate = Object.fromEntries(sesiuniGrupa.map(x => [x.id, x.data]));
+  return `<div class="table-wrap"><table>
+    <thead><tr><th>Elev</th><th>Prezență</th><th>Absențe</th><th>Media</th><th class="hide-sm">Ultimul comentariu</th><th></th></tr></thead>
+    <tbody>${elevi.map(s => {
+      const st = statsElev(s.id);
+      const lastCom = st.rec.filter(p => p.comentariu).sort((a, b) => (sesDate[b.sesiune_id] || '').localeCompare(sesDate[a.sesiune_id] || ''))[0];
+      return `<tr>
+        <td><div class="student-name" onclick="openStudent('${s.id}')">${esc(fullName(s))}</div><div class="sub">${esc(s.phone || '')}</div></td>
+        <td>${st.pct === null ? '—' : `<div class="progress-wrap"><div class="progress-bar-sm"><div class="progress-fill-sm" style="width:${st.pct}%"></div></div><span class="progress-text">${st.present}/${st.marked}</span></div>`}</td>
+        <td>${st.absent}${st.motivat ? ` <span class="sub">+${st.motivat} motivate</span>` : ''}</td>
+        <td>${st.media === null ? '—' : `<b style="color:var(--navy)">${st.media.toFixed(1)}</b> <span class="sub">din ${st.nNote}</span>`}</td>
+        <td class="hide-sm sub">${lastCom ? esc(fmtDate(sesDate[lastCom.sesiune_id])) + ': ' + esc(lastCom.comentariu) : '—'}</td>
+        <td><button class="btn-icon" title="Scoate din grupă" aria-label="Scoate ${esc(fullName(s))} din grupă" onclick="removeMembru('${s.id}')">✕</button></td>
+      </tr>`; }).join('')}</tbody></table></div>
+    <p class="sub" style="margin-top:0.5rem">Prezența se calculează din lecțiile în care elevul a fost marcat. Întârzierile se socotesc prezențe.</p>`;
+}
+
+async function removeMembru(cid) {
+  const s = byId(cid);
+  if (!confirm(`Scoți ${s ? fullName(s) : 'elevul'} din grupă? Prezențele și notele lui rămân salvate.`)) return;
+  const { error } = await sb.from('grupa_membri').delete().eq('grupa_id', currentGrupa.id).eq('cursant_id', cid);
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  membri = membri.filter(m => !(m.grupa_id === currentGrupa.id && String(m.cursant_id) === String(cid)));
+  renderGrupa(); toast('Scos din grupă', 'success');
+}
+
+// ----- creare / editare grupă -----
+function openGrupaModal(id) {
+  const g = id ? grupe.find(x => x.id === id) : null;
+  document.getElementById('modalGrupaTitle').textContent = g ? 'Editează grupa' : 'Grupă nouă';
+  document.getElementById('grId').value = g ? g.id : '';
+  document.getElementById('grNume').value = g ? g.nume : '';
+  document.getElementById('grNivel').value = g ? (g.nivel || '') : '';
+  document.getElementById('grVarsta').value = g ? (g.varsta || '') : '';
+  document.getElementById('grOrar').value = g ? (g.orar || '') : '';
+  document.getElementById('grLocatie').value = g ? (g.locatie || '') : '';
+  const prof = g ? (g.profesor || '') : (currentUser ? currentUser.nume : '');
+  const names = [...new Set([...team.map(t => t.nume), prof].filter(Boolean))];
+  document.getElementById('grProfesor').innerHTML = '<option value="">—</option>' + names.map(n => `<option ${n === prof ? 'selected' : ''}>${esc(n)}</option>`).join('');
+  document.getElementById('grActiva').checked = g ? g.activa !== false : true;
+  openModal('modalGrupa');
+}
+async function saveGrupa() {
+  const nume = document.getElementById('grNume').value.trim();
+  if (!nume) { toast('Completează numele grupei', 'error'); return; }
+  const id = document.getElementById('grId').value;
+  const payload = {
+    nume,
+    nivel: document.getElementById('grNivel').value || null,
+    varsta: document.getElementById('grVarsta').value.trim() || null,
+    orar: document.getElementById('grOrar').value.trim() || null,
+    locatie: document.getElementById('grLocatie').value.trim() || null,
+    profesor: document.getElementById('grProfesor').value || null,
+    activa: document.getElementById('grActiva').checked
+  };
+  const res = id ? await sb.from('grupe').update(payload).eq('id', id).select().single()
+                 : await sb.from('grupe').insert(payload).select().single();
+  if (res.error) { toast('Eroare: ' + res.error.message, 'error'); return; }
+  closeModal('modalGrupa');
+  await loadGrupe();
+  if (id) { if (currentGrupa && currentGrupa.id === id) { currentGrupa = grupe.find(g => g.id === id); if (document.getElementById('page-grupa').classList.contains('active')) renderGrupa(); } toast('Grupa e salvată', 'success'); }
+  else { toast('Grupa e creată. Adaugă elevii.', 'success'); await openGrupa(res.data.id); openMembri(); }
+}
+
+// ----- elevii grupei -----
+function openMembri() {
+  mbSel = new Set(membri.filter(m => m.grupa_id === currentGrupa.id).map(m => String(m.cursant_id)));
+  document.getElementById('mbSearch').value = '';
+  ['mbFirst', 'mbLast', 'mbPhone'].forEach(i => document.getElementById(i).value = '');
+  renderMembriPicker();
+  openModal('modalMembri');
+}
+function renderMembriPicker() {
+  const q = document.getElementById('mbSearch').value.toLowerCase().trim(), qd = digits(q);
+  const groupsOf = cid => membri.filter(m => String(m.cursant_id) === String(cid) && m.grupa_id !== currentGrupa.id)
+    .map(m => (grupe.find(g => g.id === m.grupa_id) || {}).nume).filter(Boolean);
+  const list = all.filter(s => s.etapa !== 'pierdut' || mbSel.has(String(s.id)))
+    .filter(s => !q || fullName(s).toLowerCase().includes(q) || (qd.length >= 3 && digits(s.phone).includes(qd)))
+    .sort((a, b) => (mbSel.has(String(b.id)) - mbSel.has(String(a.id))) || ((b.etapa === 'client') - (a.etapa === 'client')) || fullName(a).localeCompare(fullName(b), 'ro'));
+  document.getElementById('mbList').innerHTML = list.length ? list.slice(0, 200).map(s => {
+    const other = groupsOf(s.id);
+    return `<label class="mb-item"><input type="checkbox" ${mbSel.has(String(s.id)) ? 'checked' : ''} onchange="toggleMb('${s.id}',this.checked)">
+      <span style="flex:1;min-width:0"><span style="font-weight:600;color:var(--navy)">${esc(fullName(s))}</span>
+      <span class="sub" style="display:block">${esc(s.phone || '')}${other.length ? ' · și în: ' + esc(other.join(', ')) : ''}</span></span>
+      ${s.etapa === 'client' ? '' : etapaBadge(s.etapa)}</label>`;
+  }).join('') : '<div class="loading" style="padding:1.5rem">Nimeni găsit. Adaugă-l mai jos ca elev nou.</div>';
+  document.getElementById('mbCount').textContent = mbSel.size + ' bifați';
+}
+function toggleMb(id, on) {
+  if (on) mbSel.add(String(id)); else mbSel.delete(String(id));
+  document.getElementById('mbCount').textContent = mbSel.size + ' bifați';
+}
+async function addElevNou() {
+  const first = document.getElementById('mbFirst').value.trim();
+  if (!first) { toast('Completează prenumele', 'error'); return; }
+  const { data, error } = await sb.from('cursanti').insert({
+    first_name: first, last_name: document.getElementById('mbLast').value.trim() || '-',
+    phone: document.getElementById('mbPhone').value.trim(),
+    level: currentGrupa.nivel || 'Necunoscut', format: 'Offline',
+    sursa: 'grupă', origine: 'manual', etapa: 'client', status: 'activ', responsabil: currentUser ? currentUser.nume : null,
+    package: 'Grupă: ' + currentGrupa.nume, package_total: 0, lectii_finalizate: 0, pay_status: 'asteptare', pay_amount: 0
+  }).select().single();
+  if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  all.unshift(data);
+  mbSel.add(String(data.id));
+  ['mbFirst', 'mbLast', 'mbPhone'].forEach(i => document.getElementById(i).value = '');
+  renderMembriPicker();
+  toast(fullName(data) + ' a fost creat. Apasă „Salvează”.', 'success');
+}
+async function saveMembri() {
+  const gid = currentGrupa.id;
+  const before = new Set(membri.filter(m => m.grupa_id === gid).map(m => String(m.cursant_id)));
+  const add = [...mbSel].filter(id => !before.has(id));
+  const rem = [...before].filter(id => !mbSel.has(id));
+  if (add.length) {
+    const { error } = await sb.from('grupa_membri').insert(add.map(id => ({ grupa_id: gid, cursant_id: id })));
+    if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  }
+  if (rem.length) {
+    const { error } = await sb.from('grupa_membri').delete().eq('grupa_id', gid).in('cursant_id', rem);
+    if (error) { toast('Eroare: ' + error.message, 'error'); return; }
+  }
+  closeModal('modalMembri');
+  const { data } = await sb.from('grupa_membri').select('*');
+  membri = data || [];
+  renderGrupa();
+  loadAll();
+  toast(`Grupa are acum ${mbSel.size} ${mbSel.size === 1 ? 'elev' : 'elevi'}`, 'success');
+}
+
+// ===== CĂUTARE (nume, telefon, localitate, țară) =====
+const PREFIXE = [
+  ['373', 'Moldova'], ['40', 'România'], ['380', 'Ucraina'], ['39', 'Italia'], ['44', 'Marea Britanie'], ['353', 'Irlanda'],
+  ['49', 'Germania'], ['33', 'Franța'], ['34', 'Spania'], ['351', 'Portugalia'], ['32', 'Belgia'], ['31', 'Țările de Jos'],
+  ['41', 'Elveția'], ['43', 'Austria'], ['420', 'Cehia'], ['48', 'Polonia'], ['972', 'Israel'], ['90', 'Turcia'],
+  ['7', 'Rusia'], ['1', 'SUA / Canada'], ['45', 'Danemarca'], ['46', 'Suedia'], ['47', 'Norvegia'], ['30', 'Grecia'], ['359', 'Bulgaria']
+].sort((a, b) => b[0].length - a[0].length);
+function taraDinTelefon(p) {
+  const raw = String(p || '').trim();
+  let d = digits(raw);
+  if (!d) return '';
+  if (d.startsWith('00')) d = d.slice(2);
+  else if (!raw.startsWith('+')) {
+    if (d.length === 9 && d.startsWith('0')) return 'Moldova';        // 069xxxxxx
+    if (d.length === 8 && /^[67]/.test(d)) return 'Moldova';          // 69xxxxxx
+  }
+  const m = PREFIXE.find(([k]) => d.startsWith(k));
+  return m ? m[1] : '';
+}
+function taraOf(s) { return (s.tara || '').trim() || taraDinTelefon(s.phone); }
+function norm(v) { return String(v || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+function matchesQuery(s, q) {
+  if (!q) return true;
+  const nq = norm(q), qd = digits(q);
+  const hay = norm([fullName(s), s.email, s.localitate, taraOf(s), s.phone].join(' '));
+  return hay.includes(nq) || (qd.length >= 3 && digits(s.phone).includes(qd));
+}
+
+async function openCautare(q) {
+  showPage('cautare', document.getElementById('nav-cautare'));
+  if (typeof q === 'string') document.getElementById('cauta').value = q;
+  if (!grupe.length && !membri.length) {
+    const [g, m] = await Promise.all([sb.from('grupe').select('*'), sb.from('grupa_membri').select('*')]);
+    grupe = g.data || []; membri = m.data || [];
+  }
+  fillCautareFiltre();
+  renderCautare();
+  setTimeout(() => document.getElementById('cauta').focus(), 50);
+}
+function fillCautareFiltre() {
+  const tSel = document.getElementById('cautaTara'), lSel = document.getElementById('cautaLoc');
+  const tv = tSel.value, lv = lSel.value;
+  const count = (arr) => { const c = {}; arr.filter(Boolean).forEach(x => c[x] = (c[x] || 0) + 1); return Object.entries(c).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ro')); };
+  tSel.innerHTML = '<option value="">Toate țările</option>' + count(all.map(taraOf)).map(([k, n]) => `<option value="${esc(k)}">${esc(k)} (${n})</option>`).join('');
+  lSel.innerHTML = '<option value="">Toate localitățile</option>' + count(all.map(s => (s.localitate || '').trim())).map(([k, n]) => `<option value="${esc(k)}">${esc(k)} (${n})</option>`).join('');
+  tSel.value = tv; lSel.value = lv;
+}
+function renderCautare() {
+  const q = document.getElementById('cauta').value.trim();
+  const tara = document.getElementById('cautaTara').value, loc = document.getElementById('cautaLoc').value;
+  const list = all.filter(s => matchesQuery(s, q))
+    .filter(s => !tara || taraOf(s) === tara)
+    .filter(s => !loc || (s.localitate || '').trim() === loc);
+  const box = document.getElementById('cautareRez');
+  document.getElementById('cautareN').textContent = list.length === 1 ? '1 rezultat' : list.length + ' rezultate';
+  if (!list.length) { box.innerHTML = '<div class="loading">Niciun rezultat.</div>'; return; }
+  box.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Nume</th><th>Telefon</th><th>Localitate</th><th>Țară</th><th>Etapă</th><th class="hide-sm">Grupe</th></tr></thead>
+    <tbody>${list.slice(0, 300).map(s => {
+      const gr = membri.filter(m => String(m.cursant_id) === String(s.id)).map(m => (grupe.find(g => g.id === m.grupa_id) || {}).nume).filter(Boolean);
+      const t = (s.tara || '').trim(), td = t ? '' : taraDinTelefon(s.phone);
+      return `<tr>
+        <td><div class="student-name" onclick="openStudent('${s.id}')">${esc(fullName(s))}</div>${s.email ? `<div class="sub">${esc(s.email)}</div>` : ''}</td>
+        <td style="white-space:nowrap">${esc(s.phone || '—')}</td>
+        <td>${esc(s.localitate || '—')}</td>
+        <td>${t ? esc(t) : td ? `${esc(td)} <span class="sub">după telefon</span>` : '—'}</td>
+        <td>${etapaBadge(s.etapa)}</td>
+        <td class="hide-sm sub">${esc(gr.join(', ') || '—')}</td>
+      </tr>`; }).join('')}</tbody></table></div>`;
+}
+function topSearch(e) {
+  if (e.key === 'Enter') { const v = e.target.value; e.target.value = ''; openCautare(v); }
+}
+async function saveLoc(id) {
+  const localitate = document.getElementById('detLoc').value.trim() || null;
+  const tara = document.getElementById('detTara').value.trim() || null;
+  await update(id, { localitate, tara }, 'Localitatea și țara sunt salvate');
 }
 
 // ===== PORNIRE =====
