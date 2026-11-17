@@ -306,6 +306,12 @@ tr:hover td{background:var(--bg)}
 .search-filters{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem}
 .search-filters select{padding:0.6rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.88rem;font-family:'Inter',sans-serif;background:var(--white);color:var(--text);min-width:180px}
 @media(max-width:768px){.top-search{display:none}.search-filters select{flex:1}}
+.st-chart{display:flex;align-items:flex-end;gap:2px;height:200px;padding-top:8px;border-bottom:1px solid var(--border)}
+.st-col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;cursor:default}
+.st-bar-wrap{flex:1;display:flex;align-items:flex-end}
+.st-bar{width:100%;max-width:28px;margin:0 auto;background:var(--navy);border-radius:4px 4px 0 0;min-height:0}
+.st-col:hover .st-bar{background:var(--gold)}
+.st-x{height:22px;font-size:0.66rem;color:var(--text3);white-space:nowrap;text-align:center;padding-top:6px;overflow:visible}
 </style>
 </head>
 <body>
@@ -353,6 +359,9 @@ tr:hover td{background:var(--bg)}
         </div>
         <div class="nav-item" id="nav-leaduri" onclick="showPage('leaduri',this)">
           <span class="icon">🎯</span> Lead-uri <span class="nav-count" id="navUrgent" style="display:none">0</span>
+        </div>
+        <div class="nav-item" id="nav-statistici" onclick="showPage('statistici',this)">
+          <span class="icon">📈</span> Statistici site
         </div>
         <div class="nav-label">Școală</div>
         <div class="nav-item" id="nav-cursanti" onclick="showPage('cursanti',this)">
@@ -442,6 +451,12 @@ tr:hover td{background:var(--bg)}
           <button class="filter-btn" onclick="setFilter('inactiv',this)">Inactivi</button>
         </div>
         <div id="studentsTable"><div class="loading"><div class="spinner"></div><br>Se încarcă...</div></div>
+      </div>
+
+      <!-- STATISTICI -->
+      <div class="page" id="page-statistici">
+        <div class="chips" id="statChips" style="margin-bottom:1rem"></div>
+        <div id="statBody"></div>
       </div>
 
       <!-- CAUTARE -->
@@ -915,8 +930,9 @@ function showPage(name, navEl) {
   if (name === 'blog') loadArticole();
   if (name === 'setari') renderUtm();
   if (name === 'grupe') loadGrupe();
+  if (name === 'statistici') loadStatistici();
   if (['dashboard', 'leaduri', 'cursanti', 'grupe', 'grupa'].includes(name)) lastList = name;
-  const titles = { dashboard: 'Azi', leaduri: 'Lead-uri', cursanti: 'Cursanți', detail: 'Fișă', blog: 'Blog & Articole', setari: 'Setări', grupe: 'Grupe & catalog', cautare: 'Căutare', grupa: currentGrupa ? currentGrupa.nume : 'Catalog' };
+  const titles = { dashboard: 'Azi', leaduri: 'Lead-uri', cursanti: 'Cursanți', detail: 'Fișă', blog: 'Blog & Articole', setari: 'Setări', grupe: 'Grupe & catalog', cautare: 'Căutare', statistici: 'Statistici site', grupa: currentGrupa ? currentGrupa.nume : 'Catalog' };
   document.getElementById('pageTitle').textContent = titles[name] || name;
   if (navEl) {
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -1826,6 +1842,148 @@ async function saveLoc(id) {
   const localitate = document.getElementById('detLoc').value.trim() || null;
   const tara = document.getElementById('detTara').value.trim() || null;
   await update(id, { localitate, tara }, 'Localitatea și țara sunt salvate');
+}
+
+// ===== STATISTICI SITE =====
+let statZile = 30;
+const TOPIC = { pret: 'Preț', proba: 'Lecția de probă', nivel: 'Niveluri', format: 'Online / offline', bacioi: 'Băcioi', copii: 'Copii', cambridge: 'Cambridge', profesori: 'Profesori', orar: 'Program', companii: 'Companii', contact: 'Contact', salut: 'Salut', multumesc: 'Mulțumesc', necunoscut: 'Nu a știut' };
+
+async function fetchSince(table, cols, since) {
+  let out = [], from = 0;
+  for (;;) {
+    const { data, error } = await sb.from(table).select(cols).gte('created_at', since).order('created_at', { ascending: true }).range(from, from + 999);
+    if (error) throw error;
+    out = out.concat(data || []);
+    if (!data || data.length < 1000 || from > 60000) break;
+    from += 1000;
+  }
+  return out;
+}
+function dayKey(d) { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); }
+function fmtDur(s) { if (!s) return '—'; s = Math.round(s); return s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + String(s % 60).padStart(2, '0') + ' s'; }
+function pageName(p) {
+  if (!p || p === '/' || p === '/index.html') return 'Prima pagină';
+  if (p === '/blog/' || p === '/blog') return 'Blog: toate articolele';
+  const m = p.match(/^\/blog\/([^/]+)\/?$/);
+  if (m) { const t = m[1].replace(/-/g, ' '); return 'Blog: ' + t.charAt(0).toUpperCase() + t.slice(1); }
+  return p;
+}
+function sourceName(v) {
+  if (v.utm_source) return v.utm_source.charAt(0).toUpperCase() + v.utm_source.slice(1);
+  const r = (v.ref || '').toLowerCase();
+  if (!r) return 'Direct / necunoscut';
+  if (r.includes('google')) return 'Google';
+  if (r.includes('instagram')) return 'Instagram';
+  if (r.includes('facebook') || r === 'fb.me') return 'Facebook';
+  if (r.includes('tiktok')) return 'TikTok';
+  if (r.includes('bing')) return 'Bing';
+  if (r.includes('yandex')) return 'Yandex';
+  if (r.includes('t.co') || r.includes('twitter') || r.includes('x.com')) return 'X / Twitter';
+  if (r.includes('linkedin')) return 'LinkedIn';
+  return r.replace(/^www\./, '');
+}
+
+async function loadStatistici() {
+  const box = document.getElementById('statBody');
+  document.getElementById('statChips').innerHTML = [7, 30, 90].map(z =>
+    `<button class="chip ${statZile === z ? 'active' : ''}" onclick="statZile=${z};loadStatistici()">Ultimele ${z} zile</button>`).join('');
+  box.innerHTML = '<div class="loading"><div class="spinner"></div><br>Se încarcă...</div>';
+  const since = new Date(Date.now() - statZile * DAY);
+  since.setHours(0, 0, 0, 0);
+  let viz, chat;
+  try {
+    [viz, chat] = await Promise.all([
+      fetchSince('vizite', 'created_at,tip,vid,sid,path,ref,utm_source,device,durata,nou', since.toISOString()),
+      fetchSince('chat_intrebari', 'created_at,text,raspuns,path', since.toISOString())
+    ]);
+  } catch (e) { box.innerHTML = `<div class="loading">Eroare: ${esc(e.message || e)}</div>`; return; }
+
+  const views = viz.filter(v => v.tip === 'view');
+  if (!views.length && !chat.length) {
+    box.innerHTML = '<div class="card"><div class="loading">Încă nu sunt vizite înregistrate în această perioadă. Măsurarea a pornit pe 17 noiembrie 2026.</div></div>';
+    return;
+  }
+  const uniq = new Set(views.map(v => v.vid));
+  const sessions = new Set(views.map(v => v.sid));
+  const sesPerVid = {};
+  views.forEach(v => { (sesPerVid[v.vid] = sesPerVid[v.vid] || new Set()).add(v.sid); });
+  const oldVid = new Set(views.filter(v => v.nou === false).map(v => v.vid));
+  const returning = [...uniq].filter(id => oldVid.has(id) || sesPerVid[id].size > 1).length;
+  const retPct = uniq.size ? Math.round(returning / uniq.size * 100) : 0;
+
+  const timp = {};
+  viz.filter(v => v.tip === 'leave').forEach(v => { const k = v.sid + '|' + v.path; timp[k] = (timp[k] || 0) + (v.durata || 0); });
+  const tv = Object.values(timp).map(s => Math.min(s, 1800));
+  const avgTime = tv.length ? tv.reduce((a, b) => a + b, 0) / tv.length : 0;
+
+  const leads = all.filter(s => new Date(s.created_at) >= since && s.origine !== 'manual').length;
+  const conv = uniq.size ? (leads / uniq.size * 100) : 0;
+  const mob = new Set(views.filter(v => v.device === 'mobil').map(v => v.vid)).size;
+
+  // pe zile
+  const days = [];
+  for (let d = new Date(since); d <= new Date(); d = new Date(d.getTime() + DAY)) days.push(dayKey(d));
+  const perDay = Object.fromEntries(days.map(k => [k, new Set()]));
+  views.forEach(v => { const k = dayKey(v.created_at); if (perDay[k]) perDay[k].add(v.vid); });
+  const counts = days.map(k => perDay[k].size);
+  const max = Math.max(1, ...counts);
+  const step = days.length > 31 ? 7 : days.length > 10 ? 3 : 1;
+  const bars = days.map((k, i) => {
+    const n = counts[i], d = new Date(k + 'T12:00:00');
+    const label = d.toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' });
+    return `<div class="st-col" title="${esc(label)}: ${n} ${n === 1 ? 'vizitator' : 'vizitatori'}">
+      <div class="st-bar-wrap"><div class="st-bar" style="height:${n ? Math.max(3, n / max * 100) : 0}%"></div></div>
+      <div class="st-x">${i % step === 0 || i === days.length - 1 ? esc(label) : ''}</div></div>`;
+  }).join('');
+
+  // pagini
+  const pg = {};
+  views.forEach(v => { const k = v.path || '/'; (pg[k] = pg[k] || { n: 0, u: new Set() }).n++; pg[k].u.add(v.vid); });
+  const pgRows = Object.entries(pg).sort((a, b) => b[1].u.size - a[1].u.size).slice(0, 10);
+  // surse (după prima vizualizare a fiecărui vizitator în perioadă)
+  const first = {};
+  views.forEach(v => { if (!first[v.vid]) first[v.vid] = v; });
+  const src = {};
+  Object.values(first).forEach(v => { const k = sourceName(v); src[k] = (src[k] || 0) + 1; });
+  const srcRows = Object.entries(src).sort((a, b) => b[1] - a[1]);
+  // chat
+  const topics = {};
+  chat.forEach(c => { const k = c.raspuns || 'necunoscut'; topics[k] = (topics[k] || 0) + 1; });
+  const topicRows = Object.entries(topics).sort((a, b) => b[1] - a[1]);
+  const necunoscute = chat.filter(c => c.raspuns === 'necunoscut').slice(-15).reverse();
+  const recente = chat.slice(-15).reverse();
+
+  const share = (n, t) => t ? Math.round(n / t * 100) : 0;
+  box.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Vizitatori unici</div><div class="stat-value">${uniq.size}</div><div class="stat-sub">${views.length} pagini văzute</div></div>
+      <div class="stat-card"><div class="stat-label">Revin pe site</div><div class="stat-value">${retPct}%</div><div class="stat-sub">${returning} din ${uniq.size} au venit de mai multe ori</div></div>
+      <div class="stat-card"><div class="stat-label">Timp pe pagină</div><div class="stat-value" style="font-size:1.6rem">${fmtDur(avgTime)}</div><div class="stat-sub">medie, timp activ</div></div>
+      <div class="stat-card"><div class="stat-label">Pagini pe vizită</div><div class="stat-value">${sessions.size ? (views.length / sessions.size).toFixed(1) : '—'}</div><div class="stat-sub">${sessions.size} vizite · ${share(mob, uniq.size)}% de pe telefon</div></div>
+      <div class="stat-card"><div class="stat-label">Din vizitatori, lead-uri</div><div class="stat-value">${conv.toFixed(conv < 10 ? 1 : 0)}%</div><div class="stat-sub">${leads} lead-uri de pe site</div></div>
+      <div class="stat-card"><div class="stat-label">Întrebări în chat</div><div class="stat-value">${chat.length}</div><div class="stat-sub">${topics.necunoscut || 0} la care n-a știut răspunsul</div></div>
+    </div>
+    <div class="card" style="margin-bottom:1.25rem">
+      <div class="card-title">Vizitatori unici pe zi <span class="sub">maxim ${max}</span></div>
+      <div class="st-chart" role="img" aria-label="Vizitatori unici pe zi, ultimele ${statZile} zile">${bars}</div>
+    </div>
+    <div class="dash-grid">
+      <div class="card"><div class="card-title">Cele mai văzute pagini</div>
+        <table><thead><tr><th>Pagina</th><th>Vizitatori</th><th>Afișări</th></tr></thead><tbody>${
+          pgRows.map(([p, v]) => `<tr><td>${esc(pageName(p))}</td><td>${v.u.size}</td><td>${v.n}</td></tr>`).join('')}</tbody></table></div>
+      <div class="card"><div class="card-title">De unde vin vizitatorii</div>
+        <div class="funnel">${srcRows.map(([k, n]) => `<div class="funnel-row"><span>${esc(k)}</span><div class="funnel-bar"><span style="width:${n / srcRows[0][1] * 100}%"></span></div><b>${n}</b></div>`).join('') || '<p class="sub">—</p>'}</div></div>
+    </div>
+    <div class="dash-grid">
+      <div class="card"><div class="card-title">Ce întreabă oamenii în chat</div>
+        ${topicRows.length ? `<ul class="info-list">${topicRows.map(([k, n]) => `<li><span>${esc(TOPIC[k] || k)}</span><span>${n}</span></li>`).join('')}</ul>` : '<p class="sub">Încă nu sunt întrebări.</p>'}
+        ${necunoscute.length ? `<div class="card-title" style="margin-top:1.25rem">La ce n-a știut să răspundă</div><ul class="info-list">${necunoscute.map(c => `<li><span>${esc(c.text)}</span><span class="sub">${esc(fmtDT(c.created_at))}</span></li>`).join('')}</ul><p class="sub" style="margin-top:0.5rem">Spune-mi aceste întrebări și adaug răspunsuri în chat.</p>` : ''}
+      </div>
+      <div class="card"><div class="card-title">Ultimele întrebări</div>
+        ${recente.length ? `<ul class="info-list">${recente.map(c => `<li><span>${esc(c.text)}</span><span><span class="badge badge-${c.raspuns === 'necunoscut' ? 'orange' : 'gray'}">${esc(TOPIC[c.raspuns] || c.raspuns || '')}</span></span></li>`).join('')}</ul>` : '<p class="sub">—</p>'}
+      </div>
+    </div>
+    <p class="sub">Vizitatorii sunt numărați anonim, după browser: același om de pe telefon și de pe laptop apare de două ori. Pentru mai multe detalii ai și <a href="https://analytics.google.com/" target="_blank" rel="noopener" style="color:var(--blue)">Google Analytics</a>.</p>`;
 }
 
 // ===== PORNIRE =====
