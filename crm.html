@@ -716,6 +716,52 @@ tr:hover td{background:var(--bg)}
   </div>
 </div>
 
+<!-- MODAL: EDITARE -->
+<div class="modal-overlay" id="modalEdit">
+  <div class="modal" style="max-width:560px">
+    <h3>Editează datele</h3>
+    <input type="hidden" id="edId">
+    <div class="form-row">
+      <div class="form-group"><label for="edFirst">Prenume</label><input type="text" id="edFirst"></div>
+      <div class="form-group"><label for="edLast">Nume</label><input type="text" id="edLast"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="edPhone">Telefon</label><input type="tel" id="edPhone"></div>
+      <div class="form-group"><label for="edEmail">Email</label><input type="email" id="edEmail"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="edLevel">Nivel</label>
+        <select id="edLevel"><option>Necunoscut</option><option>Pre A1</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></div>
+      <div class="form-group"><label for="edFormat">Format</label><input type="text" id="edFormat" list="formatOpts">
+        <datalist id="formatOpts"><option>Online</option><option>Offline (Chișinău)</option><option>Offline (Băcioi)</option><option>Individual</option><option>Corporate / B2B</option></datalist></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="edLoc">Localitate</label><input type="text" id="edLoc"></div>
+      <div class="form-group"><label for="edTara">Țară</label><input type="text" id="edTara" list="taraOpts"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="edSursa">De unde a venit</label><input type="text" id="edSursa" list="sursaOpts">
+        <datalist id="sursaOpts"><option>recomandare</option><option>instagram</option><option>tiktok</option><option>facebook</option><option>google</option><option>telefon direct</option><option>grupă</option><option>altele</option></datalist></div>
+      <div class="form-group"><label for="edResp">Responsabil</label><select id="edResp"></select></div>
+    </div>
+    <div class="form-group"><label for="edObiectiv">Scop</label><input type="text" id="edObiectiv" placeholder="Ex: interviu, examen, emigrare"></div>
+    <div id="edClient">
+      <div class="form-row">
+        <div class="form-group"><label for="edPackage">Pachet</label><input type="text" id="edPackage"></div>
+        <div class="form-group"><label for="edAmount">Sumă (EUR)</label><input type="number" id="edAmount" min="0" step="1"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="edTotal">Lecții în pachet</label><input type="number" id="edTotal" min="0" step="1"></div>
+        <div class="form-group"><label for="edDone">Lecții făcute</label><input type="number" id="edDone" min="0" step="1"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modalEdit')">Anulează</button>
+      <button class="btn-save" onclick="saveEdit()">Salvează</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== SUPABASE =====
 // Cheia publică e sigură aici: accesul la date e controlat de reguli în baza de date (RLS),
@@ -1066,7 +1112,7 @@ function renderStudents() {
         <td><div class="progress-wrap"><div class="progress-bar-sm"><div class="progress-fill-sm" style="width:${pct}%"></div></div>
             <span class="progress-text">${s.lectii_finalizate || 0}/${s.package_total || 0}</span></div></td>
         <td>${payBadge(s.pay_status)}</td>
-        <td><div class="action-btns">${quickActions(s)}</div></td>
+        <td><div class="action-btns">${quickActions(s)}<button class="qa" title="Editează" aria-label="Editează ${esc(fullName(s))}" onclick="openEdit('${s.id}')">✏️</button></div></td>
       </tr>`; }).join('')}</tbody></table></div>`;
 }
 
@@ -1112,6 +1158,7 @@ async function renderDetail(id, loading) {
         <div class="student-actions">
           ${digits(s.phone) ? `<a class="btn-sm btn-sm-primary" style="text-decoration:none" href="tel:${esc(s.phone)}" onclick="logCall('${s.id}')">📞 Sună</a>` : ''}
           ${waNumber(s.phone) ? `<button class="btn-sm btn-wa" onclick="openWA('${s.id}')">💬 WhatsApp</button>` : ''}
+          <button class="btn-sm btn-sm-outline" onclick="openEdit('${s.id}')">✏️ Editează</button>
         </div>
       </div>
       <div class="stepper">${steps}</div>
@@ -1984,6 +2031,52 @@ async function loadStatistici() {
       </div>
     </div>
     <p class="sub">Vizitatorii sunt numărați anonim, după browser: același om de pe telefon și de pe laptop apare de două ori. Pentru mai multe detalii ai și <a href="https://analytics.google.com/" target="_blank" rel="noopener" style="color:var(--blue)">Google Analytics</a>.</p>`;
+}
+
+// ===== EDITARE CURSANT / LEAD =====
+function openEdit(id) {
+  const s = all.find(x => String(x.id) === String(id)); if (!s) return;
+  const v = (k, val) => { document.getElementById(k).value = val ?? ''; };
+  v('edId', s.id); v('edFirst', s.first_name); v('edLast', s.last_name === '-' ? '' : s.last_name);
+  v('edPhone', s.phone); v('edEmail', s.email); v('edFormat', s.format); v('edLoc', s.localitate); v('edTara', s.tara);
+  v('edSursa', s.sursa); v('edObiectiv', s.obiectiv);
+  const lv = document.getElementById('edLevel');
+  if (s.level && ![...lv.options].some(o => o.value === s.level)) lv.insertAdjacentHTML('beforeend', `<option>${esc(s.level)}</option>`);
+  lv.value = s.level || 'Necunoscut';
+  const names = [...new Set([...team.map(t => t.nume), s.responsabil].filter(Boolean))];
+  document.getElementById('edResp').innerHTML = '<option value="">— nimeni —</option>' + names.map(n => `<option ${n === s.responsabil ? 'selected' : ''}>${esc(n)}</option>`).join('');
+  const isClient = s.etapa === 'client';
+  document.getElementById('edClient').style.display = isClient ? 'block' : 'none';
+  v('edPackage', s.package); v('edAmount', s.pay_amount); v('edTotal', s.package_total); v('edDone', s.lectii_finalizate);
+  document.getElementById('edTara').placeholder = (typeof taraDinTelefon === 'function' && taraDinTelefon(s.phone)) || 'Moldova';
+  openModal('modalEdit');
+}
+async function saveEdit() {
+  const id = document.getElementById('edId').value;
+  const s = all.find(x => String(x.id) === String(id)); if (!s) return;
+  const g = k => document.getElementById(k).value.trim();
+  const first = g('edFirst');
+  if (!first) { toast('Prenumele nu poate fi gol', 'error'); return; }
+  const fields = {
+    first_name: first, last_name: g('edLast') || '-', phone: g('edPhone'), email: g('edEmail') || null,
+    level: document.getElementById('edLevel').value, format: g('edFormat') || null,
+    localitate: g('edLoc') || null, tara: g('edTara') || null, sursa: g('edSursa') || null,
+    obiectiv: g('edObiectiv') || null, responsabil: document.getElementById('edResp').value || null
+  };
+  if (s.etapa === 'client') {
+    const num = k => { const x = g(k); return x === '' ? 0 : Math.max(0, Math.round(Number(x))); };
+    const total = num('edTotal'), done = num('edDone');
+    if ([total, done, num('edAmount')].some(isNaN)) { toast('Verifică numerele din pachet', 'error'); return; }
+    Object.assign(fields, { package: g('edPackage') || null, pay_amount: num('edAmount'), package_total: total, lectii_finalizate: done });
+  }
+  const changed = Object.keys(fields).filter(k => String(fields[k] ?? '') !== String(s[k] ?? ''));
+  if (!changed.length) { closeModal('modalEdit'); return; }
+  const ok = await update(id, fields, 'Datele au fost salvate');
+  if (ok) {
+    closeModal('modalEdit');
+    await note(id, 'Date modificate: ' + changed.map(k => ({ first_name: 'prenume', last_name: 'nume', phone: 'telefon', email: 'email', level: 'nivel', format: 'format', localitate: 'localitate', tara: 'țară', sursa: 'sursă', obiectiv: 'scop', responsabil: 'responsabil', package: 'pachet', pay_amount: 'sumă', package_total: 'lecții în pachet', lectii_finalizate: 'lecții făcute' }[k] || k)).join(', '));
+    if (document.getElementById('page-detail').classList.contains('active') && String(currentId) === String(id)) renderDetail(id, false);
+  }
 }
 
 // ===== PORNIRE =====
